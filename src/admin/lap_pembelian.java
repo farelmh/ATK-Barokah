@@ -712,7 +712,7 @@ public class lap_pembelian extends javax.swing.JFrame {
         jButton8.setBorderPainted(false);
 
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/userhitam.png"))); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/user biru1 1.png"))); // NOI18N
 
         txt_panggilan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         txt_panggilan.setForeground(new java.awt.Color(204, 204, 204));

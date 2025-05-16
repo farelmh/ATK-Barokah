@@ -8,8 +8,6 @@ import fungsi_ubah_data.FormUbahBarang;
 import fungsi_lain.modelTabel;
 import fungsi_lain.CariData;
 import fungsi_lain.formatUang;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
@@ -21,9 +19,9 @@ public class dataBarang extends javax.swing.JFrame {
     private PreparedStatement stat;
     private ResultSet rs;
     private DefaultTableModel model = null;
-    private String id, nama, hbeli, hjual, barcode, idKategori = "";
+    private String id, nama, hbeli, hjual, barcode, idKategori, idSatuan = "";
     private boolean lacak = false;
-    private final int[] index = {0, 1, 2, 6};
+    private final int[] index = {0, 1, 2, 6, 7};
     private final int[] indexUang = {4, 5};
     private final int[] indexAngka = {3};
 
@@ -33,7 +31,6 @@ public class dataBarang extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
-        scanbarcode();
         tabelBarang();
         // SwingUtilities.invokeLater(() -> stoktipis());
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
@@ -42,13 +39,14 @@ public class dataBarang extends javax.swing.JFrame {
     }
 
     // konstruktor dengan parameter
-    public dataBarang(String id, String nama, String hbeli, String hjual, String barcode, String idKategori) {
+    public dataBarang(String id, String nama, String hbeli, String hjual, String barcode, String idKategori, String idSatuan) {
         this.id = id;
         this.nama = nama;
         this.hbeli = hbeli;
         this.hjual = hjual;
         this.barcode = barcode;
         this.idKategori = idKategori;
+        this.idSatuan = idSatuan;
     }
 
     // Getter dan Setter
@@ -100,6 +98,14 @@ public class dataBarang extends javax.swing.JFrame {
         this.idKategori = idKategori;
     }
 
+    public String getIdSatuan() {
+        return idSatuan;
+    }
+
+    public void setIdSatuan(String idSatuan) {
+        this.idSatuan = idSatuan;
+    }
+
     //fungsi lacak stok tipis
     public void stoktipis() {
         if (lacak == false) {
@@ -128,16 +134,17 @@ public class dataBarang extends javax.swing.JFrame {
         model.addColumn("Stok");
         model.addColumn("Harga Beli /Pcs");
         model.addColumn("Harga Jual /Pcs");
+        model.addColumn("Satuan Kulakan");
         model.addColumn("Kode Barcode");
         tbl_barang.setModel(model);
         modelTabel.setModel(tbl_barang);
         CariData.TableSorter(tbl_barang, txt_cari, index, indexUang, indexAngka);
 
         try {
-            this.stat = k.getCon().prepareStatement("SELECT barang.id_barang, barang.nama_barang, kategori.nama_kategori, "
-                    + "barang.stok, barang.harga_beli, barang.harga_jual, barang.id_barcode\n"
-                    + "FROM barang\n"
-                    + "JOIN kategori ON kategori.id_kategori = barang.id_kategori");
+            this.stat = k.getCon().prepareStatement("SELECT b.id_barang, b.nama_barang, k.nama_kategori, b.stok, b.harga_beli, b.harga_jual, sb.nama_satuan, b.id_barcode\n"
+                    + "FROM barang b\n"
+                    + "JOIN satuan_beli sb ON sb.id_satuan = b.id_satuan\n"
+                    + "JOIN kategori k ON k.id_kategori = b.id_kategori");
             this.rs = this.stat.executeQuery();
             while (rs.next()) {
                 Object[] data = {
@@ -147,10 +154,11 @@ public class dataBarang extends javax.swing.JFrame {
                     rs.getString("stok"),
                     "Rp " + formatUang.formatRp(rs.getDouble("harga_beli")),
                     "Rp " + formatUang.formatRp(rs.getDouble("harga_jual")),
+                    rs.getString("nama_satuan"),
                     rs.getString("id_barcode")
                 };
                 model.addRow(data);
-                modelTabel.setTransparan(tbl_barang, 6);
+                modelTabel.setTransparan(tbl_barang, 7);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -173,66 +181,19 @@ public class dataBarang extends javax.swing.JFrame {
         }
     }
 
-    //fungsi scan barcode
-    private void scanbarcode() {
-        txt_cari.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String idBarcode = txt_cari.getText().trim();
-                    prosescari(idBarcode);
-                }
-            }
-        });
-    }
-
-    //cari barang
-    public void prosescari(String idBarcode) {
-        model.setRowCount(0);
-        try {
-            this.stat = k.getCon().prepareStatement("SELECT barang.id_barang, barang.nama_barang, kategori.nama_kategori, "
-                    + "barang.stok, barang.harga_beli, barang.harga_jual, barang.id_barcode\n"
-                    + "FROM barang\n"
-                    + "LEFT JOIN kategori ON kategori.id_kategori = barang.id_kategori WHERE id_barcode = ? or (id_barang like ? or nama_barang like ?)");
-            stat.setString(1, idBarcode);
-            stat.setString(2, "" + txt_cari.getText().trim() + "%");
-            stat.setString(3, "" + txt_cari.getText().trim() + "%");
-            this.rs = this.stat.executeQuery();
-
-            if (rs.next()) {
-                do {
-                    Object[] data = {
-                        rs.getString("id_barang"),
-                        rs.getString("nama_barang"),
-                        rs.getString("nama_kategori"),
-                        rs.getString("stok"),
-                        "Rp " + rs.getString("harga_beli"),
-                        "Rp " + rs.getString("harga_jual"),
-                        rs.getString("id_barcode")
-                    };
-                    model.addRow(data);
-                } while (rs.next());
-            } else {
-                JOptionPane.showMessageDialog(this, "Tidak Ditemukan!");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
-    }
-
     //panggil fungsi pop up form tambah
     private void tambahData() {
         FormTambahBarang form = new FormTambahBarang(this);
         dataBarang b = new dataBarang();
 
         if (form.showDialog()) {
-//            b.setId(form.getFieldValue("ID Barang").toUpperCase());
-//            b.setNama(form.getFieldValue("Nama Barang"));
-//            b.setHbeli(form.getFieldValue("Harga Beli /Pcs"));
-//            b.setHjual(form.getFieldValue("Harga Jual /Pcs"));
-//            b.setIdKategori(form.getIdKategori());
-//            scanBarcode(b);
-            System.out.println("harga beli : " + form.getHargaSatuan());
+            b.setId(form.getFieldValue("ID Barang").toUpperCase());
+            b.setNama(form.getFieldValue("Nama Barang"));
+            b.setHbeli(form.getHargaBeliPcs());
+            b.setHjual(form.getHargaJual());
+            b.setIdKategori(form.getIdKategori());
+            b.setIdSatuan(form.getIdSatuan());
+            scanBarcode(b);
         }
     }
 
@@ -242,7 +203,6 @@ public class dataBarang extends javax.swing.JFrame {
         boolean hasil = form.showDialog();
         if (hasil) {
             b.setBarcode(form.getFieldValue("Kode Barcode"));
-            System.out.println(b.getBarcode());
             tambahKeDB(b);
         }
     }
@@ -251,7 +211,7 @@ public class dataBarang extends javax.swing.JFrame {
     private void tambahKeDB(dataBarang b) {
         try {
             this.stat = k.getCon().prepareStatement("insert into barang (id_barang, nama_barang, stok, "
-                    + "harga_beli, harga_jual, id_barcode, id_kategori) values(?, ?, ?, ?, ?, ?, ?)");
+                    + "harga_beli, harga_jual, id_barcode, id_kategori, id_satuan) values(?, ?, ?, ?, ?, ?, ?, ?)");
             stat.setString(1, b.getId().toUpperCase());
             stat.setString(2, b.getNama());
             stat.setInt(3, 0);
@@ -259,6 +219,7 @@ public class dataBarang extends javax.swing.JFrame {
             stat.setString(5, b.getHjual());
             stat.setString(6, b.getBarcode().trim());
             stat.setString(7, b.getIdKategori());
+            stat.setString(8, b.getIdSatuan());
             stat.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Data Barang Berhasil Ditambahkan");
@@ -319,7 +280,8 @@ public class dataBarang extends javax.swing.JFrame {
             u.setHbeli(form.getFieldValue("Harga Beli /Pcs"));
             u.setHjual(form.getFieldValue("Harga Jual /Pcs"));
             u.setBarcode(form.getFieldValue("Kode Barcode"));
-
+            u.setIdSatuan(form.getIdSatuan());
+            
             updateData(u);
         }
     }
@@ -328,13 +290,14 @@ public class dataBarang extends javax.swing.JFrame {
     private void updateData(dataBarang u) {
         try {
             this.stat = k.getCon().prepareStatement("update barang set nama_barang = ?, "
-                    + "harga_beli = ?, harga_jual = ?, id_barcode = ? "
+                    + "harga_beli = ?, harga_jual = ?, id_barcode = ?, id_satuan = ? "
                     + "where id_barang = ?");
             stat.setString(1, u.getNama());
             stat.setString(2, u.getHbeli());
             stat.setString(3, u.getHjual());
             stat.setString(4, u.getBarcode());
-            stat.setString(5, u.getId().toUpperCase());
+            stat.setString(5, u.getIdSatuan());
+            stat.setString(6, u.getId().toUpperCase());
             stat.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Data Barang Berhasil Diperbarui");
@@ -758,9 +721,17 @@ public class dataBarang extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cariActionPerformed
 
     private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
-        Login a = new Login();
-        a.setVisible(true);
-        this.dispose();
+        int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (jawab == JOptionPane.YES_OPTION) {
+            Login b = new Login();
+            b.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_logoutMouseClicked
 
     private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked

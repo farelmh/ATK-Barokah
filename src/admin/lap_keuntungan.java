@@ -1,5 +1,6 @@
 package admin;
 
+import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
 import fungsi_lain.formatTanggal;
@@ -191,6 +192,11 @@ public class lap_keuntungan extends javax.swing.JFrame {
         btn_laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/laporan.png"))); // NOI18N
         btn_laporan.setBorder(null);
         btn_laporan.setBorderPainted(false);
+        btn_laporan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_laporanMouseClicked(evt);
+            }
+        });
 
         btn_barang.setBackground(new java.awt.Color(63, 114, 175));
         btn_barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/barang.png"))); // NOI18N
@@ -216,6 +222,11 @@ public class lap_keuntungan extends javax.swing.JFrame {
         btn_supplier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/supplier.png"))); // NOI18N
         btn_supplier.setBorder(null);
         btn_supplier.setBorderPainted(false);
+        btn_supplier.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_supplierMouseClicked(evt);
+            }
+        });
 
         user.setForeground(new java.awt.Color(0, 0, 0));
         user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/user biru1 1.png"))); // NOI18N
@@ -515,19 +526,36 @@ public class lap_keuntungan extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dashboardActionPerformed
 
     private void btn_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_logoutMouseClicked
-
+        int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (jawab == JOptionPane.YES_OPTION) {
+            Login b = new Login();
+            b.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_logoutMouseClicked
 
     private void btn_dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dashboardMouseClicked
+        adm_dashboard a = new adm_dashboard();
+        a.setVisible(true);
+        this.dispose();
 
     }//GEN-LAST:event_btn_dashboardMouseClicked
 
     private void btn_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_barangMouseClicked
-
+        dataBarang b = new dataBarang();
+        b.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btn_barangMouseClicked
 
     private void btn_karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_karyawanMouseClicked
-
+        dataKaryawan k = new dataKaryawan();
+        k.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btn_karyawanMouseClicked
 
     private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
@@ -555,7 +583,9 @@ public class lap_keuntungan extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cariMouseClicked
 
     private void btn_kembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_kembaliMouseClicked
-
+        laporan l = new laporan();
+        l.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btn_kembaliMouseClicked
 
     private void txt_panggilanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_panggilanMouseClicked
@@ -566,6 +596,20 @@ public class lap_keuntungan extends javax.swing.JFrame {
     private void btn_eksporMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_eksporMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_eksporMouseClicked
+
+    private void btn_supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_supplierMouseClicked
+        // TODO add your handling code here:
+        dataSupplier s = new dataSupplier();
+        s.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_supplierMouseClicked
+
+    private void btn_laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporanMouseClicked
+        // TODO add your handling code here:
+        laporan l = new laporan();
+        l.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_laporanMouseClicked
 
     /**
      * @param args the command line arguments

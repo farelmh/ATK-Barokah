@@ -214,12 +214,12 @@ public class Login extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(17, 45, 78));
-        jLabel6.setText("username");
+        jLabel6.setText("Username");
 
         jLabel7.setBackground(new java.awt.Color(51, 51, 51));
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(17, 45, 78));
-        jLabel7.setText("password");
+        jLabel7.setText("Password");
 
         txt_password.setBackground(new java.awt.Color(242, 232, 198));
         txt_password.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -230,7 +230,7 @@ public class Login extends javax.swing.JFrame {
 
         showpasswd.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         showpasswd.setForeground(new java.awt.Color(17, 45, 78));
-        showpasswd.setText("show password");
+        showpasswd.setText("Show Password");
         showpasswd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showpasswdActionPerformed(evt);
@@ -410,7 +410,6 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_lupaSandiMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_lupaSandiMouseReleased
         // TODO add your handling code here:
-
     }//GEN-LAST:event_btn_lupaSandiMouseReleased
 
     /**

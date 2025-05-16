@@ -650,7 +650,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_logoutMouseClicked
 
     private void sc_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_barangMouseClicked
-        lap_penjualan q = new lap_penjualan();
+        dataBarang q = new dataBarang();
         q.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_sc_barangMouseClicked

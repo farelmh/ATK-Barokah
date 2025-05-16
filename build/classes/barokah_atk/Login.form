@@ -229,7 +229,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="4e" green="2d" red="11" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="username"/>
+                    <Property name="text" type="java.lang.String" value="Username"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel7">
@@ -243,7 +243,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="4e" green="2d" red="11" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="password"/>
+                    <Property name="text" type="java.lang.String" value="Password"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JPasswordField" name="txt_password">
@@ -264,7 +264,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="4e" green="2d" red="11" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="show password"/>
+                    <Property name="text" type="java.lang.String" value="Show Password"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showpasswdActionPerformed"/>
