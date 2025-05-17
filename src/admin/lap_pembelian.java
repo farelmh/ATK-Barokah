@@ -45,8 +45,9 @@ public class lap_pembelian extends javax.swing.JFrame {
     private List<Pembelian> daftarPembelian;
     private Map<String, List<DetailPembelian>> detailPembelianMap;
     private boolean[] expandedRows;
-    private final int[] index = {0, 1, 2, 3};
+    private final int[] index = {0, 2, 3};
     private final int[] indexUang = {4};
+    private final int[] indexTanggal = {1};
     konek k = new konek();
 
     public lap_pembelian() {
@@ -59,7 +60,7 @@ public class lap_pembelian extends javax.swing.JFrame {
         tbl_penjualan.setModel(tableModel);
         setupTableAppearance();
         setScrollBar();
-       CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null);
+       CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null, indexTanggal);
     }
 
     private String getTanggalMulai() {

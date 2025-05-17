@@ -138,7 +138,7 @@ public class dataBarang extends javax.swing.JFrame {
         model.addColumn("Kode Barcode");
         tbl_barang.setModel(model);
         modelTabel.setModel(tbl_barang);
-        CariData.TableSorter(tbl_barang, txt_cari, index, indexUang, indexAngka);
+        CariData.TableSorter(tbl_barang, txt_cari, index, indexUang, indexAngka, null);
 
         try {
             this.stat = k.getCon().prepareStatement("SELECT * from v_data_barang");

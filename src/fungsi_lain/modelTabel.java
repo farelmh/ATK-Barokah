@@ -11,7 +11,7 @@ public class modelTabel extends DefaultTableCellRenderer {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+                table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
                 table.setRowHeight(30);
                 table.setGridColor(new Color(220, 220, 220));
                 table.setShowGrid(true);

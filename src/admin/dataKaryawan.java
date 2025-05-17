@@ -130,7 +130,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         model.addColumn("Username");
         tbl_karyawan.setModel(model);
         modelTabel.setModel(tbl_karyawan);
-        CariData.TableSorter(tbl_karyawan, txt_cari, index, null, null);
+        CariData.TableSorter(tbl_karyawan, txt_cari, index, null, null, null);
 
         try {
             this.stat = k.getCon().prepareStatement("SELECT * FROM karyawan");

@@ -18,8 +18,9 @@ public class lap_stok extends javax.swing.JFrame {
     private PreparedStatement stat;
     private ResultSet rs;
     private DefaultTableModel model = null;
-    private final int[] index = {0, 1, 2, 3, 4, 5};
+    private final int[] index = {0, 2, 3, 4, 5};
     private final int[] indexAngka = {2, 3, 4};
+    private final int[] indexTanggal = {1};
 
     konek k = new konek();
 
@@ -63,7 +64,7 @@ public class lap_stok extends javax.swing.JFrame {
         model.addColumn("Keterangan");
         tbl_stok.setModel(model);
         modelTabel.setModel(tbl_stok);
-        CariData.TableSorter(tbl_stok, txt_cari, index, null, indexAngka);
+        CariData.TableSorter(tbl_stok, txt_cari, index, null, indexAngka, indexTanggal);
 
         try {
             this.stat = k.getCon().prepareStatement("SELECT * FROM v_lap_stok");

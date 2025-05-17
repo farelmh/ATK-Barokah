@@ -1,6 +1,9 @@
 package fungsi_lain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.regex.Pattern;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -13,7 +16,7 @@ import javax.swing.table.TableRowSorter;
 
 public class CariData extends DefaultTableModel {
 
-    public static void TableSorter(JTable table, JTextField tf, int[] index, int[] indexUang, int[] indexAngka) {
+    public static void TableSorter(JTable table, JTextField tf, int[] index, int[] indexUang, int[] indexAngka, int[] indexTanggal) {
 
         Comparator<String> RpComparator = (s1, s2) -> {
             double n1 = formatUang.setDefault(s1);
@@ -27,6 +30,17 @@ public class CariData extends DefaultTableModel {
             int n2 = Integer.parseInt(s2);
             return Integer.compare(n1, n2);
         };
+        
+        Comparator<String> DateComparator = (s1, s2) -> {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // ganti sesuai format tanggal
+        try {
+            Date d1 = sdf.parse(s1);
+            Date d2 = sdf.parse(s2);
+            return d1.compareTo(d2);
+        } catch (ParseException e) {
+            return 0; // fallback jika parsing gagal
+        }
+    };
 
         TableModel model = table.getModel();
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
@@ -40,6 +54,12 @@ public class CariData extends DefaultTableModel {
         if (indexAngka != null) {
             for (int col : indexAngka) {
                 sorter.setComparator(col, IntComparator);
+            }
+        }
+        
+        if (indexTanggal != null) {
+            for (int col : indexTanggal) {
+                sorter.setComparator(col, DateComparator);
             }
         }
 

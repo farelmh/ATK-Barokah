@@ -39,14 +39,17 @@ public class lap_penjualan extends javax.swing.JFrame {
 
     private PreparedStatement statPenjualan;
     private PreparedStatement statDetail;
+    private PreparedStatement stat;
     private ResultSet rsPenjualan;
     private ResultSet rsDetail;
+    private ResultSet rs;
     private ExpandableTableModel tableModel;
     private List<Penjualan> daftarPenjualan;
     private Map<String, List<DetailPenjualan>> detailPenjualanMap;
     private boolean[] expandedRows;
-    private final int[] index = {0, 1, 2, 3};
+    private final int[] index = {0, 2, 3};
     private final int[] indexUang = {3};
+    private final int[] indexTanggal = {1};
     konek k = new konek();
 
     public lap_penjualan() {
@@ -59,7 +62,7 @@ public class lap_penjualan extends javax.swing.JFrame {
         tbl_penjualan.setModel(tableModel);
         setupTableAppearance();
         setScrollBar();
-        CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null);
+        CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null, indexTanggal);
     }
 
     private String getTanggalMulai() {
@@ -361,6 +364,29 @@ public class lap_penjualan extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
+        getTotalbarangAndTotal();
+    }
+
+    private void getTotalbarangAndTotal() {
+        try {
+            this.stat = k.getCon().prepareStatement("SELECT SUM(detail_jual.jumlah) AS jumlah, SUM(detail_jual.total) AS total\n"
+                    + "FROM detail_jual\n"
+                    + "JOIN penjualan ON penjualan.id_jual = detail_jual.id_jual\n"
+                    + "WHERE penjualan.tanggal_jual BETWEEN ? AND ?");
+            stat.setString(1, getTanggalMulai());
+            stat.setString(2, getTanggalAkhir());
+            this.rs = this.stat.executeQuery();
+            if (rs.next()) {
+                int jumlah = rs.getInt("jumlah");
+                double total = rs.getDouble("total");
+                String format = formatUang.formatRp(total);
+                
+                totalbrg.setText(String.valueOf(jumlah));
+                totalJual.setText("Rp " + format);
+            }
+            
+        } catch (Exception e) {
+        }
     }
 
     //isi data awal
@@ -623,7 +649,7 @@ public class lap_penjualan extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        total1 = new javax.swing.JTextField();
+        totalJual = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         totalbrg = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
@@ -783,7 +809,7 @@ public class lap_penjualan extends javax.swing.JFrame {
             }
         });
 
-        total1.setEditable(false);
+        totalJual.setEditable(false);
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(51, 51, 51));
@@ -793,7 +819,7 @@ public class lap_penjualan extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel8.setText("Total Barang Dijual");
+        jLabel8.setText("Total Barang Terjual");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -849,14 +875,14 @@ public class lap_penjualan extends javax.swing.JFrame {
             }
         });
 
-        btn_cari1.setText("Perluas semua");
+        btn_cari1.setText("Perluas semua [+]");
         btn_cari1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cari1ActionPerformed(evt);
             }
         });
 
-        btn_cari2.setText("Perkecil semua");
+        btn_cari2.setText("Perkecil semua [-]");
         btn_cari2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cari2ActionPerformed(evt);
@@ -887,7 +913,7 @@ public class lap_penjualan extends javax.swing.JFrame {
                 .addComponent(btn_cari)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_cari3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_cari1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_cari2)
@@ -935,7 +961,7 @@ public class lap_penjualan extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addComponent(total1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(totalJual, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -956,7 +982,7 @@ public class lap_penjualan extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(totalbrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(total1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(totalJual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -1037,7 +1063,7 @@ public class lap_penjualan extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1297, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1187,7 +1213,7 @@ public class lap_penjualan extends javax.swing.JFrame {
     private javax.swing.JTable tbl_penjualan;
     private com.toedter.calendar.JDateChooser tgl_akhir;
     private com.toedter.calendar.JDateChooser tgl_mulai;
-    private javax.swing.JTextField total1;
+    private javax.swing.JTextField totalJual;
     private javax.swing.JTextField totalbrg;
     private javax.swing.JTextField txt_cari;
     private javax.swing.JLabel txt_panggilan;

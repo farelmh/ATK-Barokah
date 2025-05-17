@@ -88,7 +88,7 @@ public class dataSupplier extends javax.swing.JFrame {
         model.addColumn("Alamat");
         tbl_supplier.setModel(model);
         modelTabel.setModel(tbl_supplier);
-        CariData.TableSorter(tbl_supplier, txt_cari, index, null, null);
+        CariData.TableSorter(tbl_supplier, txt_cari, index, null, null, null);
 
         try {
             this.stat = k.getCon().prepareStatement("SELECT * from supplier;");

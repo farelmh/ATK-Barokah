@@ -29,6 +29,9 @@ public class stokOpname extends javax.swing.JFrame {
     private DefaultTableModel model = null;
     private DefaultTableModel model2 = null;
     private final int[] index = {1, 2, 7};
+    private final int[] indexh = {0, 2, 3, 7};
+    private final int[] indexTanggal = {1};
+    private final int[] indexAngka = {4, 5, 6};
 
     konek k = new konek();
 
@@ -44,7 +47,9 @@ public class stokOpname extends javax.swing.JFrame {
         autoFokus();
         getUser();
         tablehistori();
-        CariData.TableSorter(tbl_opname, txtSearch, index, null, null);
+        CariData.TableSorter(tbl_opname, txtSearch, index, null, null, null);
+        CariData.TableSorter(tbl_histori, txtSearch1, indexh, null, indexAngka, indexTanggal);
+        
     }
 
     // show tanggal otomatis
@@ -126,13 +131,7 @@ public class stokOpname extends javax.swing.JFrame {
         tbl_histori.setModel(model2);
         modelTabel.setModel(tbl_histori);
         try {
-            this.stat = k.getCon().prepareStatement("SELECT o.id_opname, o.tgl_opname, k.nama_karyawan, b.nama_barang, dop.stok_sistem, "
-                    + "dop.stok_fisik, dop.stok_fisik - dop.stok_sistem AS selisih, dop.keterangan\n"
-                    + "FROM detail_opname dop\n"
-                    + "JOIN opname o ON o.id_opname = dop.id_opname\n"
-                    + "JOIN karyawan k ON k.id_karyawan = o.id_karyawan\n"
-                    + "JOIN barang b ON b.id_barang = dop.id_barang\n"
-                    + "ORDER BY o.id_opname DESC");
+            this.stat = k.getCon().prepareStatement("SELECT * FROM v_histori_opname");
             this.rs = this.stat.executeQuery();
             while (rs.next()) {
                 Object[] data = {
