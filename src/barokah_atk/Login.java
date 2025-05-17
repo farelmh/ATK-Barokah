@@ -148,6 +148,7 @@ public class Login extends javax.swing.JFrame {
                 );
 
                 if (result == JOptionPane.YES_OPTION) {
+                    session.getInstance().setNama(usn);
                     ceklevel(idLevel);
                 }
             } else if (txt_username.getText().trim() != "") {

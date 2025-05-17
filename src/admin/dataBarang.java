@@ -141,10 +141,7 @@ public class dataBarang extends javax.swing.JFrame {
         CariData.TableSorter(tbl_barang, txt_cari, index, indexUang, indexAngka);
 
         try {
-            this.stat = k.getCon().prepareStatement("SELECT b.id_barang, b.nama_barang, k.nama_kategori, b.stok, b.harga_beli, b.harga_jual, sb.nama_satuan, b.id_barcode\n"
-                    + "FROM barang b\n"
-                    + "JOIN satuan_beli sb ON sb.id_satuan = b.id_satuan\n"
-                    + "JOIN kategori k ON k.id_kategori = b.id_kategori");
+            this.stat = k.getCon().prepareStatement("SELECT * from v_data_barang");
             this.rs = this.stat.executeQuery();
             while (rs.next()) {
                 Object[] data = {

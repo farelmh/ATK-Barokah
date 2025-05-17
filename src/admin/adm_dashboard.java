@@ -130,6 +130,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
     //ambil data keuntungan
     private DefaultCategoryDataset getKeuntunganDataset() {
+        
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         try {
             String query = "CALL keuntunganBulanIni()";
@@ -153,7 +154,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     private void showLineChart() {
         DefaultCategoryDataset dataset = getKeuntunganDataset();
 
-        JFreeChart linechart = ChartFactory.createLineChart("Keuntungan Bulan Ini", "Tanggal", "Total",
+        JFreeChart linechart = ChartFactory.createLineChart("Grafik Keuntungan Harian (Bulan Ini)", "Tanggal", "Total",
                 dataset, PlotOrientation.VERTICAL, false, true, false);
 
         //create plot object

@@ -28,8 +28,9 @@ public class session {
 
     public void setNama(String idKaryawan) {
         try {
-            this.stat = k.getCon().prepareStatement("Select * from karyawan where id_karyawan = ?");
+            this.stat = k.getCon().prepareStatement("Select * from karyawan where id_karyawan = ? OR username = ?");
             stat.setString(1, idKaryawan);
+            stat.setString(2, idKaryawan);
             this.rs = this.stat.executeQuery();
 
             if (rs.next()) {
