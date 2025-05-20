@@ -45,7 +45,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         initComponents();
         k.connect();
         refreshTable();
-        carirfid();
+        cariBarcode();
         this.setLocationRelativeTo(null);
         generateIdTRJ();
         gettanggal();
@@ -137,7 +137,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
     }
 
     //pop up jumlah
-    public void carirfid() {
+    public void cariBarcode() {
         txt_cari.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -152,15 +152,12 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
     //show barang ke pop up
     private void showbarang(String uid) {
-        tr_jual s = new tr_jual();
         try {
             this.stat = k.getCon().prepareStatement("select nama_barang from barang where id_barcode = ?");
             stat.setString(1, uid.trim());
             this.rs = this.stat.executeQuery();
-
             if (rs.next()) {
                 String nama = rs.getString("nama_barang");
-
                 JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
                 spinner.setPreferredSize(new Dimension(60, 25)); // Mengatur ukuran kotak input
@@ -180,13 +177,11 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                     int jumlahBarang = (int) spinner.getValue();
                     System.out.println("jumlah : " + jumlahBarang);
                     dataBarang(uid, jumlahBarang);
-
+                    refreshTable();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Tidak DItemukan");
             }
-
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -224,13 +219,9 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
             this.rs = this.stat.executeQuery();
 
             if (rs.next()) {
-                System.out.println("Barang ditemukan: " + rs.getString("nama_barang"));
                 db.id_barang = rs.getString("id_barang");
                 db.nama_barang = rs.getString("nama_barang");
                 db.harga = rs.getDouble("harga_jual");
-
-                System.out.println("jumlah" + jumlahBarang);
-                System.out.println("harga " + db.harga);
                 tambah(db, jumlahBarang);
 
             }

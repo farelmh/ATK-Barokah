@@ -48,7 +48,6 @@ public class stokOpname extends javax.swing.JFrame {
         getUser();
         tablehistori();
         CariData.TableSorter(tbl_opname, txtSearch, index, null, null, null);
-        CariData.TableSorter(tbl_histori, txtSearch1, indexh, null, indexAngka, indexTanggal);
         
     }
 
@@ -130,6 +129,7 @@ public class stokOpname extends javax.swing.JFrame {
 
         tbl_histori.setModel(model2);
         modelTabel.setModel(tbl_histori);
+        CariData.TableSorter(tbl_histori, txtSearch1, indexh, null, indexAngka, indexTanggal);
         try {
             this.stat = k.getCon().prepareStatement("SELECT * FROM v_histori_opname");
             this.rs = this.stat.executeQuery();

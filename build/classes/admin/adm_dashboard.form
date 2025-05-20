@@ -381,14 +381,14 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jPanel7" min="-2" pref="335" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jPanel9" min="-2" pref="335" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jPanel9" pref="350" max="32767" attributes="0"/>
                               </Group>
                               <Component id="panelLineChart" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jPanel10" pref="335" max="32767" attributes="0"/>
+                              <Component id="jPanel10" pref="341" max="32767" attributes="0"/>
                               <Component id="panelBarChart" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -521,7 +521,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="karyawan" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="166" max="32767" attributes="0"/>
+                                      <EmptySpace pref="181" max="32767" attributes="0"/>
                                       <Component id="sc_karyawan" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -604,7 +604,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="stoktipis" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="176" max="32767" attributes="0"/>
+                                      <EmptySpace pref="182" max="32767" attributes="0"/>
                                       <Component id="sc_barang" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">

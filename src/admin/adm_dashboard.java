@@ -22,7 +22,17 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import fungsi_lain.session;
+import java.awt.Font;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import javax.swing.SwingUtilities;
+import org.jfree.chart.labels.StandardPieToolTipGenerator;
+import org.jfree.ui.HorizontalAlignment;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
 
 public class adm_dashboard extends javax.swing.JFrame {
 
@@ -99,27 +109,59 @@ public class adm_dashboard extends javax.swing.JFrame {
         }
 
         // Buat pie chart
-        JFreeChart pieChart = ChartFactory.createPieChart("5 Barang Paling Laris", dataset, true, true, false);
+        JFreeChart pieChart = ChartFactory.createPieChart(
+                "5 Barang Paling Laris",
+                dataset,
+                true,
+                true,
+                false
+        );
+
         PiePlot piePlot = (PiePlot) pieChart.getPlot();
         piePlot.setBackgroundPaint(Color.white);
+        piePlot.setOutlineVisible(true);
 
-        // Daftar warna dasar
+        // 1. Hilangkan panah label (label link)
+        piePlot.setSimpleLabels(false); // label langsung di dalam area pie
+        piePlot.setLabelGenerator(null);
+
+        // 2. Perkecil pie chart agar ada ruang untuk legend
+        piePlot.setInteriorGap(0.15); // default sekitar 0.04, makin besar = lingkaran makin kecil
+
+        // 3. Styling legend (kotak bawah)
+        pieChart.getLegend().setPosition(RectangleEdge.BOTTOM); // pindah ke bawah
+        pieChart.getLegend().setHorizontalAlignment(HorizontalAlignment.LEFT);
+        pieChart.getLegend().setVerticalAlignment(VerticalAlignment.TOP);
+        pieChart.getLegend().setItemFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+        // 4. Tampilkan legend 1 per baris (tidak berjajar)
+        pieChart.getLegend().setItemLabelPadding(new RectangleInsets(2, 5, 2, 10));
+        pieChart.getLegend().setMargin(10, 10, 10, 10);
+
+        // 5. Tooltip value bukan persen
+        piePlot.setToolTipGenerator(new StandardPieToolTipGenerator(
+                "{0}: {1} pcs", new DecimalFormat("#,###"), new DecimalFormat("0%")
+        ));
+
+        // 6. Warna-warna custom
         List<Color> colors = Arrays.asList(
                 Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
                 Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.PINK,
-                Color.GRAY, new Color(128, 0, 128) // Purple (karena Java tidak punya Purple)
+                Color.GRAY, new Color(128, 0, 128)
         );
-
-        // Set warna untuk tiap bagian pie chart
         int index = 0;
         for (Object key : dataset.getKeys()) {
-            piePlot.setSectionPaint((Comparable) key, colors.get(index % colors.size())); // Pakai warna secara berulang
+            piePlot.setSectionPaint((Comparable<?>) key, colors.get(index % colors.size()));
             index++;
         }
 
-        // Tampilkan chart di panel
+        // Set judul font
+        pieChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+        // Panel chart
         ChartPanel chartPanel = new ChartPanel(pieChart);
         chartPanel.setPreferredSize(new Dimension(200, 100));
+        chartPanel.setMouseWheelEnabled(true);
 
         panelBarChart.removeAll();
         panelBarChart.setLayout(new BorderLayout());
@@ -130,17 +172,27 @@ public class adm_dashboard extends javax.swing.JFrame {
 
     //ambil data keuntungan
     private DefaultCategoryDataset getKeuntunganDataset() {
-        
+
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         try {
-            String query = "CALL keuntunganBulanIni()";
+            String query = "CALL keuntunganPerBulan()";
             this.stat = k.getCon().prepareStatement(query);
             this.rs = this.stat.executeQuery();
 
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM"); // contoh format dari DB: 2025-05
+            SimpleDateFormat indoFormat = new SimpleDateFormat("MMMM", new Locale("id", "ID")); // hasil: Mei 2025
+
             while (rs.next()) {
-                String tanggal = rs.getString("tanggal_penjualan");
+                String tanggal = rs.getString("bulan_penjualan");
                 double keuntungan = rs.getDouble("keuntungan");
-                dataset.setValue(keuntungan, "Keuntungan", tanggal);
+
+                try {
+                    Date date = inputFormat.parse(tanggal);
+                    String bulanIndo = indoFormat.format(date);
+                    dataset.setValue(keuntungan, "Keuntungan", bulanIndo);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
             }
 
         } catch (Exception e) {
@@ -154,13 +206,26 @@ public class adm_dashboard extends javax.swing.JFrame {
     private void showLineChart() {
         DefaultCategoryDataset dataset = getKeuntunganDataset();
 
-        JFreeChart linechart = ChartFactory.createLineChart("Grafik Keuntungan Harian (Bulan Ini)", "Tanggal", "Total",
+        JFreeChart linechart = ChartFactory.createLineChart("Grafik Keuntungan Per Bulan", "Bulan", "Total",
                 dataset, PlotOrientation.VERTICAL, false, true, false);
 
         //create plot object
         CategoryPlot lineCategoryPlot = linechart.getCategoryPlot();
         lineCategoryPlot.setRangeGridlinePaint(Color.BLUE);
         lineCategoryPlot.setBackgroundPaint(Color.white);
+
+        // Set font untuk judul chart
+        linechart.getTitle().setFont(new Font("Arial", Font.BOLD, 18));
+
+// Set font untuk sumbu X dan Y
+        lineCategoryPlot.getDomainAxis().setLabelFont(new Font("Arial", Font.BOLD, 14)); // label sumbu X
+        lineCategoryPlot.getRangeAxis().setLabelFont(new Font("Arial", Font.BOLD, 14));  // label sumbu Y
+
+// Set font untuk label kategori (misal: bulan-bulan)
+        lineCategoryPlot.getDomainAxis().setTickLabelFont(new Font("Arial", Font.PLAIN, 12));
+
+// Set font untuk angka-angka di sumbu Y
+        lineCategoryPlot.getRangeAxis().setTickLabelFont(new Font("Arial", Font.PLAIN, 12));
 
         //create render object to change the moficy the line properties like color
         LineAndShapeRenderer lineRenderer = (LineAndShapeRenderer) lineCategoryPlot.getRenderer();
@@ -441,7 +506,7 @@ public class adm_dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(karyawan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                         .addComponent(sc_karyawan))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jmlkaryawan)
@@ -488,7 +553,7 @@ public class adm_dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(stoktipis)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
                         .addComponent(sc_barang))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(brg_tipis)
@@ -522,12 +587,12 @@ public class adm_dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
                     .addComponent(panelLineChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                     .addComponent(panelBarChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );

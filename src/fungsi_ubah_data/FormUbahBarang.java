@@ -31,7 +31,7 @@ public class FormUbahBarang extends FormUbah {
         fieldMap.get("ID Barang").setEnabled(false);
         fieldMap.get("Harga Beli /Pcs").setEnabled(false);
         isiSatuan();
-        isiDataBarang(); //️ langsung isi field berdasarkan data yang dikirim   
+        isiDataBarang(); //️ langsung isi field berdasarkan data yang dikirim 
 
         JTextField hargaTotalField = fieldMap.get("Harga Kulakan");
         hargaTotalField.addActionListener((e) -> {
@@ -47,6 +47,11 @@ public class FormUbahBarang extends FormUbah {
         hapus = this.hapus;
         return hapus;
     }
+    
+    public String getHbeli() {
+        double beli = formatUang.setDefault(hargaSatuan);
+        return String.valueOf(beli);
+    }
 
     private void isiDataBarang() {
         double hjual = Double.parseDouble(barang.getHjual());
@@ -61,6 +66,9 @@ public class FormUbahBarang extends FormUbah {
         setFieldValue("Harga Beli /Pcs", "Rp " + format);
         setFieldValue("Harga Jual /Pcs", String.valueOf(hjualformat));
         setFieldValue("Kode Barcode", getBarcode());
+        setFieldValue("Harga Kulakan", barang.getHargaKulak());
+        
+        comboSatuan.setSelectedItem(barang.getIdSatuan());
     }
 
     private void isiSatuan() {

@@ -2,24 +2,40 @@ package admin;
 
 import barokah_atk.Login;
 import barokah_atk.konek;
+import com.formdev.flatlaf.FlatLightLaf;
 import fungsi_tambah_data.FormTambahBarang;
 import fungsi_tambah_data.FormTambahBarcode;
 import fungsi_ubah_data.FormUbahBarang;
 import fungsi_lain.modelTabel;
 import fungsi_lain.CariData;
 import fungsi_lain.formatUang;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class dataBarang extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
     private DefaultTableModel model = null;
-    private String id, nama, hbeli, hjual, barcode, idKategori, idSatuan = "";
+    private String id, nama, hbeli, hjual, barcode, idKategori, idSatuan, hargaKulak = "";
     private boolean lacak = false;
     private final int[] index = {0, 1, 2, 6, 7};
     private final int[] indexUang = {4, 5};
@@ -32,14 +48,13 @@ public class dataBarang extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         k.connect();
         tabelBarang();
-        // SwingUtilities.invokeLater(() -> stoktipis());
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
         aktifkanTombolUbah();
         onHover();
     }
 
     // konstruktor dengan parameter
-    public dataBarang(String id, String nama, String hbeli, String hjual, String barcode, String idKategori, String idSatuan) {
+    public dataBarang(String id, String nama, String hbeli, String hjual, String barcode, String idKategori, String idSatuan, String hargaKulak) {
         this.id = id;
         this.nama = nama;
         this.hbeli = hbeli;
@@ -47,6 +62,7 @@ public class dataBarang extends javax.swing.JFrame {
         this.barcode = barcode;
         this.idKategori = idKategori;
         this.idSatuan = idSatuan;
+        this.hargaKulak = hargaKulak;
     }
 
     // Getter dan Setter
@@ -106,23 +122,68 @@ public class dataBarang extends javax.swing.JFrame {
         this.idSatuan = idSatuan;
     }
 
-    //fungsi lacak stok tipis
-    public void stoktipis() {
-        if (lacak == false) {
-            try {
-                this.stat = k.getCon().prepareStatement("CALL tampilkan_stok_tipis()");
-                this.rs = this.stat.executeQuery();
-                while (rs.next()) {
-                    String p = rs.getString("nama_barang");
-                    String u = rs.getString("stok");
-                    JOptionPane.showMessageDialog(null, "Stok barang menipis! \n"
-                            + p + ", sisa " + u);
-                    lacak = true;
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+    public String getHargaKulak() {
+        return hargaKulak;
+    }
+
+    public void setHargaKulak(String hargaKulak) {
+        this.hargaKulak = hargaKulak;
+    }
+
+    //fungsi lihat stok tipis
+    private void tampilkanStokTipisDialog() {
+        JDialog dialog = new JDialog((JFrame) null, "Daftar Stok Tipis", true);
+        dialog.setSize(400, 400);
+        dialog.setLocationRelativeTo(null);
+
+        JPanel panelUtama = new JPanel();
+        panelUtama.setLayout(new BoxLayout(panelUtama, BoxLayout.Y_AXIS));
+        panelUtama.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        try {
+            this.stat = k.getCon().prepareStatement("SELECT id_barang, nama_barang, stok FROM barang WHERE stok <= 20");
+            this.rs = this.stat.executeQuery();
+
+            boolean adaData = false;
+            while (rs.next()) {
+                adaData = true;
+
+                String id = rs.getString("id_barang");
+                String nama = rs.getString("nama_barang");
+                int stok = rs.getInt("stok");
+
+                JPanel card = new JPanel(new GridLayout(0, 1));
+                card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                ));
+                
+                JLabel idb = new JLabel("ID Barang     : " + id);
+                idb.setFont(new Font("Arial", Font.BOLD, 13));
+                JLabel nb = new JLabel("Nama Barang : " + nama);
+                nb.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+                JLabel sisa = new JLabel("Sisa Stok        : " + stok);
+                sisa.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+                
+                card.add(idb);
+                card.add(nb);
+                card.add(sisa);
+
+                panelUtama.add(card);
+                panelUtama.add(Box.createVerticalStrut(10)); // spasi antar card
             }
+
+            if (!adaData) {
+                panelUtama.add(new JLabel("Semua stok mencukupi ✅"));
+            }
+
+        } catch (Exception e) {
+            panelUtama.add(new JLabel("Gagal mengambil data: " + e.getMessage()));
         }
+
+        JScrollPane scrollPane = new JScrollPane(panelUtama);
+        dialog.add(scrollPane);
+        dialog.setVisible(true);
     }
 
     // tabel barang
@@ -240,13 +301,29 @@ public class dataBarang extends javax.swing.JFrame {
             u.setNama(model.getValueAt(modelRow, 1).toString());
             String hb = model.getValueAt(modelRow, 4).toString();
             String hj = model.getValueAt(modelRow, 5).toString();
+            String st = model.getValueAt(modelRow, 6).toString();
+            u.setIdSatuan(st);
             double hrgbeli = formatUang.setDefault(hb);
             double hrgjual = formatUang.setDefault(hj);
 
             u.setHbeli(String.valueOf(hrgbeli));
             u.setHjual(String.valueOf(hrgjual));
-        }
 
+            try {
+                this.stat = k.getCon().prepareStatement("select isi_per_satuan from satuan_beli where nama_satuan = ?");
+                stat.setString(1, u.getIdSatuan());
+                this.rs = this.stat.executeQuery();
+                if (rs.next()) {
+                    int isi = rs.getInt("isi_per_satuan");
+                    double kulak = hrgbeli * isi;
+                    kulak = Math.round(kulak / 50.0) * 50;
+
+                    u.setHargaKulak(String.valueOf(kulak));
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
         return u;
     }
 
@@ -274,11 +351,11 @@ public class dataBarang extends javax.swing.JFrame {
             // hanya set field dan update kalau user klik Simpan
             u.setId(form.getFieldValue("ID Barang"));
             u.setNama(form.getFieldValue("Nama Barang"));
-            u.setHbeli(form.getFieldValue("Harga Beli /Pcs"));
+            u.setHbeli(form.getHbeli());
             u.setHjual(form.getFieldValue("Harga Jual /Pcs"));
             u.setBarcode(form.getFieldValue("Kode Barcode"));
             u.setIdSatuan(form.getIdSatuan());
-            
+
             updateData(u);
         }
     }
@@ -343,6 +420,7 @@ public class dataBarang extends javax.swing.JFrame {
         btn_cari = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -559,36 +637,48 @@ public class dataBarang extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("DATA BARANG");
 
+        jButton1.setText("Stok Tipis");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_ubah, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 319, Short.MAX_VALUE)
-                        .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_cari)))
+                        .addContainerGap()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_ubah, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 319, Short.MAX_VALUE)
+                                .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_cari))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(427, 427, 427)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(427, 427, 427)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_tambah, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -774,6 +864,11 @@ public class dataBarang extends javax.swing.JFrame {
         // TODO add your handling code here:
         pilihData();
     }//GEN-LAST:event_tbl_barangMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        tampilkanStokTipisDialog();
+    }//GEN-LAST:event_jButton1ActionPerformed
     public static void main(String args[]) {
 
         /* Set the Nimbus look and feel */
@@ -797,6 +892,13 @@ public class dataBarang extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(dataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        
+//        FlatLightLaf.setup(); // atau FlatDarkLaf.setup();
+//        try {
+//            UIManager.setLookAndFeel(new FlatLightLaf());
+//        } catch (UnsupportedLookAndFeelException ex) {
+//            Logger.getLogger(dataBarang.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -813,6 +915,7 @@ public class dataBarang extends javax.swing.JFrame {
     private javax.swing.JLabel btn_tambah;
     private javax.swing.JLabel btn_ubah;
     private javax.swing.JButton dashboard;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;

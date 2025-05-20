@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +35,21 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import jnafilechooser.api.JnaFileChooser;
+import org.apache.poi.ss.usermodel.Workbook;
+import java.io.FileOutputStream;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class lap_penjualan extends javax.swing.JFrame {
 
@@ -380,11 +396,11 @@ public class lap_penjualan extends javax.swing.JFrame {
                 int jumlah = rs.getInt("jumlah");
                 double total = rs.getDouble("total");
                 String format = formatUang.formatRp(total);
-                
+
                 totalbrg.setText(String.valueOf(jumlah));
                 totalJual.setText("Rp " + format);
             }
-            
+
         } catch (Exception e) {
         }
     }
@@ -624,6 +640,203 @@ public class lap_penjualan extends javax.swing.JFrame {
                 scroll.getHorizontalScrollBar().setUI(new modelTabel.ModernScrollBarUI());
             }
         }
+    }
+
+    // model excel
+    private XSSFCellStyle createStyle(Workbook wb, boolean bold, int fontSize, IndexedColors bgColor) {
+        XSSFFont font = ((XSSFWorkbook) wb).createFont();
+        font.setBold(bold);
+        font.setFontName("Arial");
+        font.setFontHeightInPoints((short) fontSize);
+
+        XSSFCellStyle style = ((XSSFWorkbook) wb).createCellStyle();
+        style.setFont(font);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        if (bgColor != null) {
+            style.setFillForegroundColor(bgColor.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
+
+        return style;
+    }
+
+    private CellStyle createCurrencyStyle(Workbook wb) {
+        CellStyle style = createStyle(wb, false, 11, null);
+        DataFormat format = wb.createDataFormat();
+        style.setDataFormat(format.getFormat("\"Rp\" #,##0"));
+        return style;
+    }
+
+    private void createTitle(Sheet sheet, String title, CellStyle style, int rowIdx, int colSpan) {
+        Row row = sheet.createRow(rowIdx);
+        Cell cell = row.createCell(0);
+        cell.setCellValue(title);
+        cell.setCellStyle(style);
+        sheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 0, colSpan));
+    }
+
+    private void createHeader(Sheet sheet, String[] headers, CellStyle style, int rowIdx) {
+        Row row = sheet.createRow(rowIdx);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(style);
+        }
+    }
+
+    private void createCell(Row row, int colIdx, String value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void createCell(Row row, int colIdx, double value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void createCell(Row row, int colIdx, int value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void autoSizeColumns(Sheet sheet, int numCols) {
+        for (int i = 0; i < numCols; i++) {
+            sheet.autoSizeColumn(i);
+        }
+    }
+
+    private File getUniqueFile(File file) {
+        String name = file.getName();
+        String parent = file.getParent();
+        String baseName;
+        String extension;
+
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex != -1) {
+            baseName = name.substring(0, dotIndex);
+            extension = name.substring(dotIndex);
+        } else {
+            baseName = name;
+            extension = "";
+        }
+
+        File uniqueFile = new File(parent, baseName + extension);
+        int count = 1;
+        while (uniqueFile.exists()) {
+            uniqueFile = new File(parent, baseName + "(" + count + ")" + extension);
+            count++;
+        }
+
+        return uniqueFile;
+    }
+
+    // fungsi ekspor ke excel
+    private void exportExcel() {
+        JnaFileChooser fc = new JnaFileChooser();
+        fc.setTitle("Simpan File");
+        fc.setMode(JnaFileChooser.Mode.Files);
+        fc.addFilter("Excel Files", "xlsx");
+
+        fc.setDefaultFileName("Laporan Penjualan.xlsx");
+
+        if (!fc.showSaveDialog(this)) {
+            return;
+        }
+
+        File fileToSave = fc.getSelectedFile();
+        if (!fileToSave.getName().toLowerCase().endsWith(".xlsx")) {
+            fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+        }
+        fileToSave = getUniqueFile(fileToSave);  // <-- Cek dan rename otomatis
+        String filePath = fileToSave.getAbsolutePath();
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            XSSFCellStyle titleStyle = createStyle(workbook, true, 24, IndexedColors.WHITE);
+            XSSFCellStyle headerStyle = createStyle(workbook, true, 12, IndexedColors.LIGHT_GREEN);
+            XSSFCellStyle cellStyle = createStyle(workbook, false, 11, null);
+            CellStyle rupiahStyle = createCurrencyStyle(workbook);
+
+            Sheet sheet1 = workbook.createSheet("Ringkasan Laporan");
+            createTitle(sheet1, "Laporan Penjualan", titleStyle, 0, 3);
+            String[] header1 = {"ID Penjualan", "Tanggal", "Kasir", "Total"};
+            createHeader(sheet1, header1, headerStyle, 3);
+
+            int rowIndex = 4;
+            this.stat = k.getCon().prepareStatement("SELECT penjualan.id_jual, \n"
+                    + "date_format(penjualan.tanggal_jual, '%d-%m-%Y') AS tanggal, \n"
+                    + "karyawan.nama_karyawan, penjualan.total\n"
+                    + "FROM penjualan\n"
+                    + "JOIN karyawan ON penjualan.id_karyawan = karyawan.id_karyawan\n"
+                    + "WHERE penjualan.tanggal_jual BETWEEN ? AND ? \n"
+                    + "ORDER BY penjualan.id_jual ASC;");
+            stat.setString(1, getTanggalMulai());
+            stat.setString(2, getTanggalAkhir());
+            this.rs = this.stat.executeQuery();
+
+            while (rs.next()) {
+                Row row = sheet1.createRow(rowIndex++);
+                createCell(row, 0, rs.getString("id_jual"), cellStyle);
+                createCell(row, 1, rs.getString("tanggal"), cellStyle);
+                createCell(row, 2, rs.getString("nama_karyawan"), cellStyle);
+                createCell(row, 3, rs.getDouble("total"), rupiahStyle);
+            }
+
+            autoSizeColumns(sheet1, header1.length);
+
+            Sheet sheet2 = workbook.createSheet("Detail Laporan");
+            createTitle(sheet2, "Laporan Penjualan", titleStyle, 0, 6);
+            String[] header2 = {"ID Penjualan", "Tanggal", "Kasir", "Nama Barang", "Jumlah", "Harga Satuan", "Subtotal"};
+            createHeader(sheet2, header2, headerStyle, 3);
+
+            this.stat = k.getCon().prepareStatement("SELECT p.id_jual AS id_penjualan, \n"
+                    + "date_format(p.tanggal_jual, '%d-%m-%Y') AS tanggal, \n"
+                    + "k.nama_karyawan AS kasir, \n"
+                    + "b.nama_barang, \n"
+                    + "dj.jumlah AS qty, \n"
+                    + "ROUND(dj.total / dj.jumlah, 2) AS harga_satuan, \n"
+                    + "dj.total AS subtotal\n"
+                    + "FROM penjualan p\n"
+                    + "JOIN detail_jual dj ON p.id_jual = dj.id_jual\n"
+                    + "JOIN karyawan k ON p.id_karyawan = k.id_karyawan\n"
+                    + "JOIN barang b on dj.id_barang = b.id_barang\n"
+                    + "WHERE p.tanggal_jual BETWEEN ? AND ? \n"
+                    + "ORDER BY p.id_jual ASC");
+            stat.setString(1, getTanggalMulai());
+            stat.setString(2, getTanggalAkhir());
+            this.rs = this.stat.executeQuery();
+
+            rowIndex = 4;
+            while (rs.next()) {
+                Row row = sheet2.createRow(rowIndex++);
+
+                createCell(row, 0, rs.getString("id_penjualan"), cellStyle);
+                createCell(row, 1, rs.getString("tanggal"), cellStyle);
+                createCell(row, 2, rs.getString("kasir"), cellStyle);
+                createCell(row, 3, rs.getString("nama_barang"), cellStyle);
+                createCell(row, 4, rs.getInt("qty"), cellStyle);
+                createCell(row, 5, rs.getDouble("harga_satuan"), rupiahStyle);
+                createCell(row, 6, rs.getDouble("subtotal"), rupiahStyle);
+            }
+            autoSizeColumns(sheet2, header2.length);
+
+            // === Simpan file Excel
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+            }
+            workbook.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -1128,6 +1341,16 @@ public class lap_penjualan extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
+        Date start = tgl_mulai.getDate();
+        Date end = tgl_akhir.getDate();
+
+        if (start == null || end == null) {
+            JOptionPane.showMessageDialog(null, "tanggal tidak boleh kosong");
+        } else if (start.after(end)) {
+            JOptionPane.showMessageDialog(null, "tanggal awal tidak boleh lebih dari tanggal akhir");
+        } else {
+            exportExcel();
+        }
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void btn_cari1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cari1ActionPerformed
