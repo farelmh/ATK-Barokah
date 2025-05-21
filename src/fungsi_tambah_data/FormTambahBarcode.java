@@ -5,8 +5,12 @@ import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import barokah_atk.konek;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -32,6 +36,20 @@ public class FormTambahBarcode extends FormTambah {
                 }
             });
         });
+        
+        JButton skip = new JButton("lewati");
+        skip.addActionListener(e -> {
+            isConfirmed = true;
+            dialog.dispose();
+        });
+
+        skip.setBackground(new Color(17, 45, 78));
+        skip.setForeground(Color.white);
+        skip.setToolTipText("isi data nanti");
+
+        skip.setPreferredSize(new Dimension(70, 30));
+
+        panel.add(skip, BorderLayout.EAST);
     }
 
 
