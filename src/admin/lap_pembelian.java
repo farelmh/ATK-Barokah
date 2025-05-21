@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +36,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import jnafilechooser.api.JnaFileChooser;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class lap_pembelian extends javax.swing.JFrame {
 
@@ -41,6 +57,8 @@ public class lap_pembelian extends javax.swing.JFrame {
     private PreparedStatement statDetail;
     private ResultSet rsPembelian;
     private ResultSet rsDetail;
+    private PreparedStatement stat;
+    private ResultSet rs;
     private ExpandableTableModel tableModel;
     private List<Pembelian> daftarPembelian;
     private Map<String, List<DetailPembelian>> detailPembelianMap;
@@ -60,7 +78,7 @@ public class lap_pembelian extends javax.swing.JFrame {
         tbl_penjualan.setModel(tableModel);
         setupTableAppearance();
         setScrollBar();
-       CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null, indexTanggal);
+        CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null, indexTanggal);
     }
 
     private String getTanggalMulai() {
@@ -330,7 +348,7 @@ public class lap_pembelian extends javax.swing.JFrame {
                 Pembelian pembelian = new Pembelian(id, kasir, tanggal, total, supplier);
                 daftarPembelian.add(pembelian);
 
-               this.statDetail = k.getCon().prepareStatement("CALL getDetailBeli(?)");
+                this.statDetail = k.getCon().prepareStatement("CALL getDetailBeli(?)");
                 statDetail.setString(1, id);
                 this.rsDetail = this.statDetail.executeQuery();
 
@@ -485,7 +503,7 @@ public class lap_pembelian extends javax.swing.JFrame {
                             return dateFormat.format(p.getTanggal());
                         case 2:
                             return p.getNamaKasir();
-                        case 3 :
+                        case 3:
                             return p.getNamaSupplier();
                         case 4:
                             return "Rp " + formatUang.formatRp(p.getTotal());
@@ -611,6 +629,205 @@ public class lap_pembelian extends javax.swing.JFrame {
                 scroll.getHorizontalScrollBar().setUI(new modelTabel.ModernScrollBarUI());
             }
         }
+    }
+
+    // model excel
+    private XSSFCellStyle createStyle(Workbook wb, boolean bold, int fontSize, IndexedColors bgColor) {
+        XSSFFont font = ((XSSFWorkbook) wb).createFont();
+        font.setBold(bold);
+        font.setFontName("Arial");
+        font.setFontHeightInPoints((short) fontSize);
+
+        XSSFCellStyle style = ((XSSFWorkbook) wb).createCellStyle();
+        style.setFont(font);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        if (bgColor != null) {
+            style.setFillForegroundColor(bgColor.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
+
+        return style;
+    }
+
+    private CellStyle createCurrencyStyle(Workbook wb) {
+        CellStyle style = createStyle(wb, false, 11, null);
+        DataFormat format = wb.createDataFormat();
+        style.setDataFormat(format.getFormat("\"Rp\" #,##0"));
+        return style;
+    }
+
+    private void createTitle(Sheet sheet, String title, CellStyle style, int rowIdx, int colSpan) {
+        Row row = sheet.createRow(rowIdx);
+        Cell cell = row.createCell(0);
+        cell.setCellValue(title);
+        cell.setCellStyle(style);
+        sheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 0, colSpan));
+    }
+
+    private void createHeader(Sheet sheet, String[] headers, CellStyle style, int rowIdx) {
+        Row row = sheet.createRow(rowIdx);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(style);
+        }
+    }
+
+    private void createCell(Row row, int colIdx, String value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void createCell(Row row, int colIdx, double value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void createCell(Row row, int colIdx, int value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void autoSizeColumns(Sheet sheet, int numCols) {
+        for (int i = 0; i < numCols; i++) {
+            sheet.autoSizeColumn(i);
+        }
+    }
+
+    private File getUniqueFile(File file) {
+        String name = file.getName();
+        String parent = file.getParent();
+        String baseName;
+        String extension;
+
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex != -1) {
+            baseName = name.substring(0, dotIndex);
+            extension = name.substring(dotIndex);
+        } else {
+            baseName = name;
+            extension = "";
+        }
+
+        File uniqueFile = new File(parent, baseName + extension);
+        int count = 1;
+        while (uniqueFile.exists()) {
+            uniqueFile = new File(parent, baseName + "(" + count + ")" + extension);
+            count++;
+        }
+
+        return uniqueFile;
+    }
+
+    // fungsi ekspor ke excel
+    private void exportExcel() {
+        JnaFileChooser fc = new JnaFileChooser();
+        fc.setTitle("Simpan File");
+        fc.setMode(JnaFileChooser.Mode.Files);
+        fc.addFilter("Excel Files", "xlsx");
+
+        fc.setDefaultFileName("Laporan Pembelian.xlsx");
+
+        if (!fc.showSaveDialog(this)) {
+            return;
+        }
+
+        File fileToSave = fc.getSelectedFile();
+        if (!fileToSave.getName().toLowerCase().endsWith(".xlsx")) {
+            fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+        }
+        fileToSave = getUniqueFile(fileToSave);  // <-- Cek dan rename otomatis
+        String filePath = fileToSave.getAbsolutePath();
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            XSSFCellStyle titleStyle = createStyle(workbook, true, 24, IndexedColors.WHITE);
+            XSSFCellStyle headerStyle = createStyle(workbook, true, 12, IndexedColors.LIGHT_GREEN);
+            XSSFCellStyle cellStyle = createStyle(workbook, false, 11, null);
+            CellStyle rupiahStyle = createCurrencyStyle(workbook);
+
+            Sheet sheet1 = workbook.createSheet("Ringkasan Laporan");
+            createTitle(sheet1, "Laporan Pembelian", titleStyle, 0, 4);
+            String[] header1 = {"ID Pembelian", "Tanggal", "Kasir", "Supplier", "Total"};
+            createHeader(sheet1, header1, headerStyle, 3);
+
+            int rowIndex = 4;
+            this.stat = k.getCon().prepareStatement("SELECT pembelian.id_beli, \n"
+                    + "date_format(pembelian.tanggal_beli, '%d-%m-%Y') AS tanggal,\n"
+                    + "karyawan.nama_karyawan, supplier.nama_supplier,\n"
+                    + "pembelian.total\n"
+                    + "FROM pembelian\n"
+                    + "JOIN karyawan ON karyawan.id_karyawan = pembelian.id_karyawan\n"
+                    + "JOIN supplier ON supplier.id_supplier = pembelian.id_supplier\n"
+                    + "WHERE pembelian.tanggal_beli BETWEEN ? AND ? \n"
+                    + "ORDER BY pembelian.id_beli ASC");
+            stat.setString(1, getTanggalMulai());
+            stat.setString(2, getTanggalAkhir());
+            this.rs = this.stat.executeQuery();
+
+            while (rs.next()) {
+                Row row = sheet1.createRow(rowIndex++);
+                createCell(row, 0, rs.getString("id_beli"), cellStyle);
+                createCell(row, 1, rs.getString("tanggal"), cellStyle);
+                createCell(row, 2, rs.getString("nama_karyawan"), cellStyle);
+                createCell(row, 3, rs.getString("nama_supplier"), cellStyle);
+                createCell(row, 4, rs.getDouble("total"), rupiahStyle);
+            }
+
+            autoSizeColumns(sheet1, header1.length);
+
+            Sheet sheet2 = workbook.createSheet("Detail Laporan");
+            createTitle(sheet2, "Laporan Pembelian", titleStyle, 0, 7);
+            String[] header2 = {"ID Pembelian", "Tanggal", "Kasir", "Supplier", "Nama Barang", "Jumlah", "Harga Satuan", "Subtotal"};
+            createHeader(sheet2, header2, headerStyle, 3);
+
+            this.stat = k.getCon().prepareStatement("SELECT p.id_beli,\n"
+                    + "date_format(p.tanggal_beli, '%d-%m-%Y') AS tanggal,\n"
+                    + "k.nama_karyawan, s.nama_supplier, b.nama_barang, db.jumlah, \n"
+                    + "round(db.total / db.jumlah, 2) AS harga_satuan,\n"
+                    + "db.total as subtotal\n"
+                    + "FROM pembelian p \n"
+                    + "JOIN detail_beli db ON p.id_beli = db.id_beli\n"
+                    + "JOIN karyawan k ON k.id_karyawan = p.id_karyawan\n"
+                    + "JOIN supplier s on s.id_supplier = p.id_supplier\n"
+                    + "JOIN barang b ON b.id_barang = db.id_barang\n"
+                    + "WHERE p.tanggal_beli BETWEEN ? AND ?");
+            stat.setString(1, getTanggalMulai());
+            stat.setString(2, getTanggalAkhir());
+            this.rs = this.stat.executeQuery();
+
+            rowIndex = 4;
+            while (rs.next()) {
+                Row row = sheet2.createRow(rowIndex++);
+
+                createCell(row, 0, rs.getString("id_beli"), cellStyle);
+                createCell(row, 1, rs.getString("tanggal"), cellStyle);
+                createCell(row, 2, rs.getString("nama_karyawan"), cellStyle);
+                createCell(row, 3, rs.getString("nama_supplier"), cellStyle);
+                createCell(row, 4, rs.getString("nama_barang"), cellStyle);
+                createCell(row, 5, rs.getInt("jumlah"), cellStyle);
+                createCell(row, 6, rs.getDouble("harga_satuan"), rupiahStyle);
+                createCell(row, 7, rs.getDouble("subtotal"), rupiahStyle);
+            }
+            autoSizeColumns(sheet2, header2.length);
+
+            // === Simpan file Excel
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+            }
+            workbook.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -1115,6 +1332,16 @@ public class lap_pembelian extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
+        Date start = tgl_mulai.getDate();
+        Date end = tgl_akhir.getDate();
+
+        if (start == null || end == null) {
+            JOptionPane.showMessageDialog(null, "tanggal tidak boleh kosong");
+        } else if (start.after(end)) {
+            JOptionPane.showMessageDialog(null, "tanggal awal tidak boleh lebih dari tanggal akhir");
+        } else {
+            exportExcel();
+        }
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void btn_cari1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cari1ActionPerformed
