@@ -259,6 +259,7 @@ public class adm_dashboard extends javax.swing.JFrame {
         logo_user = new javax.swing.JLabel();
         txt_panggilan = new javax.swing.JLabel();
         admin = new javax.swing.JLabel();
+        btn_laporan1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         btn_logout = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -366,6 +367,17 @@ public class adm_dashboard extends javax.swing.JFrame {
         admin.setForeground(new java.awt.Color(204, 204, 204));
         admin.setText("Admin");
 
+        btn_laporan1.setBackground(new java.awt.Color(63, 114, 175));
+        btn_laporan1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        btn_laporan1.setBorder(null);
+        btn_laporan1.setBorderPainted(false);
+        btn_laporan1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_laporan1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_laporan1MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -381,7 +393,8 @@ public class adm_dashboard extends javax.swing.JFrame {
                                 .addComponent(btn_dataBarang)
                                 .addComponent(btn_dataKaryawan)
                                 .addComponent(btn_laporan)
-                                .addComponent(btn_dataSupplier)))
+                                .addComponent(btn_dataSupplier)
+                                .addComponent(btn_laporan1)))
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGap(82, 82, 82)
                             .addComponent(admin))))
@@ -408,6 +421,8 @@ public class adm_dashboard extends javax.swing.JFrame {
                 .addComponent(btn_dataKaryawan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_dataSupplier)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_laporan1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_laporan)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -487,7 +502,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
         karyawan.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         karyawan.setForeground(new java.awt.Color(204, 204, 204));
-        karyawan.setText("total karyawan");
+        karyawan.setText("Total karyawan");
 
         sc_karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/panahijo.png"))); // NOI18N
         sc_karyawan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -506,7 +521,7 @@ public class adm_dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(karyawan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
                         .addComponent(sc_karyawan))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jmlkaryawan)
@@ -717,8 +732,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
     private void sc_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_barangMouseClicked
         dataBarang q = new dataBarang();
-        q.setVisible(true);
-        this.dispose();
+        q.tampilkanStokTipisDialog();
     }//GEN-LAST:event_sc_barangMouseClicked
 
     private void sc_pemasukanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_pemasukanMouseClicked
@@ -770,6 +784,13 @@ public class adm_dashboard extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txt_panggilanMouseClicked
 
+    private void btn_laporan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporan1MouseClicked
+        // TODO add your handling code here:
+        adm_transaksi_jual a = new adm_transaksi_jual();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_laporan1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -814,6 +835,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     private javax.swing.JButton btn_dataKaryawan;
     private javax.swing.JButton btn_dataSupplier;
     private javax.swing.JButton btn_laporan;
+    private javax.swing.JButton btn_laporan1;
     private javax.swing.JButton btn_logout;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;

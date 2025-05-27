@@ -18,6 +18,8 @@ public class ksr_dataBarang extends javax.swing.JFrame {
     private ResultSet rs;
     private DefaultTableModel model = null;
     private final int[] index = {0, 1, 2, 6};
+    private final int[] indexUang = {4, 5};
+    private final int[] indexAngka = {3};
 
     konek k = new konek();
 
@@ -43,7 +45,7 @@ public class ksr_dataBarang extends javax.swing.JFrame {
         model.addColumn("Kode Barcode");
         tbl_barang.setModel(model);
         modelTabel.setModel(tbl_barang);
-        CariData.TableSorter(tbl_barang, txt_cari, index);
+        CariData.TableSorter(tbl_barang, txt_cari, index, indexUang, indexAngka, null);
 
         try {
             this.stat = k.getCon().prepareStatement("SELECT barang.id_barang, barang.nama_barang, kategori.nama_kategori, "

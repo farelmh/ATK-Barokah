@@ -1,6 +1,5 @@
 package admin;
 
-import kasir.ksr_transaksi;
 import kasir.ksr_dashboard;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
@@ -104,6 +103,7 @@ public class lap_stok extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         txt_panggilan = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        btn_transaksi = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -194,6 +194,16 @@ public class lap_stok extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(204, 204, 204));
         jLabel16.setText("Admin");
 
+        btn_transaksi.setBackground(new java.awt.Color(63, 114, 175));
+        btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        btn_transaksi.setBorder(null);
+        btn_transaksi.setBorderPainted(false);
+        btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_transaksiMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -211,8 +221,9 @@ public class lap_stok extends javax.swing.JFrame {
                             .addComponent(jButton1)
                             .addComponent(jButton3)
                             .addComponent(jButton4)
-                            .addComponent(jButton5)
-                            .addComponent(jButton8)))
+                            .addComponent(jButton8)
+                            .addComponent(btn_transaksi)
+                            .addComponent(jButton5)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(jLabel16)))
@@ -236,8 +247,10 @@ public class lap_stok extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_transaksi)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton5)
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(63, 114, 175));
@@ -470,9 +483,7 @@ public class lap_stok extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        ksr_transaksi r = new ksr_transaksi();
-        r.setVisible(true);
-        this.setVisible(false);
+        
     }//GEN-LAST:event_jButton4MouseClicked
     private void cari() {
         lpr c = new lpr();
@@ -545,6 +556,13 @@ public class lap_stok extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel8MouseClicked
 
+    private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
+        // TODO add your handling code here:
+        adm_transaksi_jual a = new adm_transaksi_jual();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_transaksiMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -582,6 +600,7 @@ public class lap_stok extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cari;
+    private javax.swing.JButton btn_transaksi;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

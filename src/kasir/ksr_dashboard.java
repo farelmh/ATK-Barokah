@@ -38,8 +38,6 @@ public class ksr_dashboard extends javax.swing.JFrame {
         SwingUtilities.invokeLater(() -> showPieChart());
         showBarChart();
         txt_panggilan.setText(namaPanggilan);
-        btn_jual.setVisible(false);
-        btn_beli.setVisible(false);
     }
 
     private void totalBarang() {
@@ -178,8 +176,6 @@ public class ksr_dashboard extends javax.swing.JFrame {
         logo_user = new javax.swing.JLabel();
         txt_panggilan = new javax.swing.JLabel();
         admin = new javax.swing.JLabel();
-        btn_jual = new javax.swing.JButton();
-        btn_beli = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         btn_logout = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -263,26 +259,7 @@ public class ksr_dashboard extends javax.swing.JFrame {
         });
 
         admin.setForeground(new java.awt.Color(204, 204, 204));
-        admin.setText("Admin");
-
-        btn_jual.setText("Jual");
-        btn_jual.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_jualMouseClicked(evt);
-            }
-        });
-        btn_jual.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_jualActionPerformed(evt);
-            }
-        });
-
-        btn_beli.setText("Beli / Restock");
-        btn_beli.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_beliActionPerformed(evt);
-            }
-        });
+        admin.setText("Kasir");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -293,22 +270,18 @@ public class ksr_dashboard extends javax.swing.JFrame {
                 .addComponent(logo_user)
                 .addGap(48, 48, 48))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_beli, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_panggilan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(82, 82, 82)
-                            .addComponent(admin))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(txt_panggilan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGap(14, 14, 14)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(btn_dashboard)
                                 .addComponent(btn_dataBarang)
-                                .addComponent(btn_dataKaryawan)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(btn_jual, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btn_dataKaryawan))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(admin)))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -326,10 +299,6 @@ public class ksr_dashboard extends javax.swing.JFrame {
                 .addComponent(btn_dataBarang)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_dataKaryawan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_jual, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_beli, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -648,9 +617,7 @@ public class ksr_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_sc_pemasukanMouseClicked
 
     private void sc_karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_karyawanMouseClicked
-        ksr_transaksi_beli q = new ksr_transaksi_beli();
-        q.setVisible(true);
-        this.dispose();
+       
     }//GEN-LAST:event_sc_karyawanMouseClicked
 
     private void btn_dataKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataKaryawanActionPerformed
@@ -658,15 +625,9 @@ public class ksr_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataKaryawanActionPerformed
 
     private void btn_dataKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataKaryawanMouseClicked
-        if (!tekan) {
-            btn_jual.setVisible(true);
-            btn_beli.setVisible(true);
-            tekan = true;
-        } else if (tekan) {
-            btn_jual.setVisible(false);
-            btn_beli.setVisible(false);
-            tekan = false;
-        }
+        ksr_transaksi_jual q = new ksr_transaksi_jual();
+        q.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btn_dataKaryawanMouseClicked
 
     private void btn_dataBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataBarangActionPerformed
@@ -683,24 +644,6 @@ public class ksr_dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_txt_panggilanMouseClicked
-
-    private void btn_jualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_jualMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_jualMouseClicked
-
-    private void btn_jualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_jualActionPerformed
-        // TODO add your handling code here:
-        ksr_transaksi_jual q = new ksr_transaksi_jual();
-        q.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btn_jualActionPerformed
-
-    private void btn_beliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_beliActionPerformed
-        // TODO add your handling code here:
-        ksr_transaksi_beli q = new ksr_transaksi_beli();
-        q.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btn_beliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -791,6 +734,198 @@ public class ksr_dashboard extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -804,11 +939,9 @@ public class ksr_dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel admin;
     private javax.swing.JLabel alamat_toko;
     private javax.swing.JLabel brg_tipis;
-    private javax.swing.JButton btn_beli;
     private javax.swing.JButton btn_dashboard;
     private javax.swing.JButton btn_dataBarang;
     private javax.swing.JButton btn_dataKaryawan;
-    private javax.swing.JButton btn_jual;
     private javax.swing.JButton btn_logout;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;

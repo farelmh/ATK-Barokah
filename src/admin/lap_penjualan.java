@@ -858,6 +858,7 @@ public class lap_penjualan extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         txt_panggilan = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        btn_transaksi = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -955,6 +956,16 @@ public class lap_penjualan extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(204, 204, 204));
         jLabel16.setText("Admin");
 
+        btn_transaksi.setBackground(new java.awt.Color(63, 114, 175));
+        btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        btn_transaksi.setBorder(null);
+        btn_transaksi.setBorderPainted(false);
+        btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_transaksiMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -973,7 +984,8 @@ public class lap_penjualan extends javax.swing.JFrame {
                             .addComponent(jButton3)
                             .addComponent(jButton4)
                             .addComponent(jButton5)
-                            .addComponent(jButton8)))
+                            .addComponent(jButton8)
+                            .addComponent(btn_transaksi)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(jLabel16)))
@@ -997,8 +1009,10 @@ public class lap_penjualan extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_transaksi)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton5)
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(63, 114, 175));
@@ -1190,7 +1204,7 @@ public class lap_penjualan extends javax.swing.JFrame {
                 .addComponent(filterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(totalbrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1368,6 +1382,13 @@ public class lap_penjualan extends javax.swing.JFrame {
         resetPencarian();
     }//GEN-LAST:event_btn_cari3ActionPerformed
 
+    private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
+        // TODO add your handling code here:
+        adm_transaksi_jual a = new adm_transaksi_jual();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_transaksiMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1409,6 +1430,7 @@ public class lap_penjualan extends javax.swing.JFrame {
     private javax.swing.JButton btn_cari1;
     private javax.swing.JButton btn_cari2;
     private javax.swing.JButton btn_cari3;
+    private javax.swing.JButton btn_transaksi;
     private javax.swing.JPanel filterPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;

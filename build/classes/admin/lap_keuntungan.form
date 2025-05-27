@@ -103,6 +103,7 @@
                                   <Component id="btn_karyawan" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="btn_laporan" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="btn_supplier" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btn_transaksi" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -132,8 +133,10 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_supplier" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="btn_transaksi" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_laporan" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="215" max="32767" attributes="0"/>
+                      <EmptySpace pref="160" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -260,6 +263,23 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Admin"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btn_transaksi">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="af" green="72" red="3f" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/gambar/transaksi.png"/>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="null"/>
+                </Property>
+                <Property name="borderPainted" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_transaksiMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

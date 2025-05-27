@@ -223,6 +223,7 @@ public class dataSupplier extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         txt_panggilan = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        btn_transaksi = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         logout = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -318,10 +319,29 @@ public class dataSupplier extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(204, 204, 204));
         jLabel16.setText("Admin");
 
+        btn_transaksi.setBackground(new java.awt.Color(63, 114, 175));
+        btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        btn_transaksi.setBorder(null);
+        btn_transaksi.setBorderPainted(false);
+        btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_transaksiMouseClicked(evt);
+            }
+        });
+        btn_transaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_transaksiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel16)
+                .addGap(81, 81, 81))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -330,17 +350,14 @@ public class dataSupplier extends javax.swing.JFrame {
                             .addComponent(txt_panggilan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(barang)
                             .addComponent(karyawan)
-                            .addComponent(laporan)
                             .addComponent(supplier)
-                            .addComponent(dashboard)))
+                            .addComponent(dashboard)
+                            .addComponent(btn_transaksi)
+                            .addComponent(laporan)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addComponent(jLabel13)))
                 .addContainerGap(16, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel16)
-                .addGap(81, 81, 81))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -359,6 +376,8 @@ public class dataSupplier extends javax.swing.JFrame {
                 .addComponent(karyawan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(supplier)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_transaksi)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(laporan)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -633,6 +652,17 @@ public class dataSupplier extends javax.swing.JFrame {
         pilihData();
     }//GEN-LAST:event_tbl_supplierMouseClicked
 
+    private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
+        // TODO add your handling code here:
+        adm_transaksi_jual a = new adm_transaksi_jual();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_transaksiMouseClicked
+
+    private void btn_transaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_transaksiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_transaksiActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -672,6 +702,7 @@ public class dataSupplier extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton barang;
+    private javax.swing.JButton btn_transaksi;
     private javax.swing.JLabel btn_ubah;
     private javax.swing.JButton dashboard;
     private javax.swing.JButton jButton7;

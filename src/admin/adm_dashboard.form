@@ -99,6 +99,7 @@
                                       <Component id="btn_dataKaryawan" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="btn_laporan" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="btn_dataSupplier" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btn_laporan1" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -133,6 +134,8 @@
                       <Component id="btn_dataKaryawan" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_dataSupplier" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="btn_laporan1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_laporan" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -277,6 +280,26 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Admin"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btn_laporan1">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="af" green="72" red="3f" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/gambar/transaksi.png"/>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="null"/>
+                </Property>
+                <Property name="borderPainted" type="boolean" value="false"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_laporan1MouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -521,7 +544,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="karyawan" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="181" max="32767" attributes="0"/>
+                                      <EmptySpace pref="178" max="32767" attributes="0"/>
                                       <Component id="sc_karyawan" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -568,7 +591,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="cc" red="cc" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="total karyawan"/>
+                        <Property name="text" type="java.lang.String" value="Total karyawan"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="sc_karyawan">

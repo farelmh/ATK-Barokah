@@ -1,11 +1,14 @@
 package kasir;
 
 import barokah_atk.konek;
+import barokah_atk.Login;
 import com.sun.source.tree.TryTree;
 import fungsi_lain.session;
+import fungsi_lain.formatUang;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.Vector;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -39,17 +42,40 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
     private PreparedStatement stat;
     private ResultSet rs;
     private DefaultTableModel model = null;
+    private DefaultTableModel modelJual;
     konek k = new konek();
 
     public ksr_transaksi_jual() {
         initComponents();
+        gettanggal();
         k.connect();
-        refreshTable();
-        cariBarcode();
+        modelJual = new DefaultTableModel();
+        modelJual.addColumn("ID Barang");
+        modelJual.addColumn("Nama Barang");
+        modelJual.addColumn("Harga Jual");
+        modelJual.addColumn("Jumlah");
+        modelJual.addColumn("Subtotal");
+
+        tbl_jual.setModel(modelJual);
+
         this.setLocationRelativeTo(null);
         generateIdTRJ();
-        gettanggal();
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
+    }
+
+    public void tambahDataKeTabelJual(Vector row) {
+        modelJual.addRow(row);
+    }
+    
+    public void hitungTotal() {
+        double total = 0;
+        for (int i = 0; i < modelJual.getRowCount(); i++) {
+            String subStr = modelJual.getValueAt(i, 4).toString();
+            subStr = subStr.replace("Rp", "").replace(" ", "").replace(".0", "").replace(",", ".");
+            double sub = Double.parseDouble(subStr);
+            total += sub;
+        }
+        txt_Total.setText("Rp " + formatUang.formatRp(total));
     }
 
     class tr_jual extends ksr_transaksi_jual {
@@ -122,7 +148,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
             if (rs.next()) {
 
-                txt_total.setText(rs.getString("total"));
+                txt_Total.setText(rs.getString("total"));
             }
         } catch (Exception e) {
         }
@@ -131,13 +157,13 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
     public void gettanggal() {
         LocalDate tgll = LocalDate.now();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Gunakan yyyy bukan YYYY
         String tanggal = tgll.format(df);
         tgljual.setText(tanggal);
     }
 
     //pop up jumlah
-    public void cariBarcode() {
+    public void carirfid() {
         txt_cari.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -152,12 +178,15 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
     //show barang ke pop up
     private void showbarang(String uid) {
+        tr_jual s = new tr_jual();
         try {
             this.stat = k.getCon().prepareStatement("select nama_barang from barang where id_barcode = ?");
             stat.setString(1, uid.trim());
             this.rs = this.stat.executeQuery();
+
             if (rs.next()) {
                 String nama = rs.getString("nama_barang");
+
                 JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
                 spinner.setPreferredSize(new Dimension(60, 25)); // Mengatur ukuran kotak input
@@ -177,11 +206,12 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                     int jumlahBarang = (int) spinner.getValue();
                     System.out.println("jumlah : " + jumlahBarang);
                     dataBarang(uid, jumlahBarang);
-                    refreshTable();
+
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Tidak DItemukan");
             }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -219,9 +249,13 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
             this.rs = this.stat.executeQuery();
 
             if (rs.next()) {
+                System.out.println("Barang ditemukan: " + rs.getString("nama_barang"));
                 db.id_barang = rs.getString("id_barang");
                 db.nama_barang = rs.getString("nama_barang");
                 db.harga = rs.getDouble("harga_jual");
+
+                System.out.println("jumlah" + jumlahBarang);
+                System.out.println("harga " + db.harga);
                 tambah(db, jumlahBarang);
 
             }
@@ -249,18 +283,17 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         txt_panggilan = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
+        kasir_profil = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_jual = new javax.swing.JTable();
         btn_tambah = new javax.swing.JLabel();
         btn_keranjang = new javax.swing.JLabel();
-        btn_back = new javax.swing.JLabel();
         btn_hitung = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txt_total = new javax.swing.JTextField();
+        txt_Total = new javax.swing.JTextField();
         txt_kembalian = new javax.swing.JTextField();
         txt_bayar = new javax.swing.JTextField();
         btn_bayar = new javax.swing.JLabel();
@@ -327,7 +360,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         });
 
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/userhitam.png"))); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/user biru1 1.png"))); // NOI18N
 
         txt_panggilan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         txt_panggilan.setForeground(new java.awt.Color(204, 204, 204));
@@ -385,13 +418,13 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(63, 114, 175));
 
-        jButton6.setBackground(new java.awt.Color(63, 114, 175));
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/profilbiru.png"))); // NOI18N
-        jButton6.setBorder(null);
-        jButton6.setBorderPainted(false);
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        kasir_profil.setBackground(new java.awt.Color(63, 114, 175));
+        kasir_profil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/profilbiru.png"))); // NOI18N
+        kasir_profil.setBorder(null);
+        kasir_profil.setBorderPainted(false);
+        kasir_profil.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
+                kasir_profilMouseClicked(evt);
             }
         });
 
@@ -424,13 +457,6 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
             }
         });
 
-        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/kembali.png"))); // NOI18N
-        btn_back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_backMouseClicked(evt);
-            }
-        });
-
         btn_hitung.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/hitung.png"))); // NOI18N
         btn_hitung.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -450,10 +476,10 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Kembalian :");
 
-        txt_total.setEditable(false);
-        txt_total.addActionListener(new java.awt.event.ActionListener() {
+        txt_Total.setEditable(false);
+        txt_Total.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_totalActionPerformed(evt);
+                txt_TotalActionPerformed(evt);
             }
         });
 
@@ -476,6 +502,12 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
         tgljual.setEditable(false);
 
+        txt_cari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_cariActionPerformed(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("TRANSAKSI JUAL");
@@ -491,7 +523,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_Total, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -503,12 +535,9 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_keranjang))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(id_jual, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tgljual, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(id_jual, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tgljual, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -538,11 +567,11 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                     .addComponent(tgljual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_Total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(9, 9, 9)
@@ -551,7 +580,6 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                     .addComponent(txt_kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_back)
                     .addComponent(btn_hitung)
                     .addComponent(btn_bayar))
                 .addContainerGap())
@@ -582,7 +610,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6))
+                                .addComponent(kasir_profil))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
@@ -594,7 +622,7 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton6)
+                        .addComponent(kasir_profil)
                         .addGap(90, 90, 90))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -659,12 +687,6 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton4MouseClicked
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
-        ksr_profil r = new ksr_profil();
-        r.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButton6MouseClicked
-
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         ksr_dashboard r = new ksr_dashboard();
         r.setVisible(true);
@@ -672,49 +694,10 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        ksr_dt_barang r = new ksr_dt_barang();
+        ksr_dataBarang r = new ksr_dataBarang();
         r.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton3MouseClicked
-
-    private void txt_totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_totalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_totalActionPerformed
-
-    private void txt_kembalianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_kembalianActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_kembalianActionPerformed
-
-    private void btn_tambahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_tambahMouseClicked
-        ksr_tbh_transaksi_jual r = new ksr_tbh_transaksi_jual();
-        r.setVisible(true);
-        this.setVisible(false);
-
-
-    }//GEN-LAST:event_btn_tambahMouseClicked
-
-    private void btn_keranjangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_keranjangMouseClicked
-        // TODO add your handling code here:
-        ksr_transaksi_keranjang_jual p = new ksr_transaksi_keranjang_jual();
-        p.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btn_keranjangMouseClicked
-
-    private void btn_hitungMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_hitungMouseClicked
-        // TODO add your handling code here:
-        tr_jual h = new tr_jual();
-        double total = Double.parseDouble(txt_total.getText());
-        double bayar = Double.parseDouble(txt_bayar.getText());
-        double kembalian = bayar - total;
-        String kembaliann = Double.toString(kembalian);
-        if (bayar >= total) {
-            txt_kembalian.setText(kembaliann);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "uang tidak cukup");
-        }
-
-    }//GEN-LAST:event_btn_hitungMouseClicked
     private void trjual() {
         if (p == null) {
             p = new tr_jual();
@@ -723,50 +706,50 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
 
         // insert tabel penjualan
         try {
-             String idkaryawan = session.getInstance().getId();
-                this.stat = k.getCon().prepareStatement("insert into penjualan values (?, ?, ?, ?)");
-                stat.setString(1, id_jual.getText());
-                stat.setString(2, tgljual.getText());
-                stat.setString(3, "KY003");
-                stat.setString(4, txt_total.getText());
-                stat.executeUpdate();
+            String total = txt_Total.getText();
+            double Total = formatUang.setDefault(total);
+            String idkaryawan = session.getInstance().getId();
+            this.stat = k.getCon().prepareStatement("insert into penjualan values (?, ?, ?, ?)");
+            stat.setString(1, id_jual.getText());
+            stat.setString(2, tgljual.getText());
+            stat.setString(3, "KY003");
+            stat.setString(4, String.valueOf(Total));
+            stat.executeUpdate();
 
-                // insert detail penjualan
+            // insert detail penjualan
+            try {
+                String idbarang = "";
+                String jumlah = "";
+                this.stat = k.getCon().prepareStatement("select id_barang, nama_barang, harga, sum(jumlah) as jumlah, sum(total) as total "
+                        + "from keranjang "
+                        + "group by id_barang, nama_barang");
+                this.rs = this.stat.executeQuery();
+
+                while (rs.next()) {
+                    idbarang = rs.getString("id_barang");
+                    jumlah = rs.getString("jumlah");
+                    total = rs.getString("total");
+
+                    this.stat = k.getCon().prepareStatement("insert into detail_jual values (?, ?, ?, ?)");
+                    stat.setString(1, id_jual.getText());
+                    stat.setString(2, idbarang);
+                    stat.setString(3, jumlah);
+                    stat.setString(4, total);
+                    stat.executeUpdate();
+                }
+
                 try {
-                    String idbarang = "";
-                    String jumlah = "";
-                    String total = "";
+                    this.stat = k.getCon().prepareStatement("delete from keranjang");
+                    stat.executeUpdate();
+                    refreshTable();
 
-                    this.stat = k.getCon().prepareStatement("select id_barang, nama_barang, harga, sum(jumlah) as jumlah, sum(total) as total "
-                            + "from keranjang "
-                            + "group by id_barang, nama_barang");
-                    this.rs = this.stat.executeQuery();
-
-                    while (rs.next()) {
-                        idbarang = rs.getString("id_barang");
-                        jumlah = rs.getString("jumlah");
-                        total = rs.getString("total");
-
-                        this.stat = k.getCon().prepareStatement("insert into detail_jual values (?, ?, ?, ?)");
-                        stat.setString(1, id_jual.getText());
-                        stat.setString(2, idbarang);
-                        stat.setString(3, jumlah);
-                        stat.setString(4, total);
-                        stat.executeUpdate();
-                    }
-
-                    try {
-                        this.stat = k.getCon().prepareStatement("delete from keranjang");
-                        stat.executeUpdate();
-                        refreshTable();
-
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, e.getMessage());
-                    }
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());
                 }
-                JOptionPane.showMessageDialog(null, "pembayaran berhasil!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            JOptionPane.showMessageDialog(null, "pembayaran berhasil!");
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -775,6 +758,10 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         txt_kembalian.setText("");
         generateIdTRJ();
     }
+    private void txt_panggilanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_panggilanMouseClicked
+        ;
+    }//GEN-LAST:event_txt_panggilanMouseClicked
+
     private void btn_bayarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_bayarMouseClicked
         // TODO add your handling code here:
         try {
@@ -793,21 +780,60 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-
     }//GEN-LAST:event_btn_bayarMouseClicked
 
-    private void btn_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_backMouseClicked
-        ksr_transaksi r = new ksr_transaksi();
-        r.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btn_backMouseClicked
-
-    private void txt_panggilanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_panggilanMouseClicked
+    private void txt_kembalianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_kembalianActionPerformed
         // TODO add your handling code here:
-        user_profile r = new user_profile();
+    }//GEN-LAST:event_txt_kembalianActionPerformed
+
+    private void txt_TotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_TotalActionPerformed
+
+    private void btn_hitungMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_hitungMouseClicked
+        // TODO add your handling code here:
+        tr_jual h = new tr_jual();
+        String total = txt_Total.getText();
+        double Total = formatUang.setDefault(total);
+        double bayar = Double.parseDouble(txt_bayar.getText());
+        double kembalian = bayar - Total;
+        String kembaliann = Double.toString(kembalian);
+        if (bayar >= Total) {
+            txt_kembalian.setText(kembaliann);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "uang tidak cukup");
+        }
+    }//GEN-LAST:event_btn_hitungMouseClicked
+
+    private void btn_keranjangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_keranjangMouseClicked
+        
+    }//GEN-LAST:event_btn_keranjangMouseClicked
+
+    private void btn_tambahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_tambahMouseClicked
+        ksr_tbh_transaksi_jual r = new ksr_tbh_transaksi_jual();
         r.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_txt_panggilanMouseClicked
+
+    }//GEN-LAST:event_btn_tambahMouseClicked
+
+    private void kasir_profilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kasir_profilMouseClicked
+        int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (jawab == JOptionPane.YES_OPTION) {
+            Login c = new Login();
+            c.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_kasir_profilMouseClicked
+
+    private void txt_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cariActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_cariActionPerformed
 
     /**
      * @param args the command line arguments
@@ -898,6 +924,198 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -908,7 +1126,6 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btn_back;
     private javax.swing.JLabel btn_bayar;
     private javax.swing.JLabel btn_hitung;
     private javax.swing.JLabel btn_keranjang;
@@ -917,7 +1134,6 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -932,12 +1148,13 @@ public class ksr_transaksi_jual extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton kasir_profil;
     private javax.swing.JTable tbl_jual;
     private javax.swing.JTextField tgljual;
+    private javax.swing.JTextField txt_Total;
     private javax.swing.JTextField txt_bayar;
     private javax.swing.JTextField txt_cari;
     private javax.swing.JTextField txt_kembalian;
     private javax.swing.JLabel txt_panggilan;
-    private javax.swing.JTextField txt_total;
     // End of variables declaration//GEN-END:variables
 }

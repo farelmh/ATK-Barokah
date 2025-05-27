@@ -191,6 +191,7 @@ public class lap_keuntungan extends javax.swing.JFrame {
         user = new javax.swing.JLabel();
         txt_panggilan = new javax.swing.JLabel();
         admin = new javax.swing.JLabel();
+        btn_transaksi = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         btn_logout = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -298,6 +299,16 @@ public class lap_keuntungan extends javax.swing.JFrame {
         admin.setForeground(new java.awt.Color(204, 204, 204));
         admin.setText("Admin");
 
+        btn_transaksi.setBackground(new java.awt.Color(63, 114, 175));
+        btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        btn_transaksi.setBorder(null);
+        btn_transaksi.setBorderPainted(false);
+        btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_transaksiMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -316,7 +327,8 @@ public class lap_keuntungan extends javax.swing.JFrame {
                             .addComponent(btn_barang)
                             .addComponent(btn_karyawan)
                             .addComponent(btn_laporan)
-                            .addComponent(btn_supplier)))
+                            .addComponent(btn_supplier)
+                            .addComponent(btn_transaksi)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(admin)))
@@ -340,8 +352,10 @@ public class lap_keuntungan extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_supplier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_transaksi)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_laporan)
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addContainerGap(160, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(63, 114, 175));
@@ -724,6 +738,13 @@ public class lap_keuntungan extends javax.swing.JFrame {
         resetPencarian();
     }//GEN-LAST:event_btn_cari4ActionPerformed
 
+    private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
+        // TODO add your handling code here:
+        adm_transaksi_jual a = new adm_transaksi_jual();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_transaksiMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -771,6 +792,7 @@ public class lap_keuntungan extends javax.swing.JFrame {
     private javax.swing.JButton btn_laporan;
     private javax.swing.JButton btn_logout;
     private javax.swing.JButton btn_supplier;
+    private javax.swing.JButton btn_transaksi;
     private javax.swing.JPanel filterPanel;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
