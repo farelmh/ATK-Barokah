@@ -13,6 +13,25 @@ public class FormTambahSupplier extends FormTambah {
     public FormTambahSupplier(Frame parent) {
         super(parent, "Tambah Supplier", "ID Supplier", "Nama Supplier", "No Telp", "Alamat");
         k.connect();
+        fieldMap.get("ID Supplier").setEnabled(false);
+        makeId();
+    }
+    
+    private void makeId() {
+        try {
+            PreparedStatement stat = k.getCon().prepareStatement("Select max(id_supplier) as id from supplier");
+            ResultSet rs = stat.executeQuery();
+            String newId;
+            if (rs.next()) {
+                String lastId = rs.getString("id");
+                newId = (lastId != null)
+                        ? "SP" + String.format("%03d", Integer.parseInt(lastId.substring(3)) + 1)
+                        : "SP" + "001";
+                fieldMap.get("ID Supplier").setText(newId);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
 import fungsi_lain.modelTabel;
+import fungsi_lain.session;
 import fungsi_tambah_data.FormTambahAkun;
 import fungsi_tambah_data.FormTambahKaryawan;
 import fungsi_tambah_data.FormTambahRFID;
@@ -21,6 +22,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     private DefaultTableModel model = null;
     private String id, namaPanjang, namaPendek, no_telp, email, username, password, id_level, id_rfid = "";
     private final int[] index = {0, 1, 2, 3, 4, 5, 6};
+    String namaPanggilan = session.getInstance().getNama();
 
     konek k = new konek();
 
@@ -31,6 +33,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         tabelKaryawan();
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
         aktifkanTombolUbah();
+        txt_panggilan.setText(namaPanggilan);
     }
 
     public dataKaryawan(String id, String namaPanjang, String namaPendek, String no_telp, String email,
@@ -128,6 +131,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         model.addColumn("Email");
         model.addColumn("Jabatan");
         model.addColumn("Username");
+        model.addColumn("ID RFID");
         tbl_karyawan.setModel(model);
         modelTabel.setModel(tbl_karyawan);
         CariData.TableSorter(tbl_karyawan, txt_cari, index, null, null, null);
@@ -143,9 +147,11 @@ public class dataKaryawan extends javax.swing.JFrame {
                     rs.getString("no_telp"),
                     rs.getString("email"),
                     rs.getString("id_level"),
-                    rs.getString("username")
+                    rs.getString("username"),
+                    rs.getString("id_rfid")
                 };
                 model.addRow(data);
+                modelTabel.setTransparan(tbl_karyawan, 7);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -240,6 +246,9 @@ public class dataKaryawan extends javax.swing.JFrame {
         u.setNo_telp(model.getValueAt(modelRow, 3).toString());
         u.setEmail(model.getValueAt(modelRow, 4).toString());
         u.setId_level(model.getValueAt(modelRow, 5).toString());
+        Object value = model.getValueAt(modelRow, 7);
+        String rfid = (value != null) ? value.toString() : "";
+        u.setId_rfid(rfid);
         return u;
     }
 
@@ -271,6 +280,7 @@ public class dataKaryawan extends javax.swing.JFrame {
             u.setNo_telp(form.getFieldValue("No Telp"));
             u.setEmail(form.getFieldValue("Email"));
             u.setId_level(form.getId_level());
+            u.setId_rfid(form.getFieldValue("ID RFID"));
 
             updateData(u);
         }
@@ -279,14 +289,15 @@ public class dataKaryawan extends javax.swing.JFrame {
     private void updateData(dataKaryawan u) {
         try {
             this.stat = k.getCon().prepareStatement("update karyawan set nama_karyawan = ?, nama_panggilan = ?, no_telp = ?, email = ?,"
-                    + " id_level = ? "
+                    + " id_level = ?, id_rfid = ? \n"
                     + " where id_karyawan = ?");
             stat.setString(1, u.getNamaPanjang());
             stat.setString(2, u.getNamaPendek());
             stat.setString(3, u.getNo_telp());
             stat.setString(4, u.getEmail());
             stat.setString(5, u.getId_level().toLowerCase());
-            stat.setString(6, u.getId().toUpperCase());
+            stat.setString(6, u.getId_rfid());
+            stat.setString(7, u.getId().toUpperCase());
             stat.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Data Karyawan Berhasil Diperbarui");
@@ -351,6 +362,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/dashboard.png"))); // NOI18N
         dashboard.setBorder(null);
         dashboard.setBorderPainted(false);
+        dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dashboard.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dashboardMouseClicked(evt);
@@ -366,6 +378,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/laporan.png"))); // NOI18N
         laporan.setBorder(null);
         laporan.setBorderPainted(false);
+        laporan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         laporan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 laporanMouseClicked(evt);
@@ -381,6 +394,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/barang.png"))); // NOI18N
         barang.setBorder(null);
         barang.setBorderPainted(false);
+        barang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         barang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 barangMouseClicked(evt);
@@ -391,6 +405,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/karyawan.png"))); // NOI18N
         karyawan.setBorder(null);
         karyawan.setBorderPainted(false);
+        karyawan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         karyawan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 karyawanMouseClicked(evt);
@@ -401,6 +416,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         supplier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/supplier.png"))); // NOI18N
         supplier.setBorder(null);
         supplier.setBorderPainted(false);
+        supplier.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         supplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 supplierMouseClicked(evt);
@@ -428,6 +444,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
         btn_transaksi.setBorder(null);
         btn_transaksi.setBorderPainted(false);
+        btn_transaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_transaksiMouseClicked(evt);
@@ -494,6 +511,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/logout2.png"))); // NOI18N
         logout.setBorder(null);
         logout.setBorderPainted(false);
+        logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -503,13 +521,15 @@ public class dataKaryawan extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(218, 212, 181));
 
         btn_tambah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/tambahdataterbaru.png"))); // NOI18N
+        btn_tambah.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_tambah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_tambahMouseClicked(evt);
             }
         });
 
-        btn_ubah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/ubaheditbiru.png"))); // NOI18N
+        btn_ubah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/ubahdata.png"))); // NOI18N
+        btn_ubah.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_ubah.setEnabled(false);
         btn_ubah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -600,7 +620,7 @@ public class dataKaryawan extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Alamat toko");
+        jLabel14.setText("Jl. Argopuro, Desa Prasi");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -680,28 +700,9 @@ public class dataKaryawan extends javax.swing.JFrame {
 
     private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
         // TODO add your handling code here:
-        model.setRowCount(0);
-        try {
-
-            this.stat = k.getCon().prepareStatement("select * from karyawan where id_karyawan like ? or nama_karyawan like ?");
-            stat.setString(1, "" + txt_cari.getText() + "%");
-            stat.setString(2, "" + txt_cari.getText() + "%");
-            this.rs = this.stat.executeQuery();
-
-            while (rs.next()) {
-                Object[] data = {
-                    rs.getString("id_barang"),
-                    rs.getString("nama_barang"),
-                    rs.getString("stok"),
-                    rs.getString("harga_beli"),
-                    rs.getString("harga_jual")
-                };
-                model.addRow(data);
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
+        tabelKaryawan();
+        txt_cari.setText("");
+        CariData.resetTableSorting(tbl_karyawan);
     }//GEN-LAST:event_btn_cariActionPerformed
 
     private void txt_cariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_cariMouseClicked
@@ -745,7 +746,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        
+
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
@@ -778,7 +779,7 @@ public class dataKaryawan extends javax.swing.JFrame {
 
     private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
         // TODO add your handling code here:
-        adm_transaksi_jual a = new adm_transaksi_jual();
+        Transaksi a = new Transaksi();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked

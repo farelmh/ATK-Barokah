@@ -20,7 +20,7 @@ public class FormUbahKaryawan extends FormUbah {
     konek k = new konek();
 
     public FormUbahKaryawan(Frame parent, dataKaryawan karyawan) {
-        super(parent, "Ubah data karyawan", "ID Karyawan", "Nama Lengkap", "Nama Panggilan", "No Telp", "Email");
+        super(parent, "Ubah data karyawan", "ID Karyawan", "Nama Lengkap", "Nama Panggilan", "No Telp", "Email", "ID RFID");
         this.karyawan = karyawan;
         k.connect();
         isiData();
@@ -63,6 +63,7 @@ public class FormUbahKaryawan extends FormUbah {
         setFieldValue("No Telp", karyawan.getNo_telp());
         setFieldValue("Email", karyawan.getEmail());
         setFieldValue("Jabatan", comboJabatan.getSelectedItem().toString());
+        setFieldValue("ID RFID", karyawan.getId_rfid());
     }
 
     public boolean hapusData(boolean hapus) {
@@ -78,6 +79,7 @@ public class FormUbahKaryawan extends FormUbah {
         String notelp = getFieldValue("No Telp");
         String email = getFieldValue("Email");
         String id_level = comboJabatan.getSelectedItem().toString();
+        String idrfid = getFieldValue("ID RFID");
 
         if (id.isEmpty() || namaPanjang.isEmpty() || namaPendek.isEmpty() || notelp.isEmpty() || email.isEmpty() || id_level.isEmpty()) {
             setPesan("Semua kolom harus diisi!");
@@ -92,7 +94,10 @@ public class FormUbahKaryawan extends FormUbah {
         } else if (namaPendek.length() < 3) {
             setPesan("Nama Panggilan minimal 3 karakter!");
             return false;
-        } else if (!notelp.matches("\\d+")) {
+        }  else if (namaPanjang.matches(".*\\d.*") || namaPendek.matches(".*\\d.*")) {
+            setPesan("Tidak boleh ada angka di nama!");
+            return false;
+        }else if (!notelp.matches("\\d+")) {
             setPesan("Nomor Telepon harus berupa angka");
             return false;
         } else if (notelp.length() < 11 || notelp.length() > 13) {
@@ -104,11 +109,17 @@ public class FormUbahKaryawan extends FormUbah {
         } else if (!email.contains("@gmail.com")) {
             setPesan("format email harus @gmail.com");
             return false;
+        } else if (!idrfid.matches("\\d+") && !idrfid.isEmpty()) {
+            setPesan("ID RFID harus hanya berupa angka!");
+            return false;
         } else if (isDuplicate("no_telp", notelp, id)) {
             setPesan("nomor telepon sudah terdaftar!\ngunakan nomor lain!");
             return false;
         } else if (isDuplicate("email", email, id)) {
             setPesan("email sudah terdaftar!\ngunakan email lain!");
+            return false;
+        } else if (isDuplicate("id_rfid", idrfid, id) && !idrfid.isEmpty()) {
+            setPesan("ID Kartu RFID sudah terdaftar! gunakan kartu lain");
             return false;
         }
         return true;

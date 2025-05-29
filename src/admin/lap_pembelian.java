@@ -1375,7 +1375,7 @@ public class lap_pembelian extends javax.swing.JFrame {
 
     private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
         // TODO add your handling code here:
-        adm_transaksi_jual a = new adm_transaksi_jual();
+        Transaksi a = new Transaksi();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked

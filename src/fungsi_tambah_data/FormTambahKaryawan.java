@@ -19,6 +19,25 @@ public class FormTambahKaryawan extends FormTambah {
     public FormTambahKaryawan(Frame parent) {
         super(parent, "Tambah Data Karyawan", "ID Karyawan", "Nama Lengkap", "Nama Panggilan", "Nomor Telepon", "Email");
         k.connect();
+        fieldMap.get("ID Karyawan").setEnabled(false);
+        makeId();
+    }
+
+    private void makeId() {
+        try {
+            PreparedStatement stat = k.getCon().prepareStatement("Select max(id_karyawan) as id from karyawan");
+            ResultSet rs = stat.executeQuery();
+            String newId;
+            if (rs.next()) {
+                String lastId = rs.getString("id");
+                newId = (lastId != null)
+                        ? "KY" + String.format("%03d", Integer.parseInt(lastId.substring(3)) + 1)
+                        : "KY" + "001";
+                fieldMap.get("ID Karyawan").setText(newId);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     @Override
@@ -55,6 +74,9 @@ public class FormTambahKaryawan extends FormTambah {
             return false;
         } else if (namaPanggilan.length() < 3) {
             setPesan("Nama Panggilan minimal 3 karakter!");
+            return false;
+        } else if (namaLengkap.matches(".*\\d.*") || namaPanggilan.matches(".*\\d.*")) {
+            setPesan("Tidak boleh ada angka di nama!");
             return false;
         } else if (!nomorTelp.matches("\\d+")) {
             setPesan("Nomor Telepon harus berupa angka");

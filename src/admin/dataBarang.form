@@ -414,7 +414,7 @@
                                       <Group type="102" attributes="0">
                                           <Component id="txt_cari" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btn_cari" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btn_reset" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -438,7 +438,7 @@
                               <Component id="btn_ubah" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel5" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                                  <Component id="btn_cari" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btn_reset" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_cari" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -534,12 +534,12 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_cariActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btn_cari">
+                <Component class="javax.swing.JButton" name="btn_reset">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="reset"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cariActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_resetActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel5">
@@ -620,7 +620,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Alamat toko"/>
+                <Property name="text" type="java.lang.String" value="Jl. Argopuro, Desa Prasi"/>
               </Properties>
             </Component>
           </SubComponents>

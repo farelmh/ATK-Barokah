@@ -8,6 +8,7 @@ import fungsi_ubah_data.FormUbahBarang;
 import fungsi_lain.modelTabel;
 import fungsi_lain.CariData;
 import fungsi_lain.formatUang;
+import fungsi_lain.session;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -35,6 +36,7 @@ public class dataBarang extends javax.swing.JFrame {
     private final int[] index = {0, 1, 2, 6, 7};
     private final int[] indexUang = {4, 5};
     private final int[] indexAngka = {3};
+    String namaPanggilan = session.getInstance().getNama();
 
     konek k = new konek();
 
@@ -46,6 +48,7 @@ public class dataBarang extends javax.swing.JFrame {
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
         aktifkanTombolUbah();
         onHover();
+        txt_panggilan.setText(namaPanggilan);
     }
 
     // konstruktor dengan parameter
@@ -413,7 +416,7 @@ public class dataBarang extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_barang = new javax.swing.JTable();
         txt_cari = new javax.swing.JTextField();
-        btn_cari = new javax.swing.JButton();
+        btn_reset = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -634,10 +637,10 @@ public class dataBarang extends javax.swing.JFrame {
             }
         });
 
-        btn_cari.setText("reset");
-        btn_cari.addActionListener(new java.awt.event.ActionListener() {
+        btn_reset.setText("reset");
+        btn_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cariActionPerformed(evt);
+                btn_resetActionPerformed(evt);
             }
         });
 
@@ -698,7 +701,7 @@ public class dataBarang extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(txt_cari)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_cari)))))
+                                .addComponent(btn_reset)))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -715,7 +718,7 @@ public class dataBarang extends javax.swing.JFrame {
                     .addComponent(btn_ubah, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btn_cari)
+                        .addComponent(btn_reset)
                         .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -730,7 +733,7 @@ public class dataBarang extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Alamat toko");
+        jLabel14.setText("Jl. Argopuro, Desa Prasi");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -809,13 +812,13 @@ public class dataBarang extends javax.swing.JFrame {
 
     }//GEN-LAST:event_dashboardActionPerformed
 
-    private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
+    private void btn_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_resetActionPerformed
         // TODO add your handling code here:
         //  prosescari(null);
         tabelBarang();
         txt_cari.setText("");
         CariData.resetTableSorting(tbl_barang);
-    }//GEN-LAST:event_btn_cariActionPerformed
+    }//GEN-LAST:event_btn_resetActionPerformed
 
     private void txt_cariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_cariMouseClicked
         // TODO add your handling code here:
@@ -909,7 +912,7 @@ public class dataBarang extends javax.swing.JFrame {
 
     private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
         // TODO add your handling code here:
-        adm_transaksi_jual a = new adm_transaksi_jual();
+        Transaksi a = new Transaksi();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked
@@ -959,7 +962,7 @@ public class dataBarang extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton barang;
-    private javax.swing.JButton btn_cari;
+    private javax.swing.JButton btn_reset;
     private javax.swing.JLabel btn_tambah;
     private javax.swing.JButton btn_transaksi;
     private javax.swing.JLabel btn_ubah;

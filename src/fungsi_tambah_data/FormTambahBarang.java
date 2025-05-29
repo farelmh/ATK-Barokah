@@ -166,7 +166,7 @@ public class FormTambahBarang extends FormTambah {
     public String getHargaJual() {
         return hjual.getText();
     }
-    
+
     public String getIdSatuan() {
         return idSatuan;
     }
@@ -253,7 +253,21 @@ public class FormTambahBarang extends FormTambah {
     @Override
     protected boolean validateInput() {
         // hitung ulang harga per pcs
-        double hargaTotal = Double.parseDouble(fieldMap.get("Harga Kulakan").getText());
+        String hargaKulak = fieldMap.get("Harga Kulakan").getText();
+
+        if (hargaKulak.isEmpty()) {
+            setPesan("semua kolom harus diisi");
+            return false;
+        }
+        if (!hargaKulak.matches("\\d+")) {
+            setPesan("Harga harus berupa angka!");
+            return false;
+        }
+        double hargaTotal = Double.parseDouble(hargaKulak);
+        if (hargaTotal < 100) {
+            setPesan("Harga kulak setidaknya terdiri dari 3 angka!");
+            return false;
+        }
         konversiHarga(hargaTotal);
         fieldHargaBeliOtomatis.setText(hargaSatuan);
 

@@ -3,25 +3,20 @@ package admin;
 import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.RoundedPanel;
+import fungsi_lain.session;
 import javax.swing.JOptionPane;
+
 public class laporan extends javax.swing.JFrame {
 
     konek k = new konek();
+    String namaPanggilan = session.getInstance().getNama();
 
     public laporan() {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
-
+        txt_panggilan.setText(namaPanggilan);
     }
-
-    class brg extends laporan {
-
-        public brg() {
-            
-        }
-    }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -71,6 +66,7 @@ public class laporan extends javax.swing.JFrame {
         dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/dashboard.png"))); // NOI18N
         dashboard.setBorder(null);
         dashboard.setBorderPainted(false);
+        dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dashboard.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dashboardMouseClicked(evt);
@@ -86,6 +82,7 @@ public class laporan extends javax.swing.JFrame {
         laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/laporan.png"))); // NOI18N
         laporan.setBorder(null);
         laporan.setBorderPainted(false);
+        laporan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         laporan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 laporanMouseClicked(evt);
@@ -101,6 +98,7 @@ public class laporan extends javax.swing.JFrame {
         barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/barang.png"))); // NOI18N
         barang.setBorder(null);
         barang.setBorderPainted(false);
+        barang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         barang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 barangMouseClicked(evt);
@@ -111,6 +109,7 @@ public class laporan extends javax.swing.JFrame {
         karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/karyawan.png"))); // NOI18N
         karyawan.setBorder(null);
         karyawan.setBorderPainted(false);
+        karyawan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         karyawan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 karyawanMouseClicked(evt);
@@ -121,6 +120,7 @@ public class laporan extends javax.swing.JFrame {
         supplier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/supplier.png"))); // NOI18N
         supplier.setBorder(null);
         supplier.setBorderPainted(false);
+        supplier.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         supplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 supplierMouseClicked(evt);
@@ -148,6 +148,7 @@ public class laporan extends javax.swing.JFrame {
         btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
         btn_transaksi.setBorder(null);
         btn_transaksi.setBorderPainted(false);
+        btn_transaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_transaksiMouseClicked(evt);
@@ -214,6 +215,7 @@ public class laporan extends javax.swing.JFrame {
         logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/logout2.png"))); // NOI18N
         logout.setBorder(null);
         logout.setBorderPainted(false);
+        logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -227,6 +229,7 @@ public class laporan extends javax.swing.JFrame {
         jLabel2.setText("LAPORAN");
 
         pnl_penjualan.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_penjualan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnl_penjualan.setPreferredSize(new java.awt.Dimension(170, 170));
         pnl_penjualan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -256,6 +259,7 @@ public class laporan extends javax.swing.JFrame {
         );
 
         pnl_pembelian.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_pembelian.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnl_pembelian.setPreferredSize(new java.awt.Dimension(170, 170));
         pnl_pembelian.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -285,6 +289,7 @@ public class laporan extends javax.swing.JFrame {
         );
 
         pnl_keuntungan.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_keuntungan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnl_keuntungan.setPreferredSize(new java.awt.Dimension(170, 170));
         pnl_keuntungan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -314,6 +319,7 @@ public class laporan extends javax.swing.JFrame {
         );
 
         pnl_stok.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_stok.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnl_stok.setPreferredSize(new java.awt.Dimension(170, 170));
         pnl_stok.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -343,6 +349,7 @@ public class laporan extends javax.swing.JFrame {
         );
 
         pnl_operasional.setBackground(new java.awt.Color(255, 255, 255));
+        pnl_operasional.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnl_operasional.setPreferredSize(new java.awt.Dimension(170, 170));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -367,6 +374,7 @@ public class laporan extends javax.swing.JFrame {
         );
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel12.setPreferredSize(new java.awt.Dimension(170, 170));
         jPanel12.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -447,7 +455,7 @@ public class laporan extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Alamat toko");
+        jLabel14.setText("Jl. Argopuro, Desa Prasi");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -552,7 +560,7 @@ public class laporan extends javax.swing.JFrame {
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
-        
+
     }//GEN-LAST:event_laporanMouseClicked
 
     private void laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_laporanActionPerformed
@@ -560,7 +568,7 @@ public class laporan extends javax.swing.JFrame {
     }//GEN-LAST:event_laporanActionPerformed
 
     private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
-       dataSupplier r = new dataSupplier();
+        dataSupplier r = new dataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_supplierMouseClicked
@@ -606,7 +614,7 @@ public class laporan extends javax.swing.JFrame {
 
     private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
         // TODO add your handling code here:
-        adm_transaksi_jual a = new adm_transaksi_jual();
+        Transaksi a = new Transaksi();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked

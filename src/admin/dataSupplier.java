@@ -4,6 +4,7 @@ import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
 import fungsi_lain.modelTabel;
+import fungsi_lain.session;
 import fungsi_tambah_data.FormTambahSupplier;
 import fungsi_ubah_data.FormUbahSupplier;
 import java.sql.PreparedStatement;
@@ -19,6 +20,7 @@ public class dataSupplier extends javax.swing.JFrame {
     private DefaultTableModel model = null;
     private String id, nama, notelp, alamat = "";
     private final int[] index = {0, 1, 2, 3};
+    String namaPanggilan = session.getInstance().getNama();
 
     konek k = new konek();
 
@@ -29,6 +31,7 @@ public class dataSupplier extends javax.swing.JFrame {
         tabelSupplier();
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
         aktifkanTombolUbah();
+        txt_panggilan.setText(namaPanggilan);
     }
 
     public dataSupplier(String id, String nama, String notelp, String alamat) {
@@ -232,7 +235,7 @@ public class dataSupplier extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_supplier = new javax.swing.JTable();
         txt_cari = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
+        btn_reset = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -251,6 +254,7 @@ public class dataSupplier extends javax.swing.JFrame {
         dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/dashboard.png"))); // NOI18N
         dashboard.setBorder(null);
         dashboard.setBorderPainted(false);
+        dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dashboard.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dashboardMouseClicked(evt);
@@ -266,6 +270,7 @@ public class dataSupplier extends javax.swing.JFrame {
         laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/laporan.png"))); // NOI18N
         laporan.setBorder(null);
         laporan.setBorderPainted(false);
+        laporan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         laporan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 laporanMouseClicked(evt);
@@ -281,11 +286,13 @@ public class dataSupplier extends javax.swing.JFrame {
         barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/barang.png"))); // NOI18N
         barang.setBorder(null);
         barang.setBorderPainted(false);
+        barang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         karyawan.setBackground(new java.awt.Color(63, 114, 175));
         karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/karyawan.png"))); // NOI18N
         karyawan.setBorder(null);
         karyawan.setBorderPainted(false);
+        karyawan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         karyawan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 karyawanMouseClicked(evt);
@@ -296,6 +303,7 @@ public class dataSupplier extends javax.swing.JFrame {
         supplier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/supplier.png"))); // NOI18N
         supplier.setBorder(null);
         supplier.setBorderPainted(false);
+        supplier.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         supplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 supplierMouseClicked(evt);
@@ -323,6 +331,7 @@ public class dataSupplier extends javax.swing.JFrame {
         btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
         btn_transaksi.setBorder(null);
         btn_transaksi.setBorderPainted(false);
+        btn_transaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_transaksiMouseClicked(evt);
@@ -389,6 +398,7 @@ public class dataSupplier extends javax.swing.JFrame {
         logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/logout2.png"))); // NOI18N
         logout.setBorder(null);
         logout.setBorderPainted(false);
+        logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -398,13 +408,15 @@ public class dataSupplier extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(218, 212, 181));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/tambahdataterbaru.png"))); // NOI18N
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
             }
         });
 
-        btn_ubah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/ubaheditbiru.png"))); // NOI18N
+        btn_ubah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/ubahdata.png"))); // NOI18N
+        btn_ubah.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_ubah.setEnabled(false);
         btn_ubah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -441,10 +453,10 @@ public class dataSupplier extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("cari");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btn_reset.setText("reset");
+        btn_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btn_resetActionPerformed(evt);
             }
         });
 
@@ -468,7 +480,7 @@ public class dataSupplier extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)))
+                        .addComponent(btn_reset)))
                 .addContainerGap())
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(418, 418, 418)
@@ -485,7 +497,7 @@ public class dataSupplier extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btn_ubah, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton7)
+                        .addComponent(btn_reset)
                         .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -500,7 +512,7 @@ public class dataSupplier extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Alamat toko");
+        jLabel14.setText("Jl. Argopuro, Desa Prasi");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -578,14 +590,16 @@ public class dataSupplier extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_dashboardActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btn_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_resetActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btn_resetActionPerformed
 
     private void txt_cariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_cariMouseClicked
         // TODO add your handling code here:
-        //txt_cari.setText("");
+        tabelSupplier();
+        txt_cari.setText("");
+        CariData.resetTableSorting(tbl_supplier);
     }//GEN-LAST:event_txt_cariMouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
@@ -654,7 +668,7 @@ public class dataSupplier extends javax.swing.JFrame {
 
     private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
         // TODO add your handling code here:
-        adm_transaksi_jual a = new adm_transaksi_jual();
+        Transaksi a = new Transaksi();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked
@@ -702,10 +716,10 @@ public class dataSupplier extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton barang;
+    private javax.swing.JButton btn_reset;
     private javax.swing.JButton btn_transaksi;
     private javax.swing.JLabel btn_ubah;
     private javax.swing.JButton dashboard;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;

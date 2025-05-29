@@ -5,7 +5,6 @@
 package barokah_atk;
 
 import barokah_atk.Login;
-import java.awt.Color;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,9 +12,9 @@ import fungsi_lain.RoundedPanel;
 
 public class LupaSandi extends javax.swing.JFrame {
 
-    private email e;
     private PreparedStatement stat;
     private ResultSet rs;
+    private String idKaryawan;
     konek a = new konek();
 
     public LupaSandi() {
@@ -23,15 +22,6 @@ public class LupaSandi extends javax.swing.JFrame {
         initComponents();
         setVisible(true);
         this.setLocationRelativeTo(null);
-    }
-
-    class email {
-
-        String email, password;
-
-        public email() {
-            this.email = txt_email.getText();
-        }
     }
 
     /**
@@ -81,6 +71,7 @@ public class LupaSandi extends javax.swing.JFrame {
 
         txt_password.setBackground(new java.awt.Color(242, 232, 198));
         txt_password.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txt_password.setEnabled(false);
         txt_password.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txt_passwordMouseClicked(evt);
@@ -95,6 +86,7 @@ public class LupaSandi extends javax.swing.JFrame {
         showpasswd.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         showpasswd.setForeground(new java.awt.Color(17, 45, 78));
         showpasswd.setText("Show Password");
+        showpasswd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         showpasswd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showpasswdActionPerformed(evt);
@@ -111,8 +103,10 @@ public class LupaSandi extends javax.swing.JFrame {
         jLabel9.setText("________________________________________________________________________");
 
         jLabel1.setBackground(new java.awt.Color(17, 45, 78));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(17, 45, 78));
         jLabel1.setText("<< Kembali Ke Halaman Login");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -120,6 +114,7 @@ public class LupaSandi extends javax.swing.JFrame {
         });
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/submit panjang2.png"))); // NOI18N
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
@@ -127,6 +122,7 @@ public class LupaSandi extends javax.swing.JFrame {
         });
 
         txt_email.setBackground(new java.awt.Color(242, 232, 198));
+        txt_email.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txt_email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_emailActionPerformed(evt);
@@ -141,15 +137,6 @@ public class LupaSandi extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(jLabel9))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(127, 127, 127)
-                        .addComponent(judul)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(47, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,6 +156,12 @@ public class LupaSandi extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(labelj1)
                         .addGap(210, 210, 210))))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(judul)
+                    .addComponent(jLabel9))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +218,7 @@ public class LupaSandi extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -250,25 +243,23 @@ public class LupaSandi extends javax.swing.JFrame {
         // TODO add your handling code here:
         Login l = new Login();
         l.setVisible(true);
-        this.setVisible(false);
+        this.dispose();
 
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        if (e == null) {
-            e = new email();
-        }
-        e.email = txt_email.getText();
+        String email = txt_email.getText();
         if (judul.getText().equals("Lupa Sandi? Masukkan Email yang Terdaftar")) {
             try {
-                this.stat = a.getCon().prepareStatement("SELECT * FROM karyawan WHERE email ='" + e.email + "';");
+                this.stat = a.getCon().prepareStatement("SELECT * FROM karyawan WHERE email ='" + email + "';");
                 this.rs = this.stat.executeQuery();
                 if (rs.next()) {
-                    e.password = rs.getString("id_karyawan");
-                    System.out.println(e.password);
+                    idKaryawan = rs.getString("id_karyawan");
                     txt_email.setText("");
                     judul.setText("Masukkan Password Baru");
-
+                    txt_email.setEnabled(false);
+                    txt_password.setEnabled(true);
+                    txt_password.requestFocusInWindow();
                 } else {
                     JOptionPane.showMessageDialog(null, "email tidak ditemukan");
                 }
@@ -278,16 +269,24 @@ public class LupaSandi extends javax.swing.JFrame {
             }
 
         } else if (judul.getText().equals("Masukkan Password Baru")) {
+            String password = txt_password.getText();
             try {
                 this.stat = a.getCon().prepareStatement("UPDATE karyawan SET PASSWORD = ? WHERE id_karyawan = ?");
-                stat.setString(1, e.email);
-                stat.setString(2, e.password);
-                stat.executeUpdate();
+                stat.setString(1, password);
+                stat.setString(2, idKaryawan);
 
-                JOptionPane.showMessageDialog(null, "Ganti Password Berhasil, Silahkan login dengan password baru ");
-                Login p = new Login();
-                p.setVisible(true);
-                this.setVisible(false);
+                if (password.length() < 8 || password.length() > 20) {
+                    JOptionPane.showMessageDialog(null, "Password harus diantara 8 - 20 karakter");
+                } else if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%&*\\-_]).{8,20}$")) {
+                    JOptionPane.showMessageDialog(null, "Password harus mengandung kombinasi huruf kapital, huruf kecil, angka, dan simbol khusus,\n"
+                            + "simbol khusus yang bisa digunakan: ! @ # $ % & * - _ ");
+                } else {
+                    stat.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Ganti Password Berhasil, Silahkan login dengan password baru ");
+                    Login p = new Login();
+                    p.setVisible(true);
+                    this.dispose();
+                }
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());

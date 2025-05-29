@@ -632,7 +632,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
         alamat_toko.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         alamat_toko.setForeground(new java.awt.Color(204, 204, 204));
-        alamat_toko.setText("Alamat toko");
+        alamat_toko.setText("Jl. Argopuro, Desa Prasi");
 
         logo_atk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/stationery 1.png"))); // NOI18N
 
@@ -786,7 +786,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
     private void btn_laporan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporan1MouseClicked
         // TODO add your handling code here:
-        adm_transaksi_jual a = new adm_transaksi_jual();
+        Transaksi a = new Transaksi();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_laporan1MouseClicked

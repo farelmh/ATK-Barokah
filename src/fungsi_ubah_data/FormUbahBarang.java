@@ -181,6 +181,7 @@ public class FormUbahBarang extends FormUbah {
         String hbeli = getFieldValue("Harga Beli /Pcs");
         String hjual = getFieldValue("Harga Jual /Pcs");
         String idBarang = getFieldValue("ID Barang");
+        String barcode = getFieldValue("Kode Barcode");
         double hbeli1 = formatUang.setDefault(hbeli);
         String hargaBeliFormat = String.valueOf(hbeli1);
         
@@ -196,6 +197,11 @@ public class FormUbahBarang extends FormUbah {
         }
         if (isDuplicate("nama_barang", nama, idBarang)) {
             setPesan("Nama barang sudah terdaftar!");
+            return false;
+        }
+        
+        if (isDuplicate("id_barcode", barcode, idBarang) && !barcode.isEmpty()) {
+            setPesan("Barcode sudah terdaftar!");
             return false;
         }
         return true;

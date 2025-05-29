@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 
 public class konek {
 
-    private String url = "jdbc:mysql://localhost:3306/elkasir";
+    private String url = "jdbc:mysql://localhost:3306/barokah_atk";
     private String username = "root";
     private String password = "";
     private Connection con;
