@@ -1,13 +1,13 @@
 package barokah_atk;
 
-import admin.adm_dashboard;
+import admin.Adm_dashboard;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import fungsi_lain.session;
-import kasir.ksr_dashboard;
+import kasir.KasirDashboard;
 import fungsi_lain.RoundedPanel;
 
 public class Login extends javax.swing.JFrame {
@@ -113,13 +113,13 @@ public class Login extends javax.swing.JFrame {
         switch (id) {
             case "admin":
                 JOptionPane.showMessageDialog(null, "Login Berhasil!, Anda masuk sebagai admin");
-                adm_dashboard db = new adm_dashboard();
+                Adm_dashboard db = new Adm_dashboard();
                 db.setVisible(true);
                 this.dispose();
                 break;
             case "kasir":
                 JOptionPane.showMessageDialog(null, "Login Berhasil!, Anda masuk sebagai kasir");
-                ksr_dashboard bd = new ksr_dashboard();
+                KasirDashboard bd = new KasirDashboard();
                 bd.setVisible(true);
                 this.dispose();
                 break;

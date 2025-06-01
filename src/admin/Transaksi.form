@@ -225,7 +225,7 @@
                               <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="296" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="291" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -270,7 +270,7 @@
                 <Component class="javax.swing.JLabel" name="btn_tambah">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/gambar/tambah-ubah.png"/>
+                      <Image iconType="3" name="/gambar/trollynew.png"/>
                     </Property>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
@@ -419,7 +419,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="TOKO BAROKAH"/>
+                <Property name="text" type="java.lang.String" value="TOKO BAROKAH ATK"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel14">
@@ -430,7 +430,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Jl. Argopuro, Desa Prasi"/>
+                <Property name="text" type="java.lang.String" value="Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -460,7 +460,7 @@
                                       <Component id="btn_dataKaryawan1" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="btn_laporan1" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="btn_dataSupplier1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="karyawan2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btn_transaksi" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -496,7 +496,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_dataSupplier1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="karyawan2" min="-2" max="-2" attributes="0"/>
+                      <Component id="btn_transaksi" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_laporan1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -643,7 +643,7 @@
                 <Property name="text" type="java.lang.String" value="Admin"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="karyawan2">
+            <Component class="javax.swing.JButton" name="btn_transaksi">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="af" green="72" red="3f" type="rgb"/>
@@ -660,7 +660,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="karyawan2MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btn_transaksiMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>

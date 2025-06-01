@@ -190,7 +190,7 @@ public class Transaksi extends javax.swing.JFrame {
 
     }
 
- // show tanggal otomatis
+    // show tanggal otomatis
     private void setTanggal() {
         LocalDate tgl1 = LocalDate.now();
         Locale localeID = Locale.forLanguageTag("id-ID");
@@ -202,7 +202,7 @@ public class Transaksi extends javax.swing.JFrame {
     }
 
     //pop up jumlah
-    public void cariBarcode() {
+    private void cariBarcode() {
         txt_cari.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -243,9 +243,7 @@ public class Transaksi extends javax.swing.JFrame {
 
                 if (option == JOptionPane.OK_OPTION) {
                     int jumlahBarang = (int) spinner.getValue();
-                    System.out.println("jumlah : " + jumlahBarang);
-                    //dataBarang(uid, jumlahBarang);
-
+                    tambahBarang(uid, jumlahBarang);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Tidak DItemukan");
@@ -254,6 +252,58 @@ public class Transaksi extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+    }
+
+    private void tambahBarang(String uid, int jumlahBarang) {
+        try {
+            String id = "";
+            String nama = "";
+            int harga = 0;
+            this.stat = k.getCon().prepareStatement("select * from barang where id_barcode = ?");
+            stat.setString(1, uid);
+            this.rs = this.stat.executeQuery();
+            if (rs.next()) {
+                id = rs.getString("id_barang");
+                nama = rs.getString("nama_barang");
+                harga = rs.getInt("harga_jual");
+            }
+
+            double subtotal = harga * jumlahBarang;
+            this.stat = k.getCon().prepareStatement("insert into keranjang values(?, ?, ?, ?, ?)");
+            stat.setString(1, id);
+            stat.setString(2, nama);
+            stat.setInt(3, harga);
+            stat.setInt(4, jumlahBarang);
+            stat.setDouble(5, subtotal);
+            stat.executeUpdate();
+
+            tabelKeranjang();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void hapusKeranjang() {
+        try {
+            this.stat = k.getCon().prepareStatement("delete from keranjang");
+            stat.executeUpdate();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+    }
+
+    private boolean keluar() {
+        if (model.getRowCount()== 0) {
+            return true;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Keluar dari halaman transaksi?\nDaftar barang yang sudah ditambahkan akan dihapus!", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            hapusKeranjang();
+            return true;
+        }
+        return false;
     }
 
     private void trjual() {
@@ -352,7 +402,7 @@ public class Transaksi extends javax.swing.JFrame {
         logo_user1 = new javax.swing.JLabel();
         txt_panggilan1 = new javax.swing.JLabel();
         admin1 = new javax.swing.JLabel();
-        karyawan2 = new javax.swing.JButton();
+        btn_transaksi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -388,7 +438,7 @@ public class Transaksi extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tbl_jual);
 
-        btn_tambah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/tambah-ubah.png"))); // NOI18N
+        btn_tambah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/trollynew.png"))); // NOI18N
         btn_tambah.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_tambah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -512,7 +562,7 @@ public class Transaksi extends javax.swing.JFrame {
                     .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -532,11 +582,11 @@ public class Transaksi extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("TOKO BAROKAH");
+        jLabel10.setText("TOKO BAROKAH ATK");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Jl. Argopuro, Desa Prasi");
+        jLabel14.setText("Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -664,14 +714,14 @@ public class Transaksi extends javax.swing.JFrame {
         admin1.setForeground(new java.awt.Color(204, 204, 204));
         admin1.setText("Admin");
 
-        karyawan2.setBackground(new java.awt.Color(63, 114, 175));
-        karyawan2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
-        karyawan2.setBorder(null);
-        karyawan2.setBorderPainted(false);
-        karyawan2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        karyawan2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_transaksi.setBackground(new java.awt.Color(63, 114, 175));
+        btn_transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        btn_transaksi.setBorder(null);
+        btn_transaksi.setBorderPainted(false);
+        btn_transaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                karyawan2MouseClicked(evt);
+                btn_transaksiMouseClicked(evt);
             }
         });
 
@@ -691,7 +741,7 @@ public class Transaksi extends javax.swing.JFrame {
                                 .addComponent(btn_dataKaryawan1)
                                 .addComponent(btn_laporan1)
                                 .addComponent(btn_dataSupplier1)
-                                .addComponent(karyawan2)))
+                                .addComponent(btn_transaksi)))
                         .addGroup(jPanel5Layout.createSequentialGroup()
                             .addGap(82, 82, 82)
                             .addComponent(admin1))))
@@ -719,7 +769,7 @@ public class Transaksi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_dataSupplier1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(karyawan2)
+                .addComponent(btn_transaksi)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_laporan1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -775,8 +825,7 @@ public class Transaksi extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Total bayar harus berupa angka!");
                     } else {
                         String kembaliStr = txt_kembalian.getText(); // "Rp 125.000"
-                        kembaliStr = kembaliStr.replace("Rp", "").replace(".", "").trim(); // "125000"
-                        double kembalian = Double.parseDouble(kembaliStr);
+                        double kembalian = formatUang.setDefault(kembaliStr);
 
                         if (kembalian < 0) {
                             JOptionPane.showMessageDialog(null, "Uang yang dibayar kurang!");
@@ -802,7 +851,7 @@ public class Transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_TotalActionPerformed
 
     private void btn_tambahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_tambahMouseClicked
-        adm_tbh_transaksi_jual r = new adm_tbh_transaksi_jual();
+        KeranjangTransaksi r = new KeranjangTransaksi();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_tambahMouseClicked
@@ -815,6 +864,7 @@ public class Transaksi extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION
         );
         if (jawab == JOptionPane.YES_OPTION) {
+            hapusKeranjang();
             Login c = new Login();
             c.setVisible(true);
             this.dispose();
@@ -826,9 +876,11 @@ public class Transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cariActionPerformed
 
     private void btn_dashboard1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dashboard1MouseClicked
-        adm_dashboard r = new adm_dashboard();
-        r.setVisible(true);
-        this.dispose();
+        Adm_dashboard r = new Adm_dashboard();
+        if (keluar()) {
+            r.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_dashboard1MouseClicked
 
     private void btn_dashboard1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dashboard1ActionPerformed
@@ -836,21 +888,27 @@ public class Transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dashboard1ActionPerformed
 
     private void btn_laporan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporan1MouseClicked
-        laporan r = new laporan();
-        r.setVisible(true);
-        this.dispose();
+        Laporan r = new Laporan();
+        if (keluar()) {
+            r.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_laporan1MouseClicked
 
     private void btn_dataBarang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataBarang1ActionPerformed
-        dataBarang q = new dataBarang();
-        q.setVisible(true);
-        this.dispose();
+        DataBarang q = new DataBarang();
+        if (keluar()) {
+            q.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_dataBarang1ActionPerformed
 
     private void btn_dataKaryawan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataKaryawan1MouseClicked
-        dataKaryawan r = new dataKaryawan();
-        r.setVisible(true);
-        this.dispose();
+        DataKaryawan r = new DataKaryawan();
+        if (keluar()) {
+            r.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_dataKaryawan1MouseClicked
 
     private void btn_dataKaryawan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataKaryawan1ActionPerformed
@@ -858,20 +916,20 @@ public class Transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataKaryawan1ActionPerformed
 
     private void btn_dataSupplier1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataSupplier1MouseClicked
-        dataSupplier r = new dataSupplier();
-        r.setVisible(true);
-        this.dispose();
+        DataSupplier r = new DataSupplier();
+        if (keluar()) {
+            r.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btn_dataSupplier1MouseClicked
 
     private void txt_panggilan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_panggilan1MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_panggilan1MouseClicked
 
-    private void karyawan2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawan2MouseClicked
-        Transaksi r = new Transaksi();
-        r.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_karyawan2MouseClicked
+    private void btn_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_transaksiMouseClicked
+
+    }//GEN-LAST:event_btn_transaksiMouseClicked
 
     private void id_jualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_id_jualActionPerformed
         // TODO add your handling code here:
@@ -903,13 +961,6 @@ public class Transaksi extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Transaksi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -928,6 +979,7 @@ public class Transaksi extends javax.swing.JFrame {
     private javax.swing.JButton btn_dataSupplier1;
     private javax.swing.JButton btn_laporan1;
     private javax.swing.JLabel btn_tambah;
+    private javax.swing.JButton btn_transaksi;
     private javax.swing.JTextField id_jual;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -942,7 +994,6 @@ public class Transaksi extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton karyawan2;
     private javax.swing.JButton kasir_profil;
     private javax.swing.JLabel logo_user1;
     private javax.swing.JTable tbl_jual;

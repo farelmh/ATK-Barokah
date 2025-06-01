@@ -536,7 +536,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_reset">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="reset"/>
+                    <Property name="text" type="java.lang.String" value="Reset"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_resetActionPerformed"/>
@@ -609,7 +609,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="TOKO BAROKAH"/>
+                <Property name="text" type="java.lang.String" value="TOKO BAROKAH ATK"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel14">
@@ -620,7 +620,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Jl. Argopuro, Desa Prasi"/>
+                <Property name="text" type="java.lang.String" value="Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo"/>
               </Properties>
             </Component>
           </SubComponents>

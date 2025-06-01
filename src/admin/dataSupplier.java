@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class dataSupplier extends javax.swing.JFrame {
+public class DataSupplier extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -24,7 +24,7 @@ public class dataSupplier extends javax.swing.JFrame {
 
     konek k = new konek();
 
-    public dataSupplier() {
+    public DataSupplier() {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
@@ -34,7 +34,7 @@ public class dataSupplier extends javax.swing.JFrame {
         txt_panggilan.setText(namaPanggilan);
     }
 
-    public dataSupplier(String id, String nama, String notelp, String alamat) {
+    public DataSupplier(String id, String nama, String notelp, String alamat) {
         this.id = id;
         this.nama = nama;
         this.notelp = notelp;
@@ -111,7 +111,7 @@ public class dataSupplier extends javax.swing.JFrame {
 
     private void tambahData() {
         FormTambahSupplier form = new FormTambahSupplier(this);
-        dataSupplier s = new dataSupplier();
+        DataSupplier s = new DataSupplier();
 
         if (form.showDialog()) {
             s.setId(form.getFieldValue("ID Supplier").toUpperCase());
@@ -123,7 +123,7 @@ public class dataSupplier extends javax.swing.JFrame {
         }
     }
 
-    private void tambahKeDb(dataSupplier s) {
+    private void tambahKeDb(DataSupplier s) {
         try {
             this.stat = k.getCon().prepareStatement("insert into supplier values (?, ?, ?, ?)");
             stat.setString(1, s.getId());
@@ -141,8 +141,8 @@ public class dataSupplier extends javax.swing.JFrame {
     }
 
     //fungsi ambil data berdasarkan data yg dipilih
-    private dataSupplier pilihData() {
-        dataSupplier u = new dataSupplier();
+    private DataSupplier pilihData() {
+        DataSupplier u = new DataSupplier();
         int selectedRow = tbl_supplier.getSelectedRow();
         int modelRow = tbl_supplier.convertRowIndexToModel(selectedRow);
 
@@ -155,7 +155,7 @@ public class dataSupplier extends javax.swing.JFrame {
     }
 
     private void ubahData() {
-        dataSupplier s = pilihData();
+        DataSupplier s = pilihData();
         FormUbahSupplier form = new FormUbahSupplier(this, s);
 
         boolean simpan = form.showDialog();
@@ -183,7 +183,7 @@ public class dataSupplier extends javax.swing.JFrame {
         }
     }
 
-    private void updateData(dataSupplier s) {
+    private void updateData(DataSupplier s) {
         try {
             this.stat = k.getCon().prepareStatement("update supplier set nama_supplier = ?, no_telp = ?, alamat = ?\n"
                     + "where id_supplier = ?");
@@ -200,7 +200,7 @@ public class dataSupplier extends javax.swing.JFrame {
         }
     }
 
-    private void hapusData(dataSupplier s) {
+    private void hapusData(DataSupplier s) {
         try {
             this.stat = k.getCon().prepareStatement("delete from supplier where id_supplier = ?");
             stat.setString(1, s.getId());
@@ -287,6 +287,11 @@ public class dataSupplier extends javax.swing.JFrame {
         barang.setBorder(null);
         barang.setBorderPainted(false);
         barang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        barang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                barangMouseClicked(evt);
+            }
+        });
 
         karyawan.setBackground(new java.awt.Color(63, 114, 175));
         karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/karyawan.png"))); // NOI18N
@@ -453,7 +458,7 @@ public class dataSupplier extends javax.swing.JFrame {
             }
         });
 
-        btn_reset.setText("reset");
+        btn_reset.setText("Reset");
         btn_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_resetActionPerformed(evt);
@@ -508,11 +513,11 @@ public class dataSupplier extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("TOKO BAROKAH");
+        jLabel7.setText("TOKO BAROKAH ATK");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Jl. Argopuro, Desa Prasi");
+        jLabel14.setText("Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -592,6 +597,9 @@ public class dataSupplier extends javax.swing.JFrame {
 
     private void btn_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_resetActionPerformed
         // TODO add your handling code here:
+        tabelSupplier();
+        txt_cari.setText("");
+        CariData.resetTableSorting(tbl_supplier);
 
     }//GEN-LAST:event_btn_resetActionPerformed
 
@@ -631,19 +639,19 @@ public class dataSupplier extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked
-        adm_dashboard r = new adm_dashboard();
+        Adm_dashboard r = new Adm_dashboard();
         r.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        dataKaryawan a = new dataKaryawan();
+        DataKaryawan a = new DataKaryawan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
-        laporan a = new laporan();
+        Laporan a = new Laporan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked
@@ -677,6 +685,13 @@ public class dataSupplier extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_transaksiActionPerformed
 
+    private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
+        // TODO add your handling code here:
+        DataBarang a = new DataBarang();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_barangMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -695,20 +710,21 @@ public class dataSupplier extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new dataSupplier().setVisible(true);
+                new DataSupplier().setVisible(true);
 
             }
         });

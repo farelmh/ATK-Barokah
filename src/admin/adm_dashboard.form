@@ -720,7 +720,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="TOKO BAROKAH"/>
+                <Property name="text" type="java.lang.String" value="TOKO BAROKAH ATK"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="alamat_toko">
@@ -731,7 +731,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Jl. Argopuro, Desa Prasi"/>
+                <Property name="text" type="java.lang.String" value="Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="logo_atk">

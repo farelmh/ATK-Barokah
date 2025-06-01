@@ -6,12 +6,12 @@ import fungsi_lain.RoundedPanel;
 import fungsi_lain.session;
 import javax.swing.JOptionPane;
 
-public class laporan extends javax.swing.JFrame {
+public class Laporan extends javax.swing.JFrame {
 
     konek k = new konek();
     String namaPanggilan = session.getInstance().getNama();
 
-    public laporan() {
+    public Laporan() {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
@@ -39,16 +39,22 @@ public class laporan extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         pnl_penjualan = new RoundedPanel(30);
         jLabel3 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
         pnl_pembelian = new RoundedPanel(30);
         jLabel1 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         pnl_keuntungan = new RoundedPanel(30);
         jLabel4 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         pnl_stok = new RoundedPanel(30);
         jLabel5 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         pnl_operasional = new RoundedPanel(30);
         jLabel8 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
         jPanel12 = new RoundedPanel(30);
         jLabel9 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -241,19 +247,28 @@ public class laporan extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
         jLabel3.setText("Laporan Penjualan");
 
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/money.png"))); // NOI18N
+
         javax.swing.GroupLayout pnl_penjualanLayout = new javax.swing.GroupLayout(pnl_penjualan);
         pnl_penjualan.setLayout(pnl_penjualanLayout);
         pnl_penjualanLayout.setHorizontalGroup(
             pnl_penjualanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_penjualanLayout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addComponent(jLabel3)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addGroup(pnl_penjualanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_penjualanLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jLabel3))
+                    .addGroup(pnl_penjualanLayout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel17)))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         pnl_penjualanLayout.setVerticalGroup(
             pnl_penjualanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_penjualanLayout.createSequentialGroup()
-                .addContainerGap(135, Short.MAX_VALUE)
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addGap(15, 15, 15))
         );
@@ -271,19 +286,27 @@ public class laporan extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("Laporan Pembelian");
 
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/beli.png"))); // NOI18N
+
         javax.swing.GroupLayout pnl_pembelianLayout = new javax.swing.GroupLayout(pnl_pembelian);
         pnl_pembelian.setLayout(pnl_pembelianLayout);
         pnl_pembelianLayout.setHorizontalGroup(
             pnl_pembelianLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_pembelianLayout.createSequentialGroup()
-                .addContainerGap(59, Short.MAX_VALUE)
+                .addContainerGap(60, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(61, 61, 61))
+                .addGap(60, 60, 60))
+            .addGroup(pnl_pembelianLayout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(jLabel10)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnl_pembelianLayout.setVerticalGroup(
             pnl_pembelianLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_pembelianLayout.createSequentialGroup()
-                .addContainerGap(131, Short.MAX_VALUE)
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addGap(19, 19, 19))
         );
@@ -299,21 +322,27 @@ public class laporan extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel4.setText("Laporan Keuntungan");
+        jLabel4.setText("Laporan Laba");
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/untungnew.png"))); // NOI18N
 
         javax.swing.GroupLayout pnl_keuntunganLayout = new javax.swing.GroupLayout(pnl_keuntungan);
         pnl_keuntungan.setLayout(pnl_keuntunganLayout);
         pnl_keuntunganLayout.setHorizontalGroup(
             pnl_keuntunganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_keuntunganLayout.createSequentialGroup()
-                .addContainerGap(50, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(62, 62, 62))
+            .addGroup(pnl_keuntunganLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addGroup(pnl_keuntunganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel12))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         pnl_keuntunganLayout.setVerticalGroup(
             pnl_keuntunganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_keuntunganLayout.createSequentialGroup()
-                .addContainerGap(133, Short.MAX_VALUE)
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addGap(17, 17, 17))
         );
@@ -331,19 +360,28 @@ public class laporan extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(51, 51, 51));
         jLabel5.setText("Laporan Stok");
 
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/stok.png"))); // NOI18N
+
         javax.swing.GroupLayout pnl_stokLayout = new javax.swing.GroupLayout(pnl_stok);
         pnl_stok.setLayout(pnl_stokLayout);
         pnl_stokLayout.setHorizontalGroup(
             pnl_stokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_stokLayout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(jLabel5)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addGroup(pnl_stokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_stokLayout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jLabel11))
+                    .addGroup(pnl_stokLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(jLabel5)))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         pnl_stokLayout.setVerticalGroup(
             pnl_stokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_stokLayout.createSequentialGroup()
-                .addContainerGap(134, Short.MAX_VALUE)
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addComponent(jLabel11)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addGap(16, 16, 16))
         );
@@ -351,24 +389,37 @@ public class laporan extends javax.swing.JFrame {
         pnl_operasional.setBackground(new java.awt.Color(255, 255, 255));
         pnl_operasional.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnl_operasional.setPreferredSize(new java.awt.Dimension(170, 170));
+        pnl_operasional.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_operasionalMouseClicked(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(51, 51, 51));
         jLabel8.setText("Biaya Operasional");
+
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/operasional.png"))); // NOI18N
 
         javax.swing.GroupLayout pnl_operasionalLayout = new javax.swing.GroupLayout(pnl_operasional);
         pnl_operasional.setLayout(pnl_operasionalLayout);
         pnl_operasionalLayout.setHorizontalGroup(
             pnl_operasionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_operasionalLayout.createSequentialGroup()
-                .addGap(61, 61, 61)
+                .addGap(84, 84, 84)
+                .addComponent(jLabel18)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_operasionalLayout.createSequentialGroup()
+                .addContainerGap(64, Short.MAX_VALUE)
                 .addComponent(jLabel8)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(64, 64, 64))
         );
         pnl_operasionalLayout.setVerticalGroup(
             pnl_operasionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_operasionalLayout.createSequentialGroup()
-                .addContainerGap(130, Short.MAX_VALUE)
+                .addContainerGap(29, Short.MAX_VALUE)
+                .addComponent(jLabel18)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addGap(20, 20, 20))
         );
@@ -384,23 +435,31 @@ public class laporan extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel9.setText("Barang Laku / Tidak Laku");
+        jLabel9.setText("Laporan Laba Bulanan");
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/untungbulan.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(jLabel15)
+                .addContainerGap(91, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel9)
-                .addGap(38, 38, 38))
+                .addGap(49, 49, 49))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap(132, Short.MAX_VALUE)
+                .addContainerGap(37, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel9)
-                .addGap(18, 18, 18))
+                .addGap(15, 15, 15))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -451,11 +510,11 @@ public class laporan extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("TOKO BAROKAH");
+        jLabel7.setText("TOKO BAROKAH ATK");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Jl. Argopuro, Desa Prasi");
+        jLabel14.setText("Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -548,13 +607,13 @@ public class laporan extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked
-        adm_dashboard r = new adm_dashboard();
+        Adm_dashboard r = new Adm_dashboard();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        dataKaryawan r = new dataKaryawan();
+        DataKaryawan r = new DataKaryawan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_karyawanMouseClicked
@@ -568,7 +627,7 @@ public class laporan extends javax.swing.JFrame {
     }//GEN-LAST:event_laporanActionPerformed
 
     private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
-        dataSupplier r = new dataSupplier();
+        DataSupplier r = new DataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_supplierMouseClicked
@@ -579,35 +638,35 @@ public class laporan extends javax.swing.JFrame {
 
     private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
         // TODO add your handling code here:
-        dataBarang a = new dataBarang();
+        DataBarang a = new DataBarang();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_barangMouseClicked
 
     private void pnl_penjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_penjualanMouseClicked
         // TODO add your handling code here:
-        lap_penjualan i = new lap_penjualan();
+        LapPenjualan i = new LapPenjualan();
         i.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_pnl_penjualanMouseClicked
 
     private void pnl_pembelianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_pembelianMouseClicked
         // TODO add your handling code here:
-        lap_pembelian i = new lap_pembelian();
+        LapPembelian i = new LapPembelian();
         i.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_pnl_pembelianMouseClicked
 
     private void pnl_keuntunganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_keuntunganMouseClicked
         // TODO add your handling code here:
-        lap_keuntungan a = new lap_keuntungan();
+        LapKeuntungan a = new LapKeuntungan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_pnl_keuntunganMouseClicked
 
     private void pnl_stokMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_stokMouseClicked
         // TODO add your handling code here:
-        lap_stok s = new lap_stok();
+        LapStok s = new LapStok();
         s.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_pnl_stokMouseClicked
@@ -625,10 +684,17 @@ public class laporan extends javax.swing.JFrame {
 
     private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
         // TODO add your handling code here:
-        lap_laku p = new lap_laku();
+        LapKeuntunganBulanan p = new LapKeuntunganBulanan();
         p.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jPanel12MouseClicked
+
+    private void pnl_operasionalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_operasionalMouseClicked
+        // TODO add your handling code here:
+        BiayaOperasional a = new BiayaOperasional();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_pnl_operasionalMouseClicked
 
     /**
      * @param args the command line arguments
@@ -648,20 +714,21 @@ public class laporan extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Laporan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new laporan().setVisible(true);
+                new Laporan().setVisible(true);
 
             }
         });
@@ -672,9 +739,15 @@ public class laporan extends javax.swing.JFrame {
     private javax.swing.JButton btn_transaksi;
     private javax.swing.JButton dashboard;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

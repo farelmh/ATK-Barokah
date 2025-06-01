@@ -1,6 +1,6 @@
 package fungsi_ubah_data;
 
-import admin.dataSupplier;
+import admin.DataSupplier;
 import barokah_atk.konek;
 import java.awt.Frame;
 import java.sql.PreparedStatement;
@@ -9,11 +9,11 @@ import javax.swing.JOptionPane;
 
 public class FormUbahSupplier extends FormUbah {
 
-    private dataSupplier supplier;
+    private DataSupplier supplier;
     private boolean hapus;
     konek k = new konek();
 
-    public FormUbahSupplier(Frame parent, dataSupplier supplier) {
+    public FormUbahSupplier(Frame parent, DataSupplier supplier) {
         super(parent, "Ubah data supplier", "ID Supplier", "Nama Supplier", "No Telp", "Alamat");
         this.supplier = supplier;
         k.connect();

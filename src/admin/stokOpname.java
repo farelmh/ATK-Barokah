@@ -1,5 +1,6 @@
 package admin;
 
+import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
 import fungsi_lain.RoundedPanel;
@@ -22,20 +23,20 @@ import fungsi_lain.session;
 import java.util.Date;
 import java.util.Locale;
 
-public class stokOpname extends javax.swing.JFrame {
+public class StokOpname extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
     private DefaultTableModel model = null;
     private DefaultTableModel model2 = null;
     private final int[] index = {1, 2, 7};
-    private final int[] indexh = {0, 2, 3, 7};
+    private final int[] indexh = {2, 3, 7};
     private final int[] indexTanggal = {1};
-    private final int[] indexAngka = {4, 5, 6};
+    private final int[] indexAngka = {0, 4, 5, 6};
 
     konek k = new konek();
 
-    public stokOpname() {
+    public StokOpname() {
         initComponents();
         k.connect();
         this.setLocationRelativeTo(null);
@@ -48,7 +49,7 @@ public class stokOpname extends javax.swing.JFrame {
         getUser();
         tablehistori();
         CariData.TableSorter(tbl_opname, txtSearch, index, null, null, null);
-        
+        txt_panggilan.setText(session.getInstance().getNama());
     }
 
     // show tanggal otomatis
@@ -59,7 +60,6 @@ public class stokOpname extends javax.swing.JFrame {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd MMMM yyyy", localeID);
         String tanggal = tgl1.format(df);
         datechoose.setText(tanggal);
-
     }
 
     // show nama otomatis
@@ -129,7 +129,7 @@ public class stokOpname extends javax.swing.JFrame {
 
         tbl_histori.setModel(model2);
         modelTabel.setModel(tbl_histori);
-        CariData.TableSorter(tbl_histori, txtSearch1, indexh, null, indexAngka, indexTanggal);
+        CariData.TableSorter(tbl_histori, txt_cari, indexh, null, indexAngka, indexTanggal);
         try {
             this.stat = k.getCon().prepareStatement("SELECT * FROM v_histori_opname");
             this.rs = this.stat.executeQuery();
@@ -416,6 +416,14 @@ public class stokOpname extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+    
+    private void resetPencarian() {
+        tgl_mulai.setDate(null);
+        tgl_akhir.setDate(null);
+        tablehistori();
+        txt_cari.setText("");
+        CariData.resetTableSorting(tbl_histori);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -428,17 +436,17 @@ public class stokOpname extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton5 = new javax.swing.JButton();
+        laporan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        barang = new javax.swing.JButton();
+        karyawan = new javax.swing.JButton();
+        supplier = new javax.swing.JButton();
+        dashboard = new javax.swing.JButton();
         txt_panggilan = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jButton7 = new javax.swing.JButton();
+        transaksi = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
+        logout = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -465,8 +473,9 @@ public class stokOpname extends javax.swing.JFrame {
         tbl_histori = new javax.swing.JTable();
         back2 = new javax.swing.JLabel();
         btn_expor = new javax.swing.JLabel();
-        txtSearch1 = new javax.swing.JTextField();
+        txt_cari = new javax.swing.JTextField();
         btn_cari2 = new javax.swing.JButton();
+        btn_cari3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -477,60 +486,75 @@ public class stokOpname extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(63, 114, 175));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 560));
 
-        jButton5.setBackground(new java.awt.Color(63, 114, 175));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/laporan.png"))); // NOI18N
-        jButton5.setBorder(null);
-        jButton5.setBorderPainted(false);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        laporan.setBackground(new java.awt.Color(63, 114, 175));
+        laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/laporan.png"))); // NOI18N
+        laporan.setBorder(null);
+        laporan.setBorderPainted(false);
+        laporan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        laporan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                laporanMouseClicked(evt);
+            }
+        });
+        laporan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                laporanActionPerformed(evt);
             }
         });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/user biru1 1.png"))); // NOI18N
 
-        jButton3.setBackground(new java.awt.Color(63, 114, 175));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/barang.png"))); // NOI18N
-        jButton3.setBorder(null);
-        jButton3.setBorderPainted(false);
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        barang.setBackground(new java.awt.Color(63, 114, 175));
+        barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/barang.png"))); // NOI18N
+        barang.setBorder(null);
+        barang.setBorderPainted(false);
+        barang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        barang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
+                barangMouseClicked(evt);
             }
         });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        barang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                barangActionPerformed(evt);
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(63, 114, 175));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/karyawan.png"))); // NOI18N
-        jButton4.setBorder(null);
-        jButton4.setBorderPainted(false);
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        karyawan.setBackground(new java.awt.Color(63, 114, 175));
+        karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/karyawan.png"))); // NOI18N
+        karyawan.setBorder(null);
+        karyawan.setBorderPainted(false);
+        karyawan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        karyawan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                karyawanMouseClicked(evt);
             }
         });
 
-        jButton8.setBackground(new java.awt.Color(63, 114, 175));
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/supplier.png"))); // NOI18N
-        jButton8.setBorder(null);
-        jButton8.setBorderPainted(false);
-
-        jButton1.setBackground(new java.awt.Color(63, 114, 175));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/dashboard.png"))); // NOI18N
-        jButton1.setBorder(null);
-        jButton1.setBorderPainted(false);
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        supplier.setBackground(new java.awt.Color(63, 114, 175));
+        supplier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/supplier.png"))); // NOI18N
+        supplier.setBorder(null);
+        supplier.setBorderPainted(false);
+        supplier.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        supplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                supplierMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+        dashboard.setBackground(new java.awt.Color(63, 114, 175));
+        dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/dashboard.png"))); // NOI18N
+        dashboard.setBorder(null);
+        dashboard.setBorderPainted(false);
+        dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        dashboard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dashboardMouseClicked(evt);
+            }
+        });
+        dashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                dashboardActionPerformed(evt);
             }
         });
 
@@ -548,13 +572,19 @@ public class stokOpname extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(204, 204, 204));
         jLabel16.setText("Admin");
 
-        jButton7.setBackground(new java.awt.Color(63, 114, 175));
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
-        jButton7.setBorder(null);
-        jButton7.setBorderPainted(false);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        transaksi.setBackground(new java.awt.Color(63, 114, 175));
+        transaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/transaksi.png"))); // NOI18N
+        transaksi.setBorder(null);
+        transaksi.setBorderPainted(false);
+        transaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                transaksiMouseClicked(evt);
+            }
+        });
+        transaksi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                transaksiActionPerformed(evt);
             }
         });
 
@@ -570,13 +600,13 @@ public class stokOpname extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5)
-                            .addComponent(jButton8)
-                            .addComponent(jButton1)
+                            .addComponent(barang)
+                            .addComponent(karyawan)
+                            .addComponent(laporan)
+                            .addComponent(supplier)
+                            .addComponent(dashboard)
                             .addComponent(txt_panggilan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton7))))
+                            .addComponent(transaksi))))
                 .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -593,34 +623,35 @@ public class stokOpname extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel16)
                 .addGap(35, 35, 35)
-                .addComponent(jButton1)
+                .addComponent(dashboard)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(barang)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
+                .addComponent(karyawan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8)
+                .addComponent(supplier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton7)
+                .addComponent(transaksi)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
+                .addComponent(laporan)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(63, 114, 175));
 
-        jButton6.setBackground(new java.awt.Color(63, 114, 175));
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/profilbiru.png"))); // NOI18N
-        jButton6.setBorder(null);
-        jButton6.setBorderPainted(false);
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        logout.setBackground(new java.awt.Color(63, 114, 175));
+        logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/logout2.png"))); // NOI18N
+        logout.setBorder(null);
+        logout.setBorderPainted(false);
+        logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
+                logoutMouseClicked(evt);
             }
         });
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        logout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                logoutActionPerformed(evt);
             }
         });
 
@@ -628,11 +659,11 @@ public class stokOpname extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("TOKO BAROKAH");
+        jLabel8.setText("TOKO BAROKAH ATK");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Alamat toko");
+        jLabel14.setText("Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo");
 
         tabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -661,14 +692,16 @@ public class stokOpname extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tbl_opname);
 
-        back1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/kembali.png"))); // NOI18N
+        back1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/kembaliNew.png"))); // NOI18N
+        back1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         back1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 back1MouseClicked(evt);
             }
         });
 
-        btn_simpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/simpan.png"))); // NOI18N
+        btn_simpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/simpanNew.png"))); // NOI18N
+        btn_simpan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_simpan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_simpanMouseClicked(evt);
@@ -778,7 +811,7 @@ public class stokOpname extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tbl_histori);
 
-        back2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/kembali.png"))); // NOI18N
+        back2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/kembaliNew.png"))); // NOI18N
         back2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         back2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -786,7 +819,8 @@ public class stokOpname extends javax.swing.JFrame {
             }
         });
 
-        btn_expor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/exporexcel.png"))); // NOI18N
+        btn_expor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/exporexcelNew.png"))); // NOI18N
+        btn_expor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_expor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_exporMouseClicked(evt);
@@ -797,6 +831,13 @@ public class stokOpname extends javax.swing.JFrame {
         btn_cari2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cari2ActionPerformed(evt);
+            }
+        });
+
+        btn_cari3.setText("Reset");
+        btn_cari3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cari3ActionPerformed(evt);
             }
         });
 
@@ -813,7 +854,7 @@ public class stokOpname extends javax.swing.JFrame {
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(back2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_expor, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btn_expor))))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(421, 421, 421)
                         .addComponent(jLabel3)
@@ -829,8 +870,10 @@ public class stokOpname extends javax.swing.JFrame {
                         .addComponent(tgl_akhir, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn_cari2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
-                        .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_cari3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
+                        .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -845,8 +888,9 @@ public class stokOpname extends javax.swing.JFrame {
                     .addComponent(tgl_mulai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tgl_akhir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btn_cari2)))
+                        .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_cari2)
+                        .addComponent(btn_cari3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -873,7 +917,7 @@ public class stokOpname extends javax.swing.JFrame {
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton6)))
+                        .addComponent(logout)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -881,7 +925,7 @@ public class stokOpname extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton6)
+                    .addComponent(logout)
                     .addComponent(jLabel7)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel8)
@@ -927,39 +971,49 @@ public class stokOpname extends javax.swing.JFrame {
         setBounds(0, 0, 1296, 728);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_dashboardActionPerformed
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+    private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
+        int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (jawab == JOptionPane.YES_OPTION) {
+            Login b = new Login();
+            b.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_logoutMouseClicked
 
-    }//GEN-LAST:event_jButton6MouseClicked
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        adm_dashboard r = new adm_dashboard();
+    private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked
+        Adm_dashboard r = new Adm_dashboard();
         r.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButton1MouseClicked
+        this.dispose();
+    }//GEN-LAST:event_dashboardMouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        dataBarang r = new dataBarang();
+    private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
+        DataBarang r = new DataBarang();
         r.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButton3MouseClicked
+        this.dispose();
+    }//GEN-LAST:event_barangMouseClicked
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        dataKaryawan r = new dataKaryawan();
+    private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
+        DataKaryawan r = new DataKaryawan();
         r.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButton4MouseClicked
+        this.dispose();
+    }//GEN-LAST:event_karyawanMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void barangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_barangActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_laporanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_laporanActionPerformed
 
     private void txt_panggilanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_panggilanMouseClicked
         // TODO add your handling code here:
@@ -971,9 +1025,9 @@ public class stokOpname extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_simpanMouseClicked
 
     private void back1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back1MouseClicked
-        dataBarang r = new dataBarang();
+        DataBarang r = new DataBarang();
         r.setVisible(true);
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_back1MouseClicked
 
     private void tbl_opnameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_opnameMouseClicked
@@ -986,23 +1040,58 @@ public class stokOpname extends javax.swing.JFrame {
 
     private void back2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back2MouseClicked
         // TODO add your handling code here:
-        dataBarang a = new dataBarang();
+        DataBarang a = new DataBarang();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_back2MouseClicked
 
     private void btn_cari2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cari2ActionPerformed
         // TODO add your handling code here:
-        cariLaporan();
+        Date start = tgl_mulai.getDate();
+        Date end = tgl_akhir.getDate();
+
+        if (start == null || end == null) {
+            JOptionPane.showMessageDialog(null, "tanggal tidak boleh kosong");
+        } else if (start.after(end)) {
+            JOptionPane.showMessageDialog(null, "tanggal awal tidak boleh lebih dari tanggal akhir");
+        } else {
+            cariLaporan();
+        }
     }//GEN-LAST:event_btn_cari2ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_logoutActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void transaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transaksiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_transaksiActionPerformed
+
+    private void transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_transaksiMouseClicked
+        // TODO add your handling code here:
+        Transaksi a = new Transaksi();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_transaksiMouseClicked
+
+    private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
+        // TODO add your handling code here:
+        Laporan a = new Laporan();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_laporanMouseClicked
+
+    private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
+        // TODO add your handling code here:
+        DataSupplier s = new DataSupplier();
+        s.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_supplierMouseClicked
+
+    private void btn_cari3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cari3ActionPerformed
+        // TODO add your handling code here:
+        resetPencarian();
+    }//GEN-LAST:event_btn_cari3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1021,21 +1110,22 @@ public class stokOpname extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+        //</editor-fold>
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new stokOpname().setVisible(true);
+                new StokOpname().setVisible(true);
             }
         });
     }
@@ -1043,17 +1133,13 @@ public class stokOpname extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel back1;
     private javax.swing.JLabel back2;
+    private javax.swing.JButton barang;
     private javax.swing.JButton btn_cari2;
+    private javax.swing.JButton btn_cari3;
     private javax.swing.JLabel btn_expor;
     private javax.swing.JLabel btn_simpan;
+    private javax.swing.JButton dashboard;
     private javax.swing.JTextField datechoose;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1073,13 +1159,18 @@ public class stokOpname extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton karyawan;
+    private javax.swing.JButton laporan;
+    private javax.swing.JButton logout;
+    private javax.swing.JButton supplier;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTable tbl_histori;
     private javax.swing.JTable tbl_opname;
     private com.toedter.calendar.JDateChooser tgl_akhir;
     private com.toedter.calendar.JDateChooser tgl_mulai;
+    private javax.swing.JButton transaksi;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtSearch1;
+    private javax.swing.JTextField txt_cari;
     private javax.swing.JLabel txt_panggilan;
     private javax.swing.JTextField txt_user;
     // End of variables declaration//GEN-END:variables

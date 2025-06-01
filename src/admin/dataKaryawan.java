@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class dataKaryawan extends javax.swing.JFrame {
+public class DataKaryawan extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -26,7 +26,7 @@ public class dataKaryawan extends javax.swing.JFrame {
 
     konek k = new konek();
 
-    public dataKaryawan() {
+    public DataKaryawan() {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
@@ -36,7 +36,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         txt_panggilan.setText(namaPanggilan);
     }
 
-    public dataKaryawan(String id, String namaPanjang, String namaPendek, String no_telp, String email,
+    public DataKaryawan(String id, String namaPanjang, String namaPendek, String no_telp, String email,
             String username, String password, String id_level, String id_rfid) {
         this.id = id;
         this.namaPanjang = namaPanjang;
@@ -170,7 +170,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     //panggil pop up tambah
     private void tambahData() {
         FormTambahKaryawan form = new FormTambahKaryawan(this);
-        dataKaryawan k = new dataKaryawan();
+        DataKaryawan k = new DataKaryawan();
 
         if (form.showDialog()) {
             k.setId(form.getFieldValue("ID Karyawan").toUpperCase());
@@ -185,7 +185,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }
 
     //tambah data rfid
-    private void scanRFID(dataKaryawan k) {
+    private void scanRFID(DataKaryawan k) {
         FormTambahRFID form = new FormTambahRFID(this);
         if (form.showDialog()) {
             k.setId_rfid(form.getFieldValue("ID RFID"));
@@ -199,7 +199,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }
 
     //tambah akun
-    private void tambahAkun(dataKaryawan k) {
+    private void tambahAkun(DataKaryawan k) {
         FormTambahAkun form = new FormTambahAkun(this);
         if (form.showDialog()) {
             k.setUsername(form.getFieldValue("Username"));
@@ -211,7 +211,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }
 
     // tambah ke database
-    private void tambahKeDb(dataKaryawan ky) {
+    private void tambahKeDb(DataKaryawan ky) {
         try {
             this.stat = k.getCon().prepareStatement("insert into karyawan values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             stat.setString(1, ky.getId());
@@ -233,8 +233,8 @@ public class dataKaryawan extends javax.swing.JFrame {
     }
 
     //fungsi ambil data berdasarkan data yg dipilih
-    private dataKaryawan pilihData() {
-        dataKaryawan u = new dataKaryawan();
+    private DataKaryawan pilihData() {
+        DataKaryawan u = new DataKaryawan();
         int selectedRow = tbl_karyawan.getSelectedRow();
 
         // Konversi indeks baris tampilan ke indeks model
@@ -254,7 +254,7 @@ public class dataKaryawan extends javax.swing.JFrame {
 
     // belum selesai
     private void ubahData() {
-        dataKaryawan u = pilihData();
+        DataKaryawan u = pilihData();
         FormUbahKaryawan form = new FormUbahKaryawan(this, u);
 
         boolean simpan = form.showDialog();
@@ -286,7 +286,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         }
     }
 
-    private void updateData(dataKaryawan u) {
+    private void updateData(DataKaryawan u) {
         try {
             this.stat = k.getCon().prepareStatement("update karyawan set nama_karyawan = ?, nama_panggilan = ?, no_telp = ?, email = ?,"
                     + " id_level = ?, id_rfid = ? \n"
@@ -307,7 +307,7 @@ public class dataKaryawan extends javax.swing.JFrame {
         }
     }
 
-    private void hapusData(dataKaryawan u) {
+    private void hapusData(DataKaryawan u) {
         try {
             this.stat = k.getCon().prepareStatement("delete from karyawan where id_karyawan = ?");
             stat.setString(1, u.getId());
@@ -561,7 +561,7 @@ public class dataKaryawan extends javax.swing.JFrame {
             }
         });
 
-        btn_cari.setText("cari");
+        btn_cari.setText("Reset");
         btn_cari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cariActionPerformed(evt);
@@ -616,11 +616,11 @@ public class dataKaryawan extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("TOKO BAROKAH");
+        jLabel7.setText("TOKO BAROKAH ATK");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel14.setText("Jl. Argopuro, Desa Prasi");
+        jLabel14.setText("Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -740,7 +740,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked
-        adm_dashboard r = new adm_dashboard();
+        Adm_dashboard r = new Adm_dashboard();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_dashboardMouseClicked
@@ -750,7 +750,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
-        laporan r = new laporan();
+        Laporan r = new Laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked
@@ -760,7 +760,7 @@ public class dataKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_laporanActionPerformed
 
     private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
-        dataSupplier r = new dataSupplier();
+        DataSupplier r = new DataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_supplierMouseClicked
@@ -772,7 +772,7 @@ public class dataKaryawan extends javax.swing.JFrame {
 
     private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
         // TODO add your handling code here:
-        dataBarang b = new dataBarang();
+        DataBarang b = new DataBarang();
         b.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_barangMouseClicked
@@ -806,20 +806,21 @@ public class dataKaryawan extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(dataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(dataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(dataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(dataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataKaryawan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new dataKaryawan().setVisible(true);
+                new DataKaryawan().setVisible(true);
 
             }
         });

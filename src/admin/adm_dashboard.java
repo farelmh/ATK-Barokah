@@ -34,7 +34,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 
-public class adm_dashboard extends javax.swing.JFrame {
+public class Adm_dashboard extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -42,7 +42,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     konek k = new konek();
     String namaPanggilan = session.getInstance().getNama();
 
-    public adm_dashboard() {
+    public Adm_dashboard() {
         initComponents();
         k.connect();
         this.setLocationRelativeTo(null);
@@ -628,11 +628,11 @@ public class adm_dashboard extends javax.swing.JFrame {
 
         toko_barokah.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         toko_barokah.setForeground(new java.awt.Color(255, 255, 255));
-        toko_barokah.setText("TOKO BAROKAH");
+        toko_barokah.setText("TOKO BAROKAH ATK");
 
         alamat_toko.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         alamat_toko.setForeground(new java.awt.Color(204, 204, 204));
-        alamat_toko.setText("Jl. Argopuro, Desa Prasi");
+        alamat_toko.setText("Jl. Raya Besuk, Desa Alaskandang, Kec. Besuk, Kab. Probolinggo");
 
         logo_atk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/stationery 1.png"))); // NOI18N
 
@@ -731,24 +731,24 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_logoutMouseClicked
 
     private void sc_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_barangMouseClicked
-        dataBarang q = new dataBarang();
+        DataBarang q = new DataBarang();
         q.tampilkanStokTipisDialog();
     }//GEN-LAST:event_sc_barangMouseClicked
 
     private void sc_pemasukanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_pemasukanMouseClicked
-        lap_penjualan q = new lap_penjualan();
+        LapPenjualan q = new LapPenjualan();
         q.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_sc_pemasukanMouseClicked
 
     private void sc_karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_karyawanMouseClicked
-        dataKaryawan q = new dataKaryawan();
+        DataKaryawan q = new DataKaryawan();
         q.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_sc_karyawanMouseClicked
 
     private void btn_dataSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataSupplierMouseClicked
-        dataSupplier r = new dataSupplier();
+        DataSupplier r = new DataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_dataSupplierMouseClicked
@@ -758,19 +758,19 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataKaryawanActionPerformed
 
     private void btn_dataKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataKaryawanMouseClicked
-        dataKaryawan r = new dataKaryawan();
+        DataKaryawan r = new DataKaryawan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_dataKaryawanMouseClicked
 
     private void btn_dataBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataBarangActionPerformed
-        dataBarang q = new dataBarang();
+        DataBarang q = new DataBarang();
         q.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_dataBarangActionPerformed
 
     private void btn_laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporanMouseClicked
-        laporan r = new laporan();
+        Laporan r = new Laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_laporanMouseClicked
@@ -808,20 +808,21 @@ public class adm_dashboard extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new adm_dashboard().setVisible(true);
+                new Adm_dashboard().setVisible(true);
             }
         });
     }
