@@ -4,6 +4,7 @@ import barokah_atk.konek;
 import barokah_atk.Login;
 import fungsi_lain.session;
 import fungsi_lain.formatUang;
+import fungsi_lain.modelTabel;
 import fungsi_tambah_data.FormScanRFID;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -31,6 +33,11 @@ public class Restock extends javax.swing.JFrame {
     private PreparedStatement stat;
     private ResultSet rs;
     private DefaultTableModel model = null;
+    private String idBarang, namaBarang = "";
+    private int jumlah;
+    private double harga, total;
+    private JComboBox<String> comboBox;
+    private int isiSatuan;
     konek k = new konek();
     String nama = session.getInstance().getNama();
 
@@ -118,7 +125,7 @@ public class Restock extends javax.swing.JFrame {
         }
     }
 
-    public void tabelKeranjang() {
+public void tabelKeranjang() {
         model = new DefaultTableModel();
         model.addColumn("ID Barang");
         model.addColumn("Nama Barang");
@@ -126,6 +133,7 @@ public class Restock extends javax.swing.JFrame {
         model.addColumn("Jumlah");
         model.addColumn("Subtotal");
         tbl_jual.setModel(model);
+        modelTabel.setModel(tbl_jual);
 
         try {
             this.stat = k.getCon().prepareStatement("select id_barang, nama_barang, harga, sum(jumlah) as jumlah, sum(total) as total"
@@ -136,9 +144,9 @@ public class Restock extends javax.swing.JFrame {
                 Object[] data = {
                     rs.getString("id_barang"),
                     rs.getString("nama_barang"),
-                    rs.getString("harga"),
+                    "Rp " + formatUang.formatRp(Double.parseDouble(rs.getString("harga"))),
                     rs.getString("jumlah"),
-                    rs.getString("total")
+                    "Rp " + formatUang.formatRp(Double.parseDouble(rs.getString("total")))
                 };
                 model.addRow(data);
             }
@@ -194,21 +202,52 @@ public class Restock extends javax.swing.JFrame {
         return null;
     }
 
-    //show barang ke pop up
-    private void showbarang(String uid) {
+    private String isiSatuan() {
         try {
-            this.stat = k.getCon().prepareStatement("select nama_barang from barang where id_barcode = ?");
-            stat.setString(1, uid.trim());
+            this.stat = k.getCon().prepareStatement(
+                    "SELECT satuan_beli.nama_satuan, satuan_beli.isi_per_satuan "
+                    + "FROM satuan_beli "
+                    + "JOIN barang ON barang.id_satuan = satuan_beli.id_satuan "
+                    + "WHERE barang.id_barang = ?"
+            );
+            stat.setString(1, idBarang);
             this.rs = this.stat.executeQuery();
 
             if (rs.next()) {
-                String nama = rs.getString("nama_barang");
+                this.isiSatuan = rs.getInt("isi_per_satuan");
+                String satuan = (rs.getString("nama_satuan"));
+                return satuan;
+            }
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return null;
+    }
+
+    //show barang ke pop up
+    private void showbarang(String uid) {
+        try {
+            this.stat = k.getCon().prepareStatement("select * from barang where id_barcode = ?");
+            stat.setString(1, uid.trim());
+            this.rs = this.stat.executeQuery();
+            
+            if (rs.next()) {
+                this.idBarang = rs.getString("id_barang");
+                this.namaBarang = rs.getString("nama_barang");
+                this.harga = rs.getDouble("harga_beli");
+                
+                String satuan = isiSatuan();
                 JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
                 spinner.setPreferredSize(new Dimension(60, 25)); // Mengatur ukuran kotak input
-                panel.add(new JLabel(nama + " :"));
+                comboBox = new JComboBox<>();
+                comboBox.addItem("Pcs");
+                comboBox.addItem(satuan);
+
+                panel.add(new JLabel(namaBarang + " :"));
                 panel.add(spinner);
+                panel.add(comboBox);
 
                 // Menampilkan pop-up dengan JSpinner
                 int option = JOptionPane.showConfirmDialog(
@@ -221,13 +260,59 @@ public class Restock extends javax.swing.JFrame {
 
                 if (option == JOptionPane.OK_OPTION) {
                     int jumlahBarang = (int) spinner.getValue();
-                    System.out.println("jumlah : " + jumlahBarang);
-                    //dataBarang(uid, jumlahBarang);
-
+                    String satuanBeli = comboBox.getSelectedItem().toString();
+                    tambahBarang(jumlahBarang, satuanBeli);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Tidak DItemukan");
             }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void tambahBarang(int jumlahBarang, String satuan) {
+        try {
+            int satuanBeli = 1;
+            if (satuan.equalsIgnoreCase("Pcs")) {
+                satuanBeli = 1;
+            } else {
+                satuanBeli = this.isiSatuan;
+            }
+            
+            int jumlahFinal = jumlahBarang * satuanBeli;
+            double subtotal = harga * jumlahFinal;
+            
+            String sqlCek = "SELECT jumlah FROM keranjang WHERE id_barang = ?";
+            PreparedStatement cekStmt = k.getCon().prepareStatement(sqlCek);
+            cekStmt.setString(1, idBarang);
+            ResultSet rs = cekStmt.executeQuery();
+            
+            if (rs.next()) {
+                // Barang sudah ada, update jumlah dan subtotal
+                int jumlahLama = rs.getInt("jumlah");
+                int jumlahBaru = jumlahLama + jumlahFinal;
+                double subtotalBaru = harga * jumlahBaru;
+
+                String sqlUpdate = "UPDATE keranjang SET jumlah = ?, total = ? WHERE id_barang = ?";
+                PreparedStatement updateStmt = k.getCon().prepareStatement(sqlUpdate);
+                updateStmt.setInt(1, jumlahBaru);
+                updateStmt.setDouble(2, subtotalBaru);
+                updateStmt.setString(3, idBarang);
+                updateStmt.executeUpdate();
+            } else {
+                // Barang belum ada, insert baru
+                this.stat = k.getCon().prepareStatement("INSERT INTO keranjang VALUES (?, ?, ?, ?, ?)");
+                stat.setString(1, idBarang);
+                stat.setString(2, namaBarang);
+                stat.setDouble(3, harga);
+                stat.setInt(4, jumlahFinal);
+                stat.setDouble(5, subtotal);
+                stat.executeUpdate();
+            }
+
+            tabelKeranjang();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -813,7 +898,7 @@ public class Restock extends javax.swing.JFrame {
                             String id = form.getId();
                             trbeli(id);
                         }
-                        
+
                     }
                 }
             }

@@ -191,6 +191,7 @@ public class KasirDashboard extends javax.swing.JFrame {
                     + "    DATE_ADD(CURDATE(), INTERVAL (6 - WEEKDAY(CURDATE())) DAY)\n"
                     + "GROUP BY DATE(p.tanggal_jual)\n"
                     + "ORDER BY tanggal;";
+
             this.stat = k.getCon().prepareStatement(query);
             this.rs = this.stat.executeQuery();
 

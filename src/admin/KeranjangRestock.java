@@ -243,11 +243,11 @@ public class KeranjangRestock extends javax.swing.JFrame {
         String namaBarang = model.getValueAt(modelRow, 1).toString();
         String hargaStr = model.getValueAt(modelRow, 3).toString();
         double hargaFormat = formatUang.setDefault(hargaStr);
-        String isiSatuan = model.getValueAt(modelRow, 6).toString();
+        String isiSatuanBeli = model.getValueAt(modelRow, 6).toString();
 
         int isisatuan;
         try {
-            isisatuan = Integer.parseInt(isiSatuan);
+            isisatuan = Integer.parseInt(isiSatuanBeli);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Isi satuan tidak valid. Default 1 digunakan.");
             isisatuan = 1;
@@ -257,24 +257,47 @@ public class KeranjangRestock extends javax.swing.JFrame {
         double subtotal = hargaFormat * jumlahFinal;
 
         try {
-            this.stat = k.getCon().prepareStatement("insert into keranjang values(?, ?, ?, ?, ?)");
-            stat.setString(1, idBarang);
-            stat.setString(2, namaBarang);
-            stat.setDouble(3, hargaFormat);
-            stat.setInt(4, jumlahFinal);
-            stat.setDouble(5, subtotal);
-            stat.executeUpdate();
+            // Cek apakah barang sudah ada di keranjang pembelian
+            String sqlCek = "SELECT jumlah FROM keranjang WHERE id_barang = ?";
+            PreparedStatement cekStmt = k.getCon().prepareStatement(sqlCek);
+            cekStmt.setString(1, idBarang);
+            ResultSet rs = cekStmt.executeQuery();
+
+            if (rs.next()) {
+                // Barang sudah ada, update jumlah dan subtotal
+                int jumlahLama = rs.getInt("jumlah");
+                int jumlahBaru = jumlahLama + jumlahFinal;
+                double subtotalBaru = hargaFormat * jumlahBaru;
+
+                String sqlUpdate = "UPDATE keranjang SET jumlah = ?, total = ? WHERE id_barang = ?";
+                PreparedStatement updateStmt = k.getCon().prepareStatement(sqlUpdate);
+                updateStmt.setInt(1, jumlahBaru);
+                updateStmt.setDouble(2, subtotalBaru);
+                updateStmt.setString(3, idBarang);
+                updateStmt.executeUpdate();
+            } else {
+                // Barang belum ada, insert baru
+                this.stat = k.getCon().prepareStatement("INSERT INTO keranjang VALUES (?, ?, ?, ?, ?)");
+                stat.setString(1, idBarang);
+                stat.setString(2, namaBarang);
+                stat.setDouble(3, hargaFormat);
+                stat.setInt(4, jumlahFinal);
+                stat.setDouble(5, subtotal);
+                stat.executeUpdate();
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
         tabelKeranjang();
 
-        // Optional: reset input
+// Reset input
         txt_jumlah.setText("");
         txt_nama.setText("");
         txt_satuan.setText("");
         tbl_barang.clearSelection();
+
     }
 
     // tombol hapus (done)

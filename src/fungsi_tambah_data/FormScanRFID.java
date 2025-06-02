@@ -60,7 +60,7 @@ public class FormScanRFID extends FormTambah {
 
     @Override
     protected boolean validateInput() {
-        String rfid = getFieldValue("Kartu RFID");
+        String rfid = getFieldValue("Kartu RFID").trim();
         if (rfid.trim().isEmpty()) {
             JOptionPane.showMessageDialog(dialog, "Harap Scan Kartu!");
             return false;

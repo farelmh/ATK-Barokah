@@ -84,11 +84,25 @@ public class Transaksi extends javax.swing.JFrame {
         });
 
     }
+    
+    private static String formatTglBulanTahun(String tanggalInput) {
+        try {
+            // Formatter input dengan bulan dalam teks bahasa Indonesia
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("id", "ID"));
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            LocalDate localDate = LocalDate.parse(tanggalInput, inputFormatter);
+            return localDate.format(outputFormatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private void setDataStruk() {
         data = new DataStrukPenjualan();
         String idPenjualan = id_jual.getText();
-        String tanggal = formatTanggal.formatTgl(tgljual.getText());
+        String tanggal = formatTglBulanTahun(tgljual.getText());
         String kasir = session.getInstance().getNama();
         double total = formatUang.setDefault(txt_Total.getText());
         double bayar = formatUang.setDefault(txt_bayar.getText());
