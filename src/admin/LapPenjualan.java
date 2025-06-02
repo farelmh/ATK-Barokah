@@ -84,6 +84,13 @@ public class LapPenjualan extends javax.swing.JFrame {
         setScrollBar();
         CariData.TableSorter(tbl_penjualan, txt_cari, index, indexUang, null, indexTanggal);
         txt_panggilan.setText(session.getInstance().getNama());
+        setTanggal();
+    }
+    
+    // set tanggal ke bahasa indo
+    private void setTanggal() {
+        formatTanggal.setTanggalIndo(tgl_mulai);
+        formatTanggal.setTanggalIndo(tgl_akhir);
     }
 
     private String getTanggalMulai() {
