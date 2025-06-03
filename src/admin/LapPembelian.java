@@ -1381,7 +1381,7 @@ public class LapPembelian extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Adm_dashboard a = new Adm_dashboard();
+        adm_dashboard a = new adm_dashboard();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1391,7 +1391,7 @@ public class LapPembelian extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        Adm_dashboard a = new Adm_dashboard();
+        adm_dashboard a = new adm_dashboard();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked

@@ -890,7 +890,7 @@ public class Transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cariActionPerformed
 
     private void btn_dashboard1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dashboard1MouseClicked
-        Adm_dashboard r = new Adm_dashboard();
+        adm_dashboard r = new adm_dashboard();
         if (keluar()) {
             r.setVisible(true);
             this.dispose();

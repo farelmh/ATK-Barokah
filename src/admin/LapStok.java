@@ -720,7 +720,7 @@ public class LapStok extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked
-        Adm_dashboard r = new Adm_dashboard();
+        adm_dashboard r = new adm_dashboard();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_dashboardMouseClicked

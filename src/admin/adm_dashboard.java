@@ -34,7 +34,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 
-public class Adm_dashboard extends javax.swing.JFrame {
+public class adm_dashboard extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -42,7 +42,7 @@ public class Adm_dashboard extends javax.swing.JFrame {
     konek k = new konek();
     String namaPanggilan = session.getInstance().getNama();
 
-    public Adm_dashboard() {
+    public adm_dashboard() {
         initComponents();
         k.connect();
         this.setLocationRelativeTo(null);
@@ -808,21 +808,23 @@ public class Adm_dashboard extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(adm_dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Adm_dashboard().setVisible(true);
+                new adm_dashboard().setVisible(true);
             }
         });
     }

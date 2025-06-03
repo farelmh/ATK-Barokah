@@ -639,7 +639,7 @@ public class DataSupplier extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardMouseClicked
-        Adm_dashboard r = new Adm_dashboard();
+        adm_dashboard r = new adm_dashboard();
         r.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_dashboardMouseClicked

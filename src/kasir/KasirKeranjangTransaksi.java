@@ -292,17 +292,39 @@ public class KasirKeranjangTransaksi extends javax.swing.JFrame {
 
         if (stokPositif(namaBarang, jumlahInput)) {
             try {
-                this.stat = k.getCon().prepareStatement("insert into keranjang values(?, ?, ?, ?, ?)");
-                stat.setString(1, idBarang);
-                stat.setString(2, namaBarang);
-                stat.setDouble(3, hargaFormat);
-                stat.setInt(4, jumlahInput);
-                stat.setDouble(5, subtotal);
-                stat.executeUpdate();
+                // Cek apakah barang sudah ada di keranjang
+                String sqlCek = "SELECT jumlah FROM keranjang WHERE id_barang = ?";
+                PreparedStatement cekStmt = k.getCon().prepareStatement(sqlCek);
+                cekStmt.setString(1, idBarang);
+                ResultSet rsp = cekStmt.executeQuery();
+
+                if (rsp.next()) {
+                    // Barang sudah ada, update jumlah dan subtotal
+                    int jumlahLama = rsp.getInt("jumlah");
+                    int jumlahBaru = jumlahLama + jumlahInput;
+                    double subtotalBaru = jumlahBaru * hargaFormat;
+
+                    String sqlUpdate = "UPDATE keranjang SET jumlah = ?, total = ? WHERE id_barang = ?";
+                    PreparedStatement updateStmt = k.getCon().prepareStatement(sqlUpdate);
+                    updateStmt.setInt(1, jumlahBaru);
+                    updateStmt.setDouble(2, subtotalBaru);
+                    updateStmt.setString(3, idBarang);
+                    updateStmt.executeUpdate();
+                } else {
+                    // Barang belum ada, lakukan insert seperti biasa
+                    this.stat = k.getCon().prepareStatement("INSERT INTO keranjang VALUES (?, ?, ?, ?, ?)");
+                    stat.setString(1, idBarang);
+                    stat.setString(2, namaBarang);
+                    stat.setDouble(3, hargaFormat);
+                    stat.setInt(4, jumlahInput);
+                    stat.setDouble(5, subtotal);
+                    stat.executeUpdate();
+                }
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
+
             tabelKeranjang();
 
             // Optional: reset input

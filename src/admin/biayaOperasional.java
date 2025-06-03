@@ -881,7 +881,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_logoutMouseClicked
 
     private void btn_dashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dashboardMouseClicked
-        Adm_dashboard a = new Adm_dashboard();
+        adm_dashboard a = new adm_dashboard();
         a.setVisible(true);
         this.dispose();
 

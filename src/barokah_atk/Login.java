@@ -1,6 +1,6 @@
 package barokah_atk;
 
-import admin.Adm_dashboard;
+import admin.adm_dashboard;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -113,7 +113,7 @@ public class Login extends javax.swing.JFrame {
         switch (id) {
             case "admin":
                 JOptionPane.showMessageDialog(null, "Login Berhasil!, Anda masuk sebagai admin");
-                Adm_dashboard db = new Adm_dashboard();
+                adm_dashboard db = new adm_dashboard();
                 db.setVisible(true);
                 this.dispose();
                 break;
