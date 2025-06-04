@@ -766,7 +766,7 @@ public class LapStok extends javax.swing.JFrame {
         }
     }
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        Laporan p = new Laporan();
+        laporan p = new laporan();
         p.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jLabel2MouseClicked
@@ -828,7 +828,7 @@ public class LapStok extends javax.swing.JFrame {
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
         // TODO add your handling code here:
-        Laporan r = new Laporan();
+        laporan r = new laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked

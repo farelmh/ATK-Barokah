@@ -5,10 +5,19 @@ import fungsi_lain.CariData;
 import fungsi_lain.formatUang;
 import fungsi_lain.modelTabel;
 import fungsi_tambah_data.FormTambahBarcode;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.SwingUtilities;
@@ -23,16 +32,20 @@ public class KeranjangRestock extends javax.swing.JFrame {
     private final int[] index = {0, 1, 2, 5, 6};
     private final int[] indexUang = {4};
     private final int[] indexAngka = {2};
+    private String idBarang, namaBarang = "";
+    private double harga, total;
+    private JComboBox<String> comboBox;
 
     konek k = new konek();
 
-    public KeranjangRestock() {
+    public KeranjangRestock() { //error tambah jumlah, di tabel keranjang ada 2 daftar
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
         tabelBarang();
         tabelKeranjang();
         cb_pilih.addItem("Pcs");
+        cariBarcode();
 
         txt_jumlah_keranjang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -54,7 +67,7 @@ public class KeranjangRestock extends javax.swing.JFrame {
             }
         });
 
-        SwingUtilities.invokeLater(() -> txt_Cari.requestFocusInWindow());
+        SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
 
         tbl_keranjang.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -80,6 +93,135 @@ public class KeranjangRestock extends javax.swing.JFrame {
             }
         });
 
+    }
+    
+    private void cariBarcode() {
+        txt_cari.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String uid = txt_cari.getText().trim();
+                // Hanya panggil showbarang jika panjang kode 13 karakter
+                if (uid.length() == 13) {
+                    txt_cari.setText(""); // reset kolom input
+                    showbarang(uid);
+                }
+            }
+        });
+    }
+    
+    private String isiSatuanBeli() {
+        try {
+            this.stat = k.getCon().prepareStatement(
+                    "SELECT satuan_beli.nama_satuan, satuan_beli.isi_per_satuan "
+                    + "FROM satuan_beli "
+                    + "JOIN barang ON barang.id_satuan = satuan_beli.id_satuan "
+                    + "WHERE barang.id_barang = ?"
+            );
+            stat.setString(1, idBarang);
+            this.rs = this.stat.executeQuery();
+
+            if (rs.next()) {
+                this.isiSatuan = rs.getInt("isi_per_satuan");
+                String satuan = (rs.getString("nama_satuan"));
+                return satuan;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return null;
+    }
+    
+    private void showbarang(String uid) {
+        try {
+            this.stat = k.getCon().prepareStatement("select * from barang where id_barcode = ?");
+            stat.setString(1, uid.trim());
+            this.rs = this.stat.executeQuery();
+            
+            if (rs.next()) {
+                this.idBarang = rs.getString("id_barang");
+                this.namaBarang = rs.getString("nama_barang");
+                this.harga = rs.getDouble("harga_beli");
+                
+                String satuan = isiSatuanBeli();
+                JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+                spinner.setPreferredSize(new Dimension(60, 25)); // Mengatur ukuran kotak input
+                comboBox = new JComboBox<>();
+                comboBox.addItem("Pcs");
+                comboBox.addItem(satuan);
+
+                panel.add(new JLabel(namaBarang + " :"));
+                panel.add(spinner);
+                panel.add(comboBox);
+
+                // Menampilkan pop-up dengan JSpinner
+                int option = JOptionPane.showConfirmDialog(
+                        null,
+                        panel,
+                        "Masukkan Jumlah Barang",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (option == JOptionPane.OK_OPTION) {
+                    int jumlahBarang = (int) spinner.getValue();
+                    String satuanBeli = comboBox.getSelectedItem().toString();
+                    tambahBarang(jumlahBarang, satuanBeli);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Tidak DItemukan");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+        private void tambahBarang(int jumlahBarang, String satuan) {
+        try {
+            int satuanBeli = 1;
+            if (satuan.equalsIgnoreCase("Pcs")) {
+                satuanBeli = 1;
+            } else {
+                satuanBeli = this.isiSatuan;
+            }
+            
+            int jumlahFinal = jumlahBarang * satuanBeli;
+            double subtotal = harga * jumlahFinal;
+            
+            String sqlCek = "SELECT jumlah FROM keranjang WHERE id_barang = ?";
+            PreparedStatement cekStmt = k.getCon().prepareStatement(sqlCek);
+            cekStmt.setString(1, idBarang);
+            ResultSet rs = cekStmt.executeQuery();
+            
+            if (rs.next()) {
+                // Barang sudah ada, update jumlah dan subtotal
+                int jumlahLama = rs.getInt("jumlah");
+                int jumlahBaru = jumlahLama + jumlahFinal;
+                double subtotalBaru = harga * jumlahBaru;
+
+                String sqlUpdate = "UPDATE keranjang SET jumlah = ?, total = ? WHERE id_barang = ?";
+                PreparedStatement updateStmt = k.getCon().prepareStatement(sqlUpdate);
+                updateStmt.setInt(1, jumlahBaru);
+                updateStmt.setDouble(2, subtotalBaru);
+                updateStmt.setString(3, idBarang);
+                updateStmt.executeUpdate();
+            } else {
+                // Barang belum ada, insert baru
+                this.stat = k.getCon().prepareStatement("INSERT INTO keranjang VALUES (?, ?, ?, ?, ?)");
+                stat.setString(1, idBarang);
+                stat.setString(2, namaBarang);
+                stat.setDouble(3, harga);
+                stat.setInt(4, jumlahFinal);
+                stat.setDouble(5, subtotal);
+                stat.executeUpdate();
+            }
+
+            tabelKeranjang();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     private void isiSatuan() {
@@ -160,7 +302,7 @@ public class KeranjangRestock extends javax.swing.JFrame {
             });
 
             modelTabel.setModel(tbl_barang);
-            CariData.TableSorter(tbl_barang, txt_Cari, index, indexUang, indexAngka, null);
+            CariData.TableSorter(tbl_barang, txt_cari, index, indexUang, indexAngka, null);
             modelTabel.setTransparan(tbl_barang, 6);
 
         } catch (Exception e) {
@@ -457,7 +599,7 @@ public class KeranjangRestock extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tbl_barang = new javax.swing.JTable();
         txt_nama = new javax.swing.JTextField();
-        txt_Cari = new javax.swing.JTextField();
+        txt_cari = new javax.swing.JTextField();
         txt_jumlah = new javax.swing.JTextField();
         tambahKerajang = new javax.swing.JLabel();
         tambahKerajang1 = new javax.swing.JLabel();
@@ -624,9 +766,9 @@ public class KeranjangRestock extends javax.swing.JFrame {
             }
         });
 
-        txt_Cari.addActionListener(new java.awt.event.ActionListener() {
+        txt_cari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_CariActionPerformed(evt);
+                txt_cariActionPerformed(evt);
             }
         });
 
@@ -689,7 +831,7 @@ public class KeranjangRestock extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_Cari, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(tambahKerajang1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -718,7 +860,7 @@ public class KeranjangRestock extends javax.swing.JFrame {
                 .addComponent(jLabel21)
                 .addGap(53, 53, 53)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_Cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
@@ -814,9 +956,9 @@ public class KeranjangRestock extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_namaActionPerformed
 
-    private void txt_CariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_CariActionPerformed
+    private void txt_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cariActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_CariActionPerformed
+    }//GEN-LAST:event_txt_cariActionPerformed
 
     private void txt_jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_jumlahActionPerformed
         // TODO add your handling code here:
@@ -886,7 +1028,7 @@ public class KeranjangRestock extends javax.swing.JFrame {
     private javax.swing.JLabel tambahKerajang4;
     private javax.swing.JTable tbl_barang;
     private javax.swing.JTable tbl_keranjang;
-    private javax.swing.JTextField txt_Cari;
+    private javax.swing.JTextField txt_cari;
     private javax.swing.JTextField txt_jumlah;
     private javax.swing.JTextField txt_jumlah_keranjang;
     private javax.swing.JTextField txt_nama;

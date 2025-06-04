@@ -23,6 +23,9 @@ import org.jfree.data.general.DefaultPieDataset;
 import fungsi_lain.session;
 import java.awt.Font;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.ui.HorizontalAlignment;
@@ -37,6 +40,7 @@ public class KasirDashboard extends javax.swing.JFrame {
     private CallableStatement cs;
     konek k = new konek();
     String namaPanggilan = session.getInstance().getNama();
+    LocalDate hariIni = LocalDate.now();
 
     public KasirDashboard() {
         initComponents();
@@ -47,6 +51,9 @@ public class KasirDashboard extends javax.swing.JFrame {
         SwingUtilities.invokeLater(() -> showPieChart());
         showLineChart();
         txt_panggilan.setText(namaPanggilan);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("id", "ID"));
+        String tanggalFormatted = hariIni.format(formatter);
+        karyawan.setText("Total Transaksi Hari Ini, " + tanggalFormatted);
     }
 
     private void totalBarang() {

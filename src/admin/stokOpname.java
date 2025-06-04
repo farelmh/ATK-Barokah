@@ -20,8 +20,26 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import fungsi_lain.session;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Locale;
+import jnafilechooser.api.JnaFileChooser;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class StokOpname extends javax.swing.JFrame {
 
@@ -41,6 +59,7 @@ public class StokOpname extends javax.swing.JFrame {
         k.connect();
         this.setLocationRelativeTo(null);
         setTanggal();
+        setTanggalChooser();
         setupTabbedPane();
         initTabelModel();
         tableopname();
@@ -68,6 +87,13 @@ public class StokOpname extends javax.swing.JFrame {
         txt_user.setText(nama);
     }
 
+    // set tanggal ke bahasa indo
+    private void setTanggalChooser() {
+        formatTanggal.setTanggalIndo(tgl_mulai);
+        formatTanggal.setTanggalIndo(tgl_akhir);
+    }
+
+    //ambil data tanggal mulai
     private String getTanggalMulai() {
         try {
             Date tgl = tgl_mulai.getDate();
@@ -78,6 +104,7 @@ public class StokOpname extends javax.swing.JFrame {
         return null;
     }
 
+    //ambil data tanggal akhir
     private String getTanggalAkhir() {
         try {
             Date tgl = tgl_akhir.getDate();
@@ -416,13 +443,183 @@ public class StokOpname extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
-    
+
     private void resetPencarian() {
         tgl_mulai.setDate(null);
         tgl_akhir.setDate(null);
         tablehistori();
         txt_cari.setText("");
         CariData.resetTableSorting(tbl_histori);
+    }
+
+    // model excel
+    private XSSFCellStyle createStyle(Workbook wb, boolean bold, int fontSize, IndexedColors bgColor) {
+        XSSFFont font = ((XSSFWorkbook) wb).createFont();
+        font.setBold(bold);
+        font.setFontName("Arial");
+        font.setFontHeightInPoints((short) fontSize);
+
+        XSSFCellStyle style = ((XSSFWorkbook) wb).createCellStyle();
+        style.setFont(font);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        if (bgColor != null) {
+            style.setFillForegroundColor(bgColor.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
+
+        return style;
+    }
+
+    private CellStyle createCurrencyStyle(Workbook wb) {
+        CellStyle style = createStyle(wb, false, 11, null);
+        DataFormat format = wb.createDataFormat();
+        style.setDataFormat(format.getFormat("\"Rp\" #,##0"));
+        return style;
+    }
+
+    private void createTitle(Sheet sheet, String title, CellStyle style, int rowIdx, int colSpan) {
+        Row row = sheet.createRow(rowIdx);
+        Cell cell = row.createCell(0);
+        cell.setCellValue(title);
+
+        style.setAlignment(HorizontalAlignment.CENTER);              // <-- Tambahkan ini
+        style.setVerticalAlignment(VerticalAlignment.CENTER);        // <-- Opsional
+        cell.setCellStyle(style);
+
+        sheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 0, colSpan));
+    }
+
+    private void createHeader(Sheet sheet, String[] headers, CellStyle style, int rowIdx) {
+        Row row = sheet.createRow(rowIdx);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(style);
+        }
+    }
+
+    private void createCell(Row row, int colIdx, String value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void createCell(Row row, int colIdx, double value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void createCell(Row row, int colIdx, int value, CellStyle style) {
+        Cell cell = row.createCell(colIdx);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+    }
+
+    private void autoSizeColumns(Sheet sheet, int numCols) {
+        for (int i = 0; i < numCols; i++) {
+            sheet.autoSizeColumn(i);
+        }
+    }
+
+    private File getUniqueFile(File file) {
+        String name = file.getName();
+        String parent = file.getParent();
+        String baseName;
+        String extension;
+
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex != -1) {
+            baseName = name.substring(0, dotIndex);
+            extension = name.substring(dotIndex);
+        } else {
+            baseName = name;
+            extension = "";
+        }
+
+        File uniqueFile = new File(parent, baseName + extension);
+        int count = 1;
+        while (uniqueFile.exists()) {
+            uniqueFile = new File(parent, baseName + "(" + count + ")" + extension);
+            count++;
+        }
+
+        return uniqueFile;
+    }
+
+    // fungsi ekspor ke excel
+    private void exportExcel() {
+        JnaFileChooser fc = new JnaFileChooser();
+        fc.setTitle("Simpan File");
+        fc.setMode(JnaFileChooser.Mode.Files);
+        fc.addFilter("Excel Files", "xlsx");
+
+        fc.setDefaultFileName("Stock Opname.xlsx");
+
+        if (!fc.showSaveDialog(this)) {
+            return;
+        }
+
+        File fileToSave = fc.getSelectedFile();
+        if (!fileToSave.getName().toLowerCase().endsWith(".xlsx")) {
+            fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+        }
+        fileToSave = getUniqueFile(fileToSave);  // <-- Cek dan rename otomatis
+        String filePath = fileToSave.getAbsolutePath();
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            XSSFCellStyle titleStyle = createStyle(workbook, true, 24, IndexedColors.WHITE);
+            XSSFCellStyle headerStyle = createStyle(workbook, true, 12, IndexedColors.LIGHT_GREEN);
+            XSSFCellStyle cellStyle = createStyle(workbook, false, 11, null);
+            CellStyle rupiahStyle = createCurrencyStyle(workbook);
+
+            Sheet sheet1 = workbook.createSheet("Stock Opname");
+            createTitle(sheet1, "Stock Opname", titleStyle, 0, 7);
+            String[] header1 = {"ID", "Tanggal", "Pencatat", "Nama Barang", "Stok Sistem", "Stok Fisik", "Sisa", "Keterangan"};
+            createHeader(sheet1, header1, headerStyle, 3);
+
+            int rowIndex = 4;
+            this.stat = k.getCon().prepareStatement("SELECT o.id_opname, o.tgl_opname, k.nama_karyawan, b.nama_barang, dop.stok_sistem, "
+                    + "dop.stok_fisik, dop.stok_fisik - dop.stok_sistem AS selisih, dop.keterangan\n"
+                    + "FROM detail_opname dop\n"
+                    + "JOIN opname o ON o.id_opname = dop.id_opname\n"
+                    + "JOIN karyawan k ON k.id_karyawan = o.id_karyawan\n"
+                    + "JOIN barang b ON b.id_barang = dop.id_barang\n"
+                    + "WHERE o.tgl_opname BETWEEN ? AND ? \n"
+                    + "ORDER BY o.tgl_opname ASC");
+            stat.setString(1, getTanggalMulai());
+            stat.setString(2, getTanggalAkhir());
+            this.rs = this.stat.executeQuery();
+
+            while (rs.next()) {
+                Row row = sheet1.createRow(rowIndex++);
+                createCell(row, 0, rs.getString("id_opname"), cellStyle);
+                createCell(row, 1, rs.getString("tgl_opname"), cellStyle);
+                createCell(row, 2, rs.getString("nama_karyawan"), cellStyle);
+                createCell(row, 3, rs.getString("nama_barang"), cellStyle);
+                createCell(row, 4, rs.getString("stok_sistem"), cellStyle);
+                createCell(row, 5, rs.getString("stok_fisik"), cellStyle);
+                createCell(row, 6, rs.getString("selisih"), cellStyle);
+                createCell(row, 7, rs.getString("keterangan"), cellStyle);
+            }
+
+            autoSizeColumns(sheet1, header1.length);
+
+            // === Simpan file Excel
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+            }
+            workbook.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -1036,6 +1233,17 @@ public class StokOpname extends javax.swing.JFrame {
 
     private void btn_exporMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_exporMouseClicked
         // TODO add your handling code here:
+        Date start = tgl_mulai.getDate();
+        Date end = tgl_akhir.getDate();
+
+        if (start == null || end == null) {
+            JOptionPane.showMessageDialog(null, "tanggal tidak boleh kosong");
+        } else if (start.after(end)) {
+            JOptionPane.showMessageDialog(null, "tanggal awal tidak boleh lebih dari tanggal akhir");
+        } else {
+            cariLaporan();
+            exportExcel();
+        }
     }//GEN-LAST:event_btn_exporMouseClicked
 
     private void back2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back2MouseClicked
@@ -1076,7 +1284,7 @@ public class StokOpname extends javax.swing.JFrame {
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
         // TODO add your handling code here:
-        Laporan a = new Laporan();
+        laporan a = new laporan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked

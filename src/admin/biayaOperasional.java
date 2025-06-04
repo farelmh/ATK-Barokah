@@ -900,7 +900,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_karyawanMouseClicked
 
     private void btn_kembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_kembaliMouseClicked
-        Laporan l = new Laporan();
+        laporan l = new laporan();
         l.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_kembaliMouseClicked
@@ -934,7 +934,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
 
     private void btn_laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporanMouseClicked
         // TODO add your handling code here:
-        Laporan l = new Laporan();
+        laporan l = new laporan();
         l.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_laporanMouseClicked

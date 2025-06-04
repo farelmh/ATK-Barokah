@@ -244,7 +244,7 @@ public class DataBarang extends javax.swing.JFrame {
 
         if (form.showDialog()) {
             b.setId(form.getFieldValue("ID Barang").toUpperCase());
-            b.setNama(form.getFieldValue("Nama Barang"));
+            b.setNama(form.getFieldValue("Nama Barang").trim());
             b.setHbeli(form.getHargaBeliPcs());
             b.setHjual(form.getHargaJual());
             b.setIdKategori(form.getIdKategori());
@@ -258,7 +258,7 @@ public class DataBarang extends javax.swing.JFrame {
         FormTambahBarcode form = new FormTambahBarcode(this);
         boolean hasil = form.showDialog();
         if (hasil) {
-            b.setBarcode(form.getFieldValue("Kode Barcode"));
+            b.setBarcode(form.getFieldValue("Kode Barcode").trim());
             tambahKeDB(b);
         }
     }
@@ -347,11 +347,11 @@ public class DataBarang extends javax.swing.JFrame {
 
         } else if (simpan) {
             // hanya set field dan update kalau user klik Simpan
-            u.setId(form.getFieldValue("ID Barang"));
-            u.setNama(form.getFieldValue("Nama Barang"));
+            u.setId(form.getFieldValue("ID Barang").trim());
+            u.setNama(form.getFieldValue("Nama Barang").trim());
             u.setHbeli(form.getHbeli());
             u.setHjual(form.getFieldValue("Harga Jual /Pcs"));
-            u.setBarcode(form.getFieldValue("Kode Barcode"));
+            u.setBarcode(form.getFieldValue("Kode Barcode").trim());
             u.setIdSatuan(form.getIdSatuan());
 
             updateData(u);
@@ -867,7 +867,7 @@ public class DataBarang extends javax.swing.JFrame {
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
-        Laporan r = new Laporan();
+        laporan r = new laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked
@@ -919,6 +919,7 @@ public class DataBarang extends javax.swing.JFrame {
 
     private void btn_transaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_transaksiActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btn_transaksiActionPerformed
     public static void main(String args[]) {
 

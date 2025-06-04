@@ -73,14 +73,14 @@ public class KasirKeranjangTransaksi extends javax.swing.JFrame {
 
     }
 
-    private void cariBarcode() {
+         private void cariBarcode() {
         txt_cari.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String uid = txt_cari.getText().trim();
-                    if (!uid.isEmpty()) {
-                        showbarang(uid);
-                    }
+            public void keyReleased(KeyEvent e) {
+                String uid = txt_cari.getText().trim();
+                // Hanya panggil showbarang jika panjang kode 13 karakter
+                if (uid.length() == 13) {
+                    txt_cari.setText(""); // reset kolom input
+                    showbarang(uid);
                 }
             }
         });
@@ -114,7 +114,9 @@ public class KasirKeranjangTransaksi extends javax.swing.JFrame {
 
                 if (option == JOptionPane.OK_OPTION) {
                     int jumlahBarang = (int) spinner.getValue();
-                    tambahBarang(uid, jumlahBarang);
+                    if (stokPositif(nama, jumlahBarang)) {
+                        tambahBarang(uid, jumlahBarang);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -127,6 +129,7 @@ public class KasirKeranjangTransaksi extends javax.swing.JFrame {
             String id = "";
             String nama = "";
             int harga = 0;
+            double subtotal = 0;
             this.stat = k.getCon().prepareStatement("select * from barang where id_barcode = ?");
             stat.setString(1, uid);
             this.rs = this.stat.executeQuery();
@@ -136,8 +139,20 @@ public class KasirKeranjangTransaksi extends javax.swing.JFrame {
                 harga = rs.getInt("harga_jual");
             }
 
-            if (stokPositif(nama, jumlahBarang)) {
-                double subtotal = harga * jumlahBarang;
+            this.stat = k.getCon().prepareStatement("select * from keranjang where id_barang = ?");
+            stat.setString(1, id);
+            this.rs = this.stat.executeQuery();
+            if (rs.next()) {
+                int jumlahLama = rs.getInt("jumlah");
+                int jumlahBaru = jumlahLama + jumlahBarang;
+                subtotal = jumlahBaru * harga;
+                this.stat = k.getCon().prepareStatement("update keranjang set jumlah = ?, total = ? where id_barang = ?");
+                stat.setInt(1, jumlahBaru);
+                stat.setDouble(2, subtotal);
+                stat.setString(3, id);
+                stat.executeUpdate();
+            } else {
+                subtotal = harga * jumlahBarang;
                 this.stat = k.getCon().prepareStatement("insert into keranjang values(?, ?, ?, ?, ?)");
                 stat.setString(1, id);
                 stat.setString(2, nama);
@@ -145,9 +160,9 @@ public class KasirKeranjangTransaksi extends javax.swing.JFrame {
                 stat.setInt(4, jumlahBarang);
                 stat.setDouble(5, subtotal);
                 stat.executeUpdate();
-
-                tabelKeranjang();
             }
+
+            tabelKeranjang();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

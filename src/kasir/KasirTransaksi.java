@@ -84,7 +84,7 @@ public class KasirTransaksi extends javax.swing.JFrame {
         });
 
     }
-    
+
     private static String formatTglBulanTahun(String tanggalInput) {
         try {
             // Formatter input dengan bulan dalam teks bahasa Indonesia
@@ -218,13 +218,12 @@ public class KasirTransaksi extends javax.swing.JFrame {
     //pop up jumlah
     private void cariBarcode() {
         txt_cari.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String uid = txt_cari.getText().trim();
-                    txt_cari.setText("");
-                    if (!uid.isEmpty()) {
-                        showbarang(uid);
-                    }
+            public void keyReleased(KeyEvent e) {
+                String uid = txt_cari.getText().trim();
+                // Hanya panggil showbarang jika panjang kode 13 karakter
+                if (uid.length() == 13) {
+                    txt_cari.setText(""); // reset kolom input
+                    showbarang(uid);
                 }
             }
         });
@@ -257,7 +256,9 @@ public class KasirTransaksi extends javax.swing.JFrame {
 
                 if (option == JOptionPane.OK_OPTION) {
                     int jumlahBarang = (int) spinner.getValue();
-                    tambahBarang(uid, jumlahBarang);
+                    if (stokPositif(nama, jumlahBarang)) {
+                        tambahBarang(uid, jumlahBarang);
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Tidak DItemukan");
@@ -268,11 +269,49 @@ public class KasirTransaksi extends javax.swing.JFrame {
         }
     }
 
+    //cek stok cukup
+    private boolean stokPositif(String namaBarang, int jumlahBaru) {
+        try {
+            int stok = 0;
+            // Ambil stok dari database
+            this.stat = k.getCon().prepareStatement("SELECT stok FROM barang WHERE nama_barang = ?");
+            stat.setString(1, namaBarang);
+            this.rs = this.stat.executeQuery();
+            if (rs.next()) {
+                stok = rs.getInt("stok");
+            }
+
+            // Hitung jumlah yang sudah ada di keranjang (JTable)
+            int totalSudahDiKeranjang = 0;
+            this.stat = k.getCon().prepareStatement("select jumlah from keranjang where nama_barang = ?");
+            stat.setString(1, namaBarang);
+            this.rs = this.stat.executeQuery();
+            if (rs.next()) {
+                totalSudahDiKeranjang = rs.getInt("jumlah");
+            }
+
+            // Hitung total keseluruhan jika ditambah dengan yang baru
+            int totalSetelahTambah = totalSudahDiKeranjang + jumlahBaru;
+
+            if (totalSetelahTambah <= stok) {
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(this, "Jumlah beli melebihi stok tersedia!\nStok: " + stok + ", Sudah di keranjang: " + totalSudahDiKeranjang);
+                return false;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error saat cek stok: " + e.getMessage());
+            return false;
+        }
+    }
+
     private void tambahBarang(String uid, int jumlahBarang) {
         try {
             String id = "";
             String nama = "";
             int harga = 0;
+            double subtotal = 0;
             this.stat = k.getCon().prepareStatement("select * from barang where id_barcode = ?");
             stat.setString(1, uid);
             this.rs = this.stat.executeQuery();
@@ -282,14 +321,28 @@ public class KasirTransaksi extends javax.swing.JFrame {
                 harga = rs.getInt("harga_jual");
             }
 
-            double subtotal = harga * jumlahBarang;
-            this.stat = k.getCon().prepareStatement("insert into keranjang values(?, ?, ?, ?, ?)");
+            this.stat = k.getCon().prepareStatement("select * from keranjang where id_barang = ?");
             stat.setString(1, id);
-            stat.setString(2, nama);
-            stat.setInt(3, harga);
-            stat.setInt(4, jumlahBarang);
-            stat.setDouble(5, subtotal);
-            stat.executeUpdate();
+            this.rs = this.stat.executeQuery();
+            if (rs.next()) {
+                int jumlahLama = rs.getInt("jumlah");
+                int jumlahBaru = jumlahLama + jumlahBarang;
+                subtotal = jumlahBaru * harga;
+                this.stat = k.getCon().prepareStatement("update keranjang set jumlah = ?, total = ? where id_barang = ?");
+                stat.setInt(1, jumlahBaru);
+                stat.setDouble(2, subtotal);
+                stat.setString(3, id);
+                stat.executeUpdate();
+            } else {
+                subtotal = harga * jumlahBarang;
+                this.stat = k.getCon().prepareStatement("insert into keranjang values(?, ?, ?, ?, ?)");
+                stat.setString(1, id);
+                stat.setString(2, nama);
+                stat.setInt(3, harga);
+                stat.setInt(4, jumlahBarang);
+                stat.setDouble(5, subtotal);
+                stat.executeUpdate();
+            }
 
             tabelKeranjang();
 
@@ -309,7 +362,7 @@ public class KasirTransaksi extends javax.swing.JFrame {
     }
 
     private boolean keluar() {
-        if (model.getRowCount()== 0) {
+        if (model.getRowCount() == 0) {
             return true;
         }
         int confirm = JOptionPane.showConfirmDialog(this, "Keluar dari halaman transaksi?\nDaftar barang yang sudah ditambahkan akan dihapus!", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -793,9 +846,11 @@ public class KasirTransaksi extends javax.swing.JFrame {
                     if (!txt_bayar.getText().matches(".*\\d.*")) {
                         JOptionPane.showMessageDialog(null, "Total bayar harus berupa angka!");
                     } else {
-                        String kembaliStr = txt_kembalian.getText(); // "Rp 125.000"
-                        kembaliStr = kembaliStr.replace("Rp", "").replace(".", "").trim(); // "125000"
-                        double kembalian = Double.parseDouble(kembaliStr);
+                        String totalStr = txt_Total.getText();
+                        double total = formatUang.setDefault(totalStr);
+                        String bayarStr = txt_bayar.getText();
+                        double bayar = formatUang.setDefault(bayarStr);
+                        double kembalian = bayar - total;
 
                         if (kembalian < 0) {
                             JOptionPane.showMessageDialog(null, "Uang yang dibayar kurang!");

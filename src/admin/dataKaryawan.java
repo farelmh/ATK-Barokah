@@ -750,7 +750,7 @@ public class DataKaryawan extends javax.swing.JFrame {
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
-        Laporan r = new Laporan();
+        laporan r = new laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked

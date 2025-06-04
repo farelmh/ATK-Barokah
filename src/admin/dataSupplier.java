@@ -651,7 +651,7 @@ public class DataSupplier extends javax.swing.JFrame {
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
-        Laporan a = new Laporan();
+        laporan a = new laporan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked

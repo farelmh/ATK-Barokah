@@ -1431,7 +1431,7 @@ public class LapPembelian extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cariMouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        Laporan p = new Laporan();
+        laporan p = new laporan();
         p.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jLabel2MouseClicked

@@ -2,6 +2,7 @@ package admin;
 
 import barokah_atk.konek;
 import barokah_atk.Login;
+import fungsi_lain.formatTanggal;
 import fungsi_lain.session;
 import fungsi_lain.formatUang;
 import fungsi_lain.modelTabel;
@@ -17,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,7 +46,6 @@ public class Restock extends javax.swing.JFrame {
     public Restock() {
         initComponents();
         k.connect();
-        gettanggal();
         this.setLocationRelativeTo(null);
         generateIdTRJ();
         SwingUtilities.invokeLater(() -> txt_cari.requestFocusInWindow());
@@ -52,6 +53,7 @@ public class Restock extends javax.swing.JFrame {
         cariBarcode();
         isiSupplier();
         txt_panggilan1.setText(nama);
+        setTanggal();
 
         txt_bayar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -109,6 +111,17 @@ public class Restock extends javax.swing.JFrame {
         }
     }
 
+    // show tanggal otomatis
+    private void setTanggal() {
+        LocalDate tgl1 = LocalDate.now();
+        Locale localeID = Locale.forLanguageTag("id-ID");
+        Locale.setDefault(localeID);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd MMMM yyyy", localeID);
+        String tanggal = tgl1.format(df);
+        tglbeli.setText(tanggal);
+
+    }
+    
     private void isiSupplier() {
         try {
             this.stat = k.getCon().prepareStatement("select id_supplier, nama_supplier from supplier");
@@ -125,7 +138,7 @@ public class Restock extends javax.swing.JFrame {
         }
     }
 
-public void tabelKeranjang() {
+    public void tabelKeranjang() {
         model = new DefaultTableModel();
         model.addColumn("ID Barang");
         model.addColumn("Nama Barang");
@@ -169,23 +182,15 @@ public void tabelKeranjang() {
 
     }
 
-    public void gettanggal() {
-        LocalDate tgll = LocalDate.now();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Gunakan yyyy bukan YYYY
-        String tanggal = tgll.format(df);
-        tgljual.setText(tanggal);
-    }
-
     //pop up jumlah
-    public void cariBarcode() {
+    private void cariBarcode() {
         txt_cari.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String uid = txt_cari.getText().trim();
-                    txt_cari.setText("");
-                    if (!uid.isEmpty()) {
-                        showbarang(uid);
-                    }
+            public void keyReleased(KeyEvent e) {
+                String uid = txt_cari.getText().trim();
+                // Hanya panggil showbarang jika panjang kode 13 karakter
+                if (uid.length() == 13) {
+                    txt_cari.setText(""); // reset kolom input
+                    showbarang(uid);
                 }
             }
         });
@@ -231,12 +236,12 @@ public void tabelKeranjang() {
             this.stat = k.getCon().prepareStatement("select * from barang where id_barcode = ?");
             stat.setString(1, uid.trim());
             this.rs = this.stat.executeQuery();
-            
+
             if (rs.next()) {
                 this.idBarang = rs.getString("id_barang");
                 this.namaBarang = rs.getString("nama_barang");
                 this.harga = rs.getDouble("harga_beli");
-                
+
                 String satuan = isiSatuan();
                 JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
@@ -280,15 +285,15 @@ public void tabelKeranjang() {
             } else {
                 satuanBeli = this.isiSatuan;
             }
-            
+
             int jumlahFinal = jumlahBarang * satuanBeli;
             double subtotal = harga * jumlahFinal;
-            
+
             String sqlCek = "SELECT jumlah FROM keranjang WHERE id_barang = ?";
             PreparedStatement cekStmt = k.getCon().prepareStatement(sqlCek);
             cekStmt.setString(1, idBarang);
             ResultSet rs = cekStmt.executeQuery();
-            
+
             if (rs.next()) {
                 // Barang sudah ada, update jumlah dan subtotal
                 int jumlahLama = rs.getInt("jumlah");
@@ -326,7 +331,7 @@ public void tabelKeranjang() {
             double Total = formatUang.setDefault(total);
             this.stat = k.getCon().prepareStatement("insert into pembelian values (?, ?, ?, ?, ?)");
             stat.setString(1, id_beli.getText());
-            stat.setString(2, tgljual.getText());
+            stat.setString(2, formatTanggal.formatTgl(tglbeli.getText()));
             stat.setString(3, idKaryawan);
             stat.setString(4, getIdSupplier());
             stat.setString(5, String.valueOf(Total));
@@ -422,7 +427,7 @@ public void tabelKeranjang() {
         txt_bayar = new javax.swing.JTextField();
         btn_bayar = new javax.swing.JLabel();
         id_beli = new javax.swing.JTextField();
-        tgljual = new javax.swing.JTextField();
+        tglbeli = new javax.swing.JTextField();
         txt_cari = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         cb_supplier = new javax.swing.JComboBox<>();
@@ -534,8 +539,8 @@ public void tabelKeranjang() {
         id_beli.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         id_beli.setText("id beli");
 
-        tgljual.setEditable(false);
-        tgljual.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        tglbeli.setEditable(false);
+        tglbeli.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         txt_cari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -588,7 +593,7 @@ public void tabelKeranjang() {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(id_beli, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tgljual, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tglbeli, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btn_kembali, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -620,7 +625,7 @@ public void tabelKeranjang() {
                 .addGap(53, 53, 53)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(id_beli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tgljual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tglbeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_supplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
@@ -887,10 +892,13 @@ public void tabelKeranjang() {
                 if (n == 0) {
                     JOptionPane.showMessageDialog(null, "harus ada barang yang dibeli!");
                 } else {
-                    String kembaliStr = txt_kembalian.getText(); // "Rp 125.000"
-                    double kembalian = formatUang.setDefault(kembaliStr);
+                    String totalStr = txt_Total.getText();
+                    double total = formatUang.setDefault(totalStr);
+                    String bayarStr = txt_bayar.getText();
+                    double bayar = formatUang.setDefault(bayarStr);
+                    double kembalian = bayar - total;
 
-                    if (kembalian <= 0) {
+                    if (kembalian < 0) {
                         JOptionPane.showMessageDialog(null, "Uang yang dibayar kurang!");
                     } else {
                         FormScanRFID form = new FormScanRFID(this);
@@ -962,7 +970,7 @@ public void tabelKeranjang() {
     }//GEN-LAST:event_btn_dashboard1ActionPerformed
 
     private void btn_laporan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporan1MouseClicked
-        Laporan r = new Laporan();
+        laporan r = new laporan();
         if (keluar()) {
             r.setVisible(true);
             this.dispose();
@@ -1079,7 +1087,7 @@ public void tabelKeranjang() {
     private javax.swing.JButton kasir_profil;
     private javax.swing.JLabel logo_user1;
     private javax.swing.JTable tbl_jual;
-    private javax.swing.JTextField tgljual;
+    private javax.swing.JTextField tglbeli;
     private javax.swing.JTextField txt_Total;
     private javax.swing.JTextField txt_bayar;
     private javax.swing.JTextField txt_cari;

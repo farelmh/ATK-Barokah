@@ -25,6 +25,8 @@ import fungsi_lain.session;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import javax.swing.SwingUtilities;
@@ -41,6 +43,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     private CallableStatement cs;
     konek k = new konek();
     String namaPanggilan = session.getInstance().getNama();
+    LocalDate hariIni = LocalDate.now();
 
     public adm_dashboard() {
         initComponents();
@@ -52,6 +55,9 @@ public class adm_dashboard extends javax.swing.JFrame {
         SwingUtilities.invokeLater(() -> showPieChart());
         showLineChart();
         txt_panggilan.setText(namaPanggilan);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("id", "ID"));
+        String tanggalFormatted = hariIni.format(formatter);
+        pemasukan.setText("Pemasukan Hari Ini, " + tanggalFormatted);
     }
 
     private void stoktipis() {
@@ -204,9 +210,10 @@ public class adm_dashboard extends javax.swing.JFrame {
 
     //tampil grafik keuntungan
     private void showLineChart() {
+        int tahun = LocalDate.now().getYear();
         DefaultCategoryDataset dataset = getKeuntunganDataset();
 
-        JFreeChart linechart = ChartFactory.createLineChart("Grafik Keuntungan Per Bulan", "Bulan", "Total",
+        JFreeChart linechart = ChartFactory.createLineChart("Grafik Keuntungan Bulananan Per Tahun " + tahun, "Bulan", "Total",
                 dataset, PlotOrientation.VERTICAL, false, true, false);
 
         //create plot object
@@ -502,7 +509,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
         karyawan.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         karyawan.setForeground(new java.awt.Color(204, 204, 204));
-        karyawan.setText("Total karyawan");
+        karyawan.setText("Total Karyawan");
 
         sc_karyawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/panahijo.png"))); // NOI18N
         sc_karyawan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -521,7 +528,7 @@ public class adm_dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(karyawan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
                         .addComponent(sc_karyawan))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jmlkaryawan)
@@ -549,7 +556,7 @@ public class adm_dashboard extends javax.swing.JFrame {
 
         stoktipis.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         stoktipis.setForeground(new java.awt.Color(204, 204, 204));
-        stoktipis.setText("Stok menipis!");
+        stoktipis.setText("Stok Menipis!");
 
         sc_barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/panahkanan.png"))); // NOI18N
         sc_barang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -770,7 +777,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataBarangActionPerformed
 
     private void btn_laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_laporanMouseClicked
-        Laporan r = new Laporan();
+        laporan r = new laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_laporanMouseClicked

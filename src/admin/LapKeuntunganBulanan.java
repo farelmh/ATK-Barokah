@@ -843,7 +843,7 @@ public class LapKeuntunganBulanan extends javax.swing.JFrame {
     }//GEN-LAST:event_karyawanMouseClicked
 
     private void kembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kembaliMouseClicked
-        Laporan p = new Laporan();
+        laporan p = new laporan();
         p.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_kembaliMouseClicked
@@ -886,7 +886,7 @@ public class LapKeuntunganBulanan extends javax.swing.JFrame {
 
     private void laporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanMouseClicked
         // TODO add your handling code here:
-        Laporan r = new Laporan();
+        laporan r = new laporan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_laporanMouseClicked
