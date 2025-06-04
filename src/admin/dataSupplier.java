@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class DataSupplier extends javax.swing.JFrame {
+public class dataSupplier extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -24,7 +24,7 @@ public class DataSupplier extends javax.swing.JFrame {
 
     konek k = new konek();
 
-    public DataSupplier() {
+    public dataSupplier() {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
@@ -34,7 +34,7 @@ public class DataSupplier extends javax.swing.JFrame {
         txt_panggilan.setText(namaPanggilan);
     }
 
-    public DataSupplier(String id, String nama, String notelp, String alamat) {
+    public dataSupplier(String id, String nama, String notelp, String alamat) {
         this.id = id;
         this.nama = nama;
         this.notelp = notelp;
@@ -111,7 +111,7 @@ public class DataSupplier extends javax.swing.JFrame {
 
     private void tambahData() {
         FormTambahSupplier form = new FormTambahSupplier(this);
-        DataSupplier s = new DataSupplier();
+        dataSupplier s = new dataSupplier();
 
         if (form.showDialog()) {
             s.setId(form.getFieldValue("ID Supplier").toUpperCase());
@@ -123,7 +123,7 @@ public class DataSupplier extends javax.swing.JFrame {
         }
     }
 
-    private void tambahKeDb(DataSupplier s) {
+    private void tambahKeDb(dataSupplier s) {
         try {
             this.stat = k.getCon().prepareStatement("insert into supplier values (?, ?, ?, ?)");
             stat.setString(1, s.getId());
@@ -141,8 +141,8 @@ public class DataSupplier extends javax.swing.JFrame {
     }
 
     //fungsi ambil data berdasarkan data yg dipilih
-    private DataSupplier pilihData() {
-        DataSupplier u = new DataSupplier();
+    private dataSupplier pilihData() {
+        dataSupplier u = new dataSupplier();
         int selectedRow = tbl_supplier.getSelectedRow();
         int modelRow = tbl_supplier.convertRowIndexToModel(selectedRow);
 
@@ -155,7 +155,7 @@ public class DataSupplier extends javax.swing.JFrame {
     }
 
     private void ubahData() {
-        DataSupplier s = pilihData();
+        dataSupplier s = pilihData();
         FormUbahSupplier form = new FormUbahSupplier(this, s);
 
         boolean simpan = form.showDialog();
@@ -183,7 +183,7 @@ public class DataSupplier extends javax.swing.JFrame {
         }
     }
 
-    private void updateData(DataSupplier s) {
+    private void updateData(dataSupplier s) {
         try {
             this.stat = k.getCon().prepareStatement("update supplier set nama_supplier = ?, no_telp = ?, alamat = ?\n"
                     + "where id_supplier = ?");
@@ -200,7 +200,7 @@ public class DataSupplier extends javax.swing.JFrame {
         }
     }
 
-    private void hapusData(DataSupplier s) {
+    private void hapusData(dataSupplier s) {
         try {
             this.stat = k.getCon().prepareStatement("delete from supplier where id_supplier = ?");
             stat.setString(1, s.getId());
@@ -645,7 +645,7 @@ public class DataSupplier extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        DataKaryawan a = new DataKaryawan();
+        dataKaryawan a = new dataKaryawan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_karyawanMouseClicked
@@ -687,7 +687,7 @@ public class DataSupplier extends javax.swing.JFrame {
 
     private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
         // TODO add your handling code here:
-        DataBarang a = new DataBarang();
+        dataBarang a = new dataBarang();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_barangMouseClicked
@@ -710,21 +710,23 @@ public class DataSupplier extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataSupplier.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DataSupplier().setVisible(true);
+                new dataSupplier().setVisible(true);
 
             }
         });

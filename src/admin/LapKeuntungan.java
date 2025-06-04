@@ -894,13 +894,13 @@ public class LapKeuntungan extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dashboardMouseClicked
 
     private void btn_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_barangMouseClicked
-        DataBarang b = new DataBarang();
+        dataBarang b = new dataBarang();
         b.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_barangMouseClicked
 
     private void btn_karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_karyawanMouseClicked
-        DataKaryawan k = new DataKaryawan();
+        dataKaryawan k = new dataKaryawan();
         k.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_karyawanMouseClicked
@@ -933,7 +933,7 @@ public class LapKeuntungan extends javax.swing.JFrame {
 
     private void btn_supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_supplierMouseClicked
         // TODO add your handling code here:
-        DataSupplier s = new DataSupplier();
+        dataSupplier s = new dataSupplier();
         s.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_supplierMouseClicked

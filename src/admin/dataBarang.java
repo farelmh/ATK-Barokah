@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-public class DataBarang extends javax.swing.JFrame {
+public class dataBarang extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -40,7 +40,7 @@ public class DataBarang extends javax.swing.JFrame {
 
     konek k = new konek();
 
-    public DataBarang() {
+    public dataBarang() {
         initComponents();
         this.setLocationRelativeTo(null);
         k.connect();
@@ -52,7 +52,7 @@ public class DataBarang extends javax.swing.JFrame {
     }
 
     // konstruktor dengan parameter
-    public DataBarang(String id, String nama, String hbeli, String hjual, String barcode, String idKategori, String idSatuan, String hargaKulak) {
+    public dataBarang(String id, String nama, String hbeli, String hjual, String barcode, String idKategori, String idSatuan, String hargaKulak) {
         this.id = id;
         this.nama = nama;
         this.hbeli = hbeli;
@@ -240,7 +240,7 @@ public class DataBarang extends javax.swing.JFrame {
     //panggil fungsi pop up form tambah
     private void tambahData() {
         FormTambahBarang form = new FormTambahBarang(this);
-        DataBarang b = new DataBarang();
+        dataBarang b = new dataBarang();
 
         if (form.showDialog()) {
             b.setId(form.getFieldValue("ID Barang").toUpperCase());
@@ -254,7 +254,7 @@ public class DataBarang extends javax.swing.JFrame {
     }
 
     //scan barcode ( tambah data )
-    private void scanBarcode(DataBarang b) {
+    private void scanBarcode(dataBarang b) {
         FormTambahBarcode form = new FormTambahBarcode(this);
         boolean hasil = form.showDialog();
         if (hasil) {
@@ -264,7 +264,7 @@ public class DataBarang extends javax.swing.JFrame {
     }
 
     //insert database
-    private void tambahKeDB(DataBarang b) {
+    private void tambahKeDB(dataBarang b) {
         try {
             this.stat = k.getCon().prepareStatement("insert into barang (id_barang, nama_barang, stok, "
                     + "harga_beli, harga_jual, id_barcode, id_kategori, id_satuan) values(?, ?, ?, ?, ?, ?, ?, ?)");
@@ -287,8 +287,8 @@ public class DataBarang extends javax.swing.JFrame {
     }
 
     //fungsi ambil data berdasarkan data yg dipilih
-    private DataBarang pilihData() {
-        DataBarang u = new DataBarang();
+    private dataBarang pilihData() {
+        dataBarang u = new dataBarang();
         int selectedRow = tbl_barang.getSelectedRow();
 
         if (selectedRow != -1) {
@@ -327,7 +327,7 @@ public class DataBarang extends javax.swing.JFrame {
 
     // panggil pop up form ubah data
     private void ubahData() {
-        DataBarang u = pilihData();
+        dataBarang u = pilihData();
         FormUbahBarang form = new FormUbahBarang(this, u);
 
         boolean simpan = form.showDialog();
@@ -359,7 +359,7 @@ public class DataBarang extends javax.swing.JFrame {
     }
 
     //update database
-    private void updateData(DataBarang u) {
+    private void updateData(dataBarang u) {
         try {
             this.stat = k.getCon().prepareStatement("update barang set nama_barang = ?, "
                     + "harga_beli = ?, harga_jual = ?, id_barcode = ?, id_satuan = ? "
@@ -380,7 +380,7 @@ public class DataBarang extends javax.swing.JFrame {
     }
 
     //hapus data di database
-    private void hapusData(DataBarang u) {
+    private void hapusData(dataBarang u) {
         try {
             this.stat = k.getCon().prepareStatement("delete from barang where id_barang = ?");
             stat.setString(1, u.getId());
@@ -861,7 +861,7 @@ public class DataBarang extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        DataKaryawan r = new DataKaryawan();
+        dataKaryawan r = new dataKaryawan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_karyawanMouseClicked
@@ -873,7 +873,7 @@ public class DataBarang extends javax.swing.JFrame {
     }//GEN-LAST:event_laporanMouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        StokOpname r = new StokOpname();
+        stokOpname r = new stokOpname();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel5MouseClicked
@@ -883,7 +883,7 @@ public class DataBarang extends javax.swing.JFrame {
     }//GEN-LAST:event_laporanActionPerformed
 
     private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
-        DataSupplier r = new DataSupplier();
+        dataSupplier r = new dataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_supplierMouseClicked
@@ -936,13 +936,13 @@ public class DataBarang extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(dataBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         
 //        FlatLightLaf.setup(); // atau FlatDarkLaf.setup();
@@ -955,7 +955,7 @@ public class DataBarang extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DataBarang().setVisible(true);
+                new dataBarang().setVisible(true);
 
             }
         });

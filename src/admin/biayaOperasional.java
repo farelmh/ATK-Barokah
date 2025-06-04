@@ -32,7 +32,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class BiayaOperasional extends javax.swing.JFrame {
+public class biayaOperasional extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -45,7 +45,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
 
     konek k = new konek();
 
-    public BiayaOperasional() {
+    public biayaOperasional() {
         initComponents();
         setTanggal();
         this.setLocationRelativeTo(null);
@@ -54,7 +54,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
         
     }
 
-    public BiayaOperasional(String tanggal, String keterangan, String jumlah) {
+    public biayaOperasional(String tanggal, String keterangan, String jumlah) {
         this.tanggal = tanggal;
         this.keterangan = keterangan;
         this.jumlah = jumlah;
@@ -192,7 +192,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
 
     private void tambahData() {
         FormTambahOperasional form = new FormTambahOperasional(this);
-        BiayaOperasional b = new BiayaOperasional();
+        biayaOperasional b = new biayaOperasional();
         if (form.showDialog()) {
             String tglFormat = formatTanggal.formatTgl(form.getFieldValue("Tanggal"));
             b.setTanggal(tglFormat);
@@ -202,7 +202,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
         }
     }
 
-    private void tambahDB(BiayaOperasional b) {
+    private void tambahDB(biayaOperasional b) {
         try {
             this.stat = k.getCon().prepareStatement("insert into biaya_operasional (tanggal, keterangan, jumlah, id_karyawan) values(?, ?, ?, ?)");
             stat.setString(1, b.getTanggal());
@@ -888,13 +888,13 @@ public class BiayaOperasional extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dashboardMouseClicked
 
     private void btn_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_barangMouseClicked
-        DataBarang b = new DataBarang();
+        dataBarang b = new dataBarang();
         b.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_barangMouseClicked
 
     private void btn_karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_karyawanMouseClicked
-        DataKaryawan k = new DataKaryawan();
+        dataKaryawan k = new dataKaryawan();
         k.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_karyawanMouseClicked
@@ -927,7 +927,7 @@ public class BiayaOperasional extends javax.swing.JFrame {
 
     private void btn_supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_supplierMouseClicked
         // TODO add your handling code here:
-        DataSupplier s = new DataSupplier();
+        dataSupplier s = new dataSupplier();
         s.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_supplierMouseClicked
@@ -995,19 +995,19 @@ public class BiayaOperasional extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BiayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(biayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BiayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(biayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BiayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(biayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BiayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(biayaOperasional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BiayaOperasional().setVisible(true);
+                new biayaOperasional().setVisible(true);
             }
         });
     }

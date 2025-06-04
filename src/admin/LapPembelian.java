@@ -1,5 +1,6 @@
 package admin;
 
+import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
 import fungsi_lain.formatTanggal;
@@ -1013,6 +1014,11 @@ public class LapPembelian extends javax.swing.JFrame {
         jButton8.setBorder(null);
         jButton8.setBorderPainted(false);
         jButton8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton8MouseClicked(evt);
+            }
+        });
 
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/user biru1 1.png"))); // NOI18N
@@ -1387,7 +1393,17 @@ public class LapPembelian extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
-
+        int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (jawab == JOptionPane.YES_OPTION) {
+            Login b = new Login();
+            b.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
@@ -1397,13 +1413,13 @@ public class LapPembelian extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        DataBarang a = new DataBarang();
+        dataBarang a = new dataBarang();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        DataKaryawan a = new DataKaryawan();
+        dataKaryawan a = new dataKaryawan();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4MouseClicked
@@ -1477,6 +1493,13 @@ public class LapPembelian extends javax.swing.JFrame {
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked
+
+    private void jButton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton8MouseClicked
+        // TODO add your handling code here:
+        dataSupplier s = new dataSupplier();
+        s.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton8MouseClicked
 
     /**
      * @param args the command line arguments

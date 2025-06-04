@@ -1,6 +1,6 @@
 package fungsi_ubah_data;
 
-import admin.DataKaryawan;
+import admin.dataKaryawan;
 import barokah_atk.konek;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,12 +14,12 @@ import javax.swing.JOptionPane;
 
 public class FormUbahKaryawan extends FormUbah {
 
-    private DataKaryawan karyawan;
+    private dataKaryawan karyawan;
     private boolean hapus;
     private JComboBox<String> comboJabatan;
     konek k = new konek();
 
-    public FormUbahKaryawan(Frame parent, DataKaryawan karyawan) {
+    public FormUbahKaryawan(Frame parent, dataKaryawan karyawan) {
         super(parent, "Ubah data karyawan", "ID Karyawan", "Nama Lengkap", "Nama Panggilan", "No Telp", "Email", "ID RFID");
         this.karyawan = karyawan;
         k.connect();

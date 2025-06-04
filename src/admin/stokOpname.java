@@ -41,7 +41,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class StokOpname extends javax.swing.JFrame {
+public class stokOpname extends javax.swing.JFrame {
 
     private PreparedStatement stat;
     private ResultSet rs;
@@ -54,7 +54,7 @@ public class StokOpname extends javax.swing.JFrame {
 
     konek k = new konek();
 
-    public StokOpname() {
+    public stokOpname() {
         initComponents();
         k.connect();
         this.setLocationRelativeTo(null);
@@ -1193,13 +1193,13 @@ public class StokOpname extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
-        DataBarang r = new DataBarang();
+        dataBarang r = new dataBarang();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_barangMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        DataKaryawan r = new DataKaryawan();
+        dataKaryawan r = new dataKaryawan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_karyawanMouseClicked
@@ -1222,7 +1222,7 @@ public class StokOpname extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_simpanMouseClicked
 
     private void back1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back1MouseClicked
-        DataBarang r = new DataBarang();
+        dataBarang r = new dataBarang();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_back1MouseClicked
@@ -1248,7 +1248,7 @@ public class StokOpname extends javax.swing.JFrame {
 
     private void back2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back2MouseClicked
         // TODO add your handling code here:
-        DataBarang a = new DataBarang();
+        dataBarang a = new dataBarang();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_back2MouseClicked
@@ -1291,7 +1291,7 @@ public class StokOpname extends javax.swing.JFrame {
 
     private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
         // TODO add your handling code here:
-        DataSupplier s = new DataSupplier();
+        dataSupplier s = new dataSupplier();
         s.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_supplierMouseClicked
@@ -1318,14 +1318,16 @@ public class StokOpname extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(stokOpname.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -1333,7 +1335,7 @@ public class StokOpname extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StokOpname().setVisible(true);
+                new stokOpname().setVisible(true);
             }
         });
     }

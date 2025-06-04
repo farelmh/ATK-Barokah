@@ -613,7 +613,7 @@ public class laporan extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardMouseClicked
 
     private void karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_karyawanMouseClicked
-        DataKaryawan r = new DataKaryawan();
+        dataKaryawan r = new dataKaryawan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_karyawanMouseClicked
@@ -627,7 +627,7 @@ public class laporan extends javax.swing.JFrame {
     }//GEN-LAST:event_laporanActionPerformed
 
     private void supplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierMouseClicked
-        DataSupplier r = new DataSupplier();
+        dataSupplier r = new dataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_supplierMouseClicked
@@ -638,7 +638,7 @@ public class laporan extends javax.swing.JFrame {
 
     private void barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barangMouseClicked
         // TODO add your handling code here:
-        DataBarang a = new DataBarang();
+        dataBarang a = new dataBarang();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_barangMouseClicked
@@ -691,7 +691,7 @@ public class laporan extends javax.swing.JFrame {
 
     private void pnl_operasionalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_operasionalMouseClicked
         // TODO add your handling code here:
-        BiayaOperasional a = new BiayaOperasional();
+        biayaOperasional a = new biayaOperasional();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_pnl_operasionalMouseClicked

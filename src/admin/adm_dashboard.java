@@ -738,7 +738,7 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_logoutMouseClicked
 
     private void sc_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_barangMouseClicked
-        DataBarang q = new DataBarang();
+        dataBarang q = new dataBarang();
         q.tampilkanStokTipisDialog();
     }//GEN-LAST:event_sc_barangMouseClicked
 
@@ -749,13 +749,13 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_sc_pemasukanMouseClicked
 
     private void sc_karyawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sc_karyawanMouseClicked
-        DataKaryawan q = new DataKaryawan();
+        dataKaryawan q = new dataKaryawan();
         q.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_sc_karyawanMouseClicked
 
     private void btn_dataSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataSupplierMouseClicked
-        DataSupplier r = new DataSupplier();
+        dataSupplier r = new dataSupplier();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_dataSupplierMouseClicked
@@ -765,13 +765,13 @@ public class adm_dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataKaryawanActionPerformed
 
     private void btn_dataKaryawanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataKaryawanMouseClicked
-        DataKaryawan r = new DataKaryawan();
+        dataKaryawan r = new dataKaryawan();
         r.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_dataKaryawanMouseClicked
 
     private void btn_dataBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataBarangActionPerformed
-        DataBarang q = new DataBarang();
+        dataBarang q = new dataBarang();
         q.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_dataBarangActionPerformed

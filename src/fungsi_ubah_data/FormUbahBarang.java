@@ -2,7 +2,7 @@ package fungsi_ubah_data;
 
 import java.awt.Frame;
 import javax.swing.JOptionPane;
-import admin.DataBarang;
+import admin.dataBarang;
 import barokah_atk.konek;
 import fungsi_lain.formatUang;
 import java.awt.Color;
@@ -17,14 +17,14 @@ import javax.swing.JTextField;
 
 public class FormUbahBarang extends FormUbah {
 
-    private DataBarang barang;
+    private dataBarang barang;
     private boolean hapus;
     private String hargaSatuan;
     private String idSatuan;
     private JComboBox<String> comboSatuan;
     konek k = new konek();
 
-    public FormUbahBarang(Frame parent, DataBarang barang) {
+    public FormUbahBarang(Frame parent, dataBarang barang) {
         super(parent, "Ubah Data Barang", "ID Barang", "Nama Barang", "Kode Barcode", "Harga Beli /Pcs", "Harga Jual /Pcs", "Harga Kulakan");
         this.barang = barang;
         k.connect();

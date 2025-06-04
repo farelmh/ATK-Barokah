@@ -1,5 +1,6 @@
 package admin;
 
+import barokah_atk.Login;
 import barokah_atk.konek;
 import fungsi_lain.CariData;
 import fungsi_lain.formatTanggal;
@@ -54,7 +55,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
-
 public class LapPenjualan extends javax.swing.JFrame {
 
     private PreparedStatement statPenjualan;
@@ -86,7 +86,7 @@ public class LapPenjualan extends javax.swing.JFrame {
         txt_panggilan.setText(session.getInstance().getNama());
         setTanggal();
     }
-    
+
     // set tanggal ke bahasa indo
     private void setTanggal() {
         formatTanggal.setTanggalIndo(tgl_mulai);
@@ -1000,6 +1000,11 @@ public class LapPenjualan extends javax.swing.JFrame {
         jButton8.setBorder(null);
         jButton8.setBorderPainted(false);
         jButton8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton8MouseClicked(evt);
+            }
+        });
 
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/user biru1 1.png"))); // NOI18N
@@ -1371,19 +1376,35 @@ public class LapPenjualan extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
-
+    int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (jawab == JOptionPane.YES_OPTION) {
+            Login b = new Login();
+            b.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-
+        adm_dashboard a = new adm_dashboard();
+        a.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-
+        dataBarang a = new dataBarang();
+        a.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-
+        dataKaryawan a = new dataKaryawan();
+        a.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
@@ -1455,6 +1476,13 @@ public class LapPenjualan extends javax.swing.JFrame {
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_transaksiMouseClicked
+
+    private void jButton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton8MouseClicked
+        // TODO add your handling code here:
+         dataSupplier a = new dataSupplier();
+        a.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton8MouseClicked
 
     /**
      * @param args the command line arguments

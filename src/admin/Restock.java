@@ -925,7 +925,7 @@ public class Restock extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_TotalActionPerformed
 
     private void btn_kembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_kembaliMouseClicked
-        DataBarang q = new DataBarang();
+        dataBarang q = new dataBarang();
         if (keluar()) {
             q.setVisible(true);
             this.dispose();
@@ -978,7 +978,7 @@ public class Restock extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_laporan1MouseClicked
 
     private void btn_dataBarang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataBarang1ActionPerformed
-        DataBarang q = new DataBarang();
+        dataBarang q = new dataBarang();
         if (keluar()) {
             q.setVisible(true);
             this.dispose();
@@ -986,7 +986,7 @@ public class Restock extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataBarang1ActionPerformed
 
     private void btn_dataKaryawan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataKaryawan1MouseClicked
-        DataKaryawan r = new DataKaryawan();
+        dataKaryawan r = new dataKaryawan();
         if (keluar()) {
             r.setVisible(true);
             this.dispose();
@@ -998,7 +998,7 @@ public class Restock extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataKaryawan1ActionPerformed
 
     private void btn_dataSupplier1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dataSupplier1MouseClicked
-        DataSupplier r = new DataSupplier();
+        dataSupplier r = new dataSupplier();
         if (keluar()) {
             r.setVisible(true);
             this.dispose();
