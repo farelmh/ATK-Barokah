@@ -59,6 +59,11 @@ public class FormTambahRFID extends FormTambah {
             JOptionPane.showMessageDialog(dialog, "harap tambahkan data kartu");
             return false;
         }
+        
+        if (!rfid.matches("\\d+")) {
+            setPesan("ID RFID harus berupa angka!");
+            return false;
+        }
 
         if (isDuplicate("id_rfid", rfid.trim())) {
             JOptionPane.showMessageDialog(dialog, "ID RFID sudah terdaftar!");

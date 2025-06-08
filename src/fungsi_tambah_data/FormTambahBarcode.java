@@ -60,6 +60,11 @@ public class FormTambahBarcode extends FormTambah {
             JOptionPane.showMessageDialog(dialog, "Harap Scan Barang");
             return false;
         }
+        
+        if (!barcode.matches("\\d+")) {
+            setPesan("Kode Barcode hanya boleh berupa angka!");
+            return false;
+        }
 
         if (isDuplicate("id_barcode", barcode.trim())) {
             JOptionPane.showMessageDialog(dialog, "Kode Barcode Sudah Terdaftar Sebelumnya!");
